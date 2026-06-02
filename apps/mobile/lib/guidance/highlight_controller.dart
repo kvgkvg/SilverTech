@@ -5,7 +5,7 @@ import 'instruction_player.dart';
 
 class HighlightController {
   HighlightController({OverlayRenderer renderer = const OverlayRenderer()})
-    : _renderer = renderer;
+      : _renderer = renderer;
   final OverlayRenderer _renderer;
 
   List<ProjectedButton> highlightsForStep({

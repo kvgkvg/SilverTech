@@ -19,7 +19,7 @@
 **Purpose**: Create the repository structure and local development foundation.
 
 - [X] T001 Create monorepo directories `apps/mobile/`, `apps/api/`, `apps/vision-tools/`, `data/templates/`, `data/descriptors/`, `data/test-images/`, `tests/contract/`, `tests/e2e/`, and `tests/uat/`
-- [ ] T002 Initialize Flutter mobile project in `apps/mobile/`
+- [X] T002 Initialize Flutter mobile project in `apps/mobile/`
 - [X] T003 Initialize FastAPI backend project with dependency metadata in `apps/api/pyproject.toml`
 - [X] T004 Initialize Python vision tooling package with dependency metadata in `apps/vision-tools/pyproject.toml`
 - [X] T005 [P] Configure mobile linting and formatting in `apps/mobile/analysis_options.yaml`

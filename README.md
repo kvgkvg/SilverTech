@@ -23,6 +23,7 @@ train a custom button detector.
 ```bash
 conda env create -f environment.yml
 conda activate silvertech
+export PATH="$HOME/development/flutter/bin:$PATH"
 cp .env.example .env
 python3 -m pip install -e apps/api
 python3 -m pip install -e apps/vision-tools
@@ -50,15 +51,16 @@ PYTHONPATH=apps/api:apps/vision-tools pytest -q apps/api/tests tests/contract ap
 dart run apps/mobile/test/vision/homography_projector_test.dart
 dart run apps/mobile/test/guidance/instruction_player_test.dart
 dart run apps/mobile/test/ui/rescan_guidance_ui_test.dart
+cd apps/mobile && flutter test
 ```
 
 ## Current Limitations
 
 - STT and LLM providers are mocked by default. Provider adapters are configured
   but not connected to real external credentials in this repo.
-- Flutter is not available from the configured Conda channels, so mobile source
-  files are scaffolded and Dart logic tests run, but full Flutter build/test is
-  still pending on a machine with Flutter installed.
+- Flutter is installed at `$HOME/development/flutter`; add
+  `$HOME/development/flutter/bin` to PATH before running Flutter commands.
+  Chrome/web validation is not required for the Android MVP.
 - OpenCV is installed in the `silvertech` environment. Synthetic fixture tests
   still use deterministic keypoint arrays so confidence and projection behavior
   remain stable in CI.

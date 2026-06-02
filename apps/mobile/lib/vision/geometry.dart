@@ -17,11 +17,11 @@ class BBox {
   final double height;
 
   List<Point2> corners() => <Point2>[
-    Point2(x, y),
-    Point2(x + width, y),
-    Point2(x + width, y + height),
-    Point2(x, y + height),
-  ];
+        Point2(x, y),
+        Point2(x + width, y),
+        Point2(x + width, y + height),
+        Point2(x, y + height),
+      ];
 }
 
 class ProjectedButton {

@@ -5,7 +5,7 @@ import '../vision/match_confidence_state.dart';
 
 class CameraScreenController {
   CameraScreenController({HighlightController? highlightController})
-    : _highlightController = highlightController ?? HighlightController();
+      : _highlightController = highlightController ?? HighlightController();
 
   final HighlightController _highlightController;
   String get instructionVi => 'Huong camera vao bang dieu khien.';
