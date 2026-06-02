@@ -9,5 +9,11 @@ void main() {
     expect(find.text('SilverTech'), findsOneWidget);
     expect(find.text('Huong camera vao bang dieu khien.'), findsOneWidget);
     expect(find.text('Mo camera'), findsOneWidget);
+
+    await tester.tap(find.text('Mo camera'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Quet bang dieu khien'), findsOneWidget);
+    expect(find.text('Dat bang dieu khien vao khung hinh'), findsOneWidget);
   });
 }
