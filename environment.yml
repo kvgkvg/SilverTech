@@ -1,0 +1,20 @@
+name: silvertech
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - dart-sdk
+  - pip:
+      - alembic
+      - fastapi
+      - httpx
+      - numpy
+      - opencv-python
+      - pydantic
+      - pytest
+      - python-multipart
+      - pyyaml
+      - sqlalchemy
+      - uvicorn

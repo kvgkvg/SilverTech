@@ -77,6 +77,12 @@
 
 - What happens when [boundary condition]?
 - How does system handle [error scenario]?
+- What happens when camera confidence is low due to blur, glare, low light,
+  partial panel view, or motion?
+- What happens when the recognized logo/brand has multiple candidate templates?
+- What happens when the LLM or backend cannot map the user's intent to valid
+  `button_id` values for the matched template?
+- What simple instruction helps an elderly user recover from each failure state?
 
 ## Requirements *(mandatory)*
 
@@ -92,6 +98,15 @@
 - **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
 - **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
 - **FR-005**: System MUST [behavior, e.g., "log all security events"]
+- **FR-UX**: User-facing flows MUST be one-tap or step-by-step with large,
+  high-contrast text and simple recovery instructions.
+- **FR-SAFE**: System MUST NOT highlight a button unless confidence gates pass
+  and the button originates from a verified template or reviewed submission.
+- **FR-TEMPLATE**: Runtime guidance and LLM-generated steps MUST reference only
+  valid `button_id` values returned by the backend for the matched template.
+- **FR-PRIVACY**: Captured or submitted images MUST be limited to appliance
+  control panels, and retained data MUST be the minimum needed for recognition,
+  debugging, evaluation, or template improvement.
 
 *Example of marking unclear requirements:*
 
@@ -102,6 +117,11 @@
 
 - **[Entity 1]**: [What it represents, key attributes without implementation]
 - **[Entity 2]**: [What it represents, relationships to other entities]
+- **Device Template**: [Brand, model/template ID, template image, optional logo
+  bounding box, panel metadata, button bounding boxes, button IDs, labels, usage
+  descriptions, and review status when relevant]
+- **Button Guidance Step**: [User intent, matched template, valid `button_id`,
+  instruction text, confidence state, and recovery instruction when uncertain]
 
 ## Success Criteria *(mandatory)*
 
@@ -116,6 +136,12 @@
 - **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
 - **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
 - **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+- **SC-LOCALIZATION**: [Button localization accuracy, match confidence, and
+  reprojection error targets for supported devices/templates]
+- **SC-TASK-SUCCESS**: [User task success target for elderly or elderly-like
+  users completing the guided appliance task]
+- **SC-LLM-VALIDITY**: [Percentage of STT/LLM guidance responses that solve the
+  intent and reference only valid backend-returned `button_id` values]
 
 ## Assumptions
 

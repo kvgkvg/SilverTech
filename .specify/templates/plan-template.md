@@ -40,7 +40,30 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+- **Elderly-first UX**: Plan documents one-tap or step-by-step flows, large
+  high-contrast text, simple recovery instructions for every error state, and
+  no login/complex configuration in MVP unless explicitly justified.
+- **Button safety**: Plan defines confidence thresholds, uncertainty handling,
+  rescan/manual confirmation paths, and treats wrong button guidance as a
+  critical failure.
+- **Localization approach**: Plan uses logo-guided template matching without QR
+  dependency; logo/brand detection only narrows candidates; ORB/SIFT plus
+  homography or affine alignment projects template button boxes to camera frame.
+- **Template source of truth**: Plan identifies template schema impacts,
+  official versus submitted-template review status, and how runtime/LLM guidance
+  is constrained to valid backend-returned `button_id` values.
+- **Hybrid architecture**: Plan separates on-device camera/template/tracking/AR
+  work from server STT/LLM/search/data work and justifies server dependencies
+  for low-to-mid-range mobile devices.
+- **Performance and robustness**: Plan defines near-real-time feedback targets,
+  blur/glare/partial-view/low-light/camera-motion handling, tracking reset
+  conditions, match confidence, and reprojection error metrics.
+- **Privacy and data minimization**: Plan limits captured/submitted images to
+  appliance control panels and documents retained image, voice, LLM, debug, and
+  evaluation data.
+- **Testability and MVP discipline**: Plan defines measurable acceptance for
+  localization accuracy, match confidence, reprojection error, user task
+  success, valid `button_id` LLM output, and constrained MVP device coverage.
 
 ## Project Structure
 

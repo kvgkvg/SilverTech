@@ -1,0 +1,16 @@
+[project]
+name = "silvertech-vision-tools"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = ["numpy>=1.26"]
+
+[project.optional-dependencies]
+opencv = ["opencv-python>=4.9"]
+dev = ["pytest>=8.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 100

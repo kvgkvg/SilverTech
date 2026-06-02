@@ -1,0 +1,14 @@
+{
+  "template_toshiba_washer_panel_v1": {
+    "start_pause": {"x": 500, "y": 150, "width": 90, "height": 55},
+    "quick_wash": {"x": 210, "y": 145, "width": 85, "height": 50},
+    "dry_mode": {"x": 315, "y": 145, "width": 80, "height": 50}
+  },
+  "template_panasonic_washer_panel_v1": {
+    "start_pause": {"x": 505, "y": 140, "width": 88, "height": 58},
+    "quick_wash": {"x": 230, "y": 132, "width": 92, "height": 52}
+  },
+  "template_daikin_ac_remote_v1": {
+    "temp_up": {"x": 180, "y": 235, "width": 70, "height": 55}
+  }
+}

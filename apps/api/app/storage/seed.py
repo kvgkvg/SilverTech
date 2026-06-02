@@ -1,0 +1,60 @@
+from __future__ import annotations
+
+from app.models.common import encode_json
+from app.storage.database import db_session, initialize_database
+from app.storage.seed_data import BUTTONS, DEVICES, NOW, TEMPLATES
+
+
+def seed_database() -> None:
+    initialize_database()
+    with db_session() as conn:
+        for device in DEVICES:
+            conn.execute(
+                """
+                INSERT OR REPLACE INTO devices
+                (id, brand, appliance_type, model_name, display_name, status, created_at, updated_at)
+                VALUES (:id, :brand, :appliance_type, :model_name, :display_name, :status, :created_at, :updated_at)
+                """,
+                {**device, "created_at": NOW, "updated_at": NOW},
+            )
+        for template in TEMPLATES:
+            row = {
+                **template,
+                "logo_bbox": encode_json(template["logo_bbox"]),
+                "panel_bbox": encode_json(template["panel_bbox"]),
+                "created_at": NOW,
+                "updated_at": NOW,
+            }
+            conn.execute(
+                """
+                INSERT OR REPLACE INTO templates
+                (id, device_id, template_code, template_image_url, logo_bbox, panel_bbox,
+                 feature_descriptor_path, version, status, created_at, updated_at)
+                VALUES (:id, :device_id, :template_code, :template_image_url, :logo_bbox, :panel_bbox,
+                        :feature_descriptor_path, :version, :status, :created_at, :updated_at)
+                """,
+                row,
+            )
+        for button in BUTTONS:
+            row = {
+                **button,
+                "bbox_template_coordinates": encode_json(button["bbox_template_coordinates"]),
+                "polygon_template_coordinates": encode_json(button["polygon_template_coordinates"]),
+                "created_at": NOW,
+                "updated_at": NOW,
+            }
+            conn.execute(
+                """
+                INSERT OR REPLACE INTO buttons
+                (id, template_id, button_id, label, vietnamese_name, function_description,
+                 bbox_template_coordinates, polygon_template_coordinates, button_type, created_at, updated_at)
+                VALUES (:id, :template_id, :button_id, :label, :vietnamese_name, :function_description,
+                        :bbox_template_coordinates, :polygon_template_coordinates, :button_type, :created_at, :updated_at)
+                """,
+                row,
+            )
+
+
+if __name__ == "__main__":
+    seed_database()
+    print("Seeded SilverTech MVP templates")

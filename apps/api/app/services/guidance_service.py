@@ -1,0 +1,52 @@
+from __future__ import annotations
+
+import time
+
+from app.services.button_validator import validate_guidance_buttons
+from app.services.llm_log_service import write_llm_log
+from app.services.llm_prompt_builder import build_prompt_summary
+from app.services.llm_response_parser import parse_guidance
+from app.services.llm_service import LLMService
+from app.services.template_repository import get_template
+
+
+class GuidanceError(Exception):
+    pass
+
+
+def create_guidance(template_id: str, user_query: str) -> dict:
+    started = time.perf_counter()
+    template = get_template(template_id)
+    if template is None:
+        raise GuidanceError("missing_template")
+    prompt_summary = build_prompt_summary(template, user_query)
+    raw = LLMService().generate(user_query, template)
+    try:
+        guidance = parse_guidance(raw)
+        validate_guidance_buttons(template_id, guidance)
+    except Exception as exc:
+        latency_ms = int((time.perf_counter() - started) * 1000)
+        write_llm_log(
+            template_id=template_id,
+            user_query=user_query,
+            stt_text=None,
+            prompt_summary=prompt_summary,
+            raw_response=raw,
+            validated_steps=None,
+            validation_status="rejected",
+            latency_ms=latency_ms,
+        )
+        raise GuidanceError("invalid_button") from exc
+    latency_ms = int((time.perf_counter() - started) * 1000)
+    payload = guidance.model_dump()
+    write_llm_log(
+        template_id=template_id,
+        user_query=user_query,
+        stt_text=None,
+        prompt_summary=prompt_summary,
+        raw_response=raw,
+        validated_steps=payload,
+        validation_status="accepted",
+        latency_ms=latency_ms,
+    )
+    return payload
