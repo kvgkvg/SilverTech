@@ -1,8 +1,197 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
 class TemplateRepositoryClient {
-  const TemplateRepositoryClient({required this.baseUrl});
+  TemplateRepositoryClient({
+    required this.baseUrl,
+    http.Client? httpClient,
+  }) : _httpClient = httpClient ?? http.Client();
+
   final String baseUrl;
+  final http.Client _httpClient;
 
   Uri candidatesUri() => Uri.parse('$baseUrl/api/vision/candidates');
   Uri templateUri(String templateId) =>
       Uri.parse('$baseUrl/api/templates/$templateId');
+
+  Future<List<TemplateSummaryDto>> findCandidates({
+    String? brand,
+    String? applianceType,
+    double? brandConfidence,
+  }) async {
+    final response = await _httpClient.post(
+      candidatesUri(),
+      headers: const <String, String>{'Content-Type': 'application/json'},
+      body: jsonEncode(<String, Object?>{
+        'brand': brand,
+        'appliance_type': applianceType,
+        'brand_confidence': brandConfidence,
+      }),
+    );
+    _throwIfError(response);
+    final body = jsonDecode(response.body) as Map<String, Object?>;
+    final candidates = body['candidates'] as List<Object?>;
+    return candidates
+        .cast<Map<String, Object?>>()
+        .map(TemplateSummaryDto.fromJson)
+        .toList();
+  }
+
+  Future<TemplateDetailDto> fetchTemplate(String templateId) async {
+    final response = await _httpClient.get(templateUri(templateId));
+    _throwIfError(response);
+    return TemplateDetailDto.fromJson(
+      jsonDecode(response.body) as Map<String, Object?>,
+    );
+  }
+}
+
+void _throwIfError(http.Response response) {
+  if (response.statusCode >= 200 && response.statusCode < 300) {
+    return;
+  }
+  final body = jsonDecode(response.body) as Map<String, Object?>;
+  throw FriendlyBackendException(
+    messageVi: body['message_vi'] as String? ?? 'Co loi xay ra.',
+    recoveryAction: body['recovery_action'] as String? ?? 'try_again',
+    statusCode: response.statusCode,
+  );
+}
+
+class FriendlyBackendException implements Exception {
+  const FriendlyBackendException({
+    required this.messageVi,
+    required this.recoveryAction,
+    required this.statusCode,
+  });
+
+  final String messageVi;
+  final String recoveryAction;
+  final int statusCode;
+}
+
+class TemplateSummaryDto {
+  const TemplateSummaryDto({
+    required this.id,
+    required this.brand,
+    required this.applianceType,
+    required this.templateCode,
+    required this.version,
+    required this.status,
+    required this.templateImageUrl,
+  });
+
+  factory TemplateSummaryDto.fromJson(Map<String, Object?> json) {
+    return TemplateSummaryDto(
+      id: json['id'] as String,
+      brand: json['brand'] as String,
+      applianceType: json['appliance_type'] as String,
+      templateCode: json['template_code'] as String,
+      version: json['version'] as int,
+      status: json['status'] as String,
+      templateImageUrl: json['template_image_url'] as String,
+    );
+  }
+
+  final String id;
+  final String brand;
+  final String applianceType;
+  final String templateCode;
+  final int version;
+  final String status;
+  final String templateImageUrl;
+}
+
+class TemplateDetailDto {
+  const TemplateDetailDto({
+    required this.id,
+    required this.brand,
+    required this.applianceType,
+    required this.templateCode,
+    required this.version,
+    required this.status,
+    required this.templateImageUrl,
+    required this.buttons,
+  });
+
+  factory TemplateDetailDto.fromJson(Map<String, Object?> json) {
+    final buttons = json['buttons'] as List<Object?>;
+    return TemplateDetailDto(
+      id: json['id'] as String,
+      brand: json['brand'] as String,
+      applianceType: json['appliance_type'] as String,
+      templateCode: json['template_code'] as String,
+      version: json['version'] as int,
+      status: json['status'] as String,
+      templateImageUrl: json['template_image_url'] as String,
+      buttons: buttons
+          .cast<Map<String, Object?>>()
+          .map(TemplateButtonDto.fromJson)
+          .toList(),
+    );
+  }
+
+  final String id;
+  final String brand;
+  final String applianceType;
+  final String templateCode;
+  final int version;
+  final String status;
+  final String templateImageUrl;
+  final List<TemplateButtonDto> buttons;
+}
+
+class TemplateButtonDto {
+  const TemplateButtonDto({
+    required this.buttonId,
+    required this.label,
+    required this.vietnameseName,
+    required this.functionDescription,
+    required this.bbox,
+    required this.buttonType,
+  });
+
+  factory TemplateButtonDto.fromJson(Map<String, Object?> json) {
+    return TemplateButtonDto(
+      buttonId: json['button_id'] as String,
+      label: json['label'] as String,
+      vietnameseName: json['vietnamese_name'] as String,
+      functionDescription: json['function_description'] as String,
+      bbox: TemplateBBoxDto.fromJson(
+        json['bbox_template_coordinates'] as Map<String, Object?>,
+      ),
+      buttonType: json['button_type'] as String,
+    );
+  }
+
+  final String buttonId;
+  final String label;
+  final String vietnameseName;
+  final String functionDescription;
+  final TemplateBBoxDto bbox;
+  final String buttonType;
+}
+
+class TemplateBBoxDto {
+  const TemplateBBoxDto({
+    required this.x,
+    required this.y,
+    required this.width,
+    required this.height,
+  });
+
+  factory TemplateBBoxDto.fromJson(Map<String, Object?> json) {
+    return TemplateBBoxDto(
+      x: (json['x'] as num).toDouble(),
+      y: (json['y'] as num).toDouble(),
+      width: (json['width'] as num).toDouble(),
+      height: (json['height'] as num).toDouble(),
+    );
+  }
+
+  final double x;
+  final double y;
+  final double width;
+  final double height;
 }

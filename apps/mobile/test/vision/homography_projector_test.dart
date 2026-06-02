@@ -1,5 +1,5 @@
-import '../../lib/vision/geometry.dart';
-import '../../lib/vision/homography_projector.dart';
+import 'package:silvertech_mobile/vision/geometry.dart';
+import 'package:silvertech_mobile/vision/homography_projector.dart';
 
 void main() {
   const projector = HomographyProjector(<List<double>>[
