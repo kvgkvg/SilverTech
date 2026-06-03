@@ -1,0 +1,7 @@
+[
+  {"device_type": "washing_machine", "queries": ["washing machine control panel", "washer control panel", "washing machine buttons", "washing machine front panel"]},
+  {"device_type": "air_conditioner_remote", "queries": ["air conditioner remote control", "AC remote control buttons", "air conditioner remote display"]},
+  {"device_type": "tv_remote", "queries": ["TV remote control", "television remote control buttons"]},
+  {"device_type": "microwave", "queries": ["microwave control panel", "microwave buttons panel"]},
+  {"device_type": "dishwasher", "queries": ["dishwasher control panel", "dishwasher buttons panel"]}
+]
