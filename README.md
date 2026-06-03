@@ -9,7 +9,9 @@ and validated `button_id` guidance.
 ## Current MVP Scope
 
 - Backend API with SQLite seed data for reviewed appliance templates.
-- Mock STT and mock LLM flow for local development.
+- On-device Vietnamese STT in the mobile app (sherpa-onnx zipformer-vi-30M
+  int8); mock LLM flow for local development. Backend `/api/stt` mock retained
+  but unused by the app.
 - `button_id` validation before guidance is returned.
 - Offline vision proof of concept for feature matching, confidence scoring, and
   homography/affine button projection.
@@ -57,8 +59,12 @@ cd apps/mobile && flutter test
 
 ## Current Limitations
 
-- STT and LLM providers are mocked by default. Provider adapters are configured
-  but not connected to real external credentials in this repo.
+- LLM provider is mocked by default. Provider adapters are configured but not
+  connected to real external credentials in this repo.
+- Mobile STT runs fully on-device via sherpa-onnx. The model files
+  (~32 MB) are not committed; download them into
+  `apps/mobile/assets/models/asr/` before `flutter build` (see that dir's
+  README). The legacy backend `/api/stt` mock is no longer called by the app.
 - Flutter is installed at `$HOME/development/flutter`; add
   `$HOME/development/flutter/bin` to PATH before running Flutter commands.
   Chrome/web validation is not required for the Android MVP.

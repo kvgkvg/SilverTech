@@ -12,11 +12,23 @@ dependencies:
   camera: ^0.11.0
   http: ^1.2.0
   flutter_tts: ^4.0.0
+  sherpa_onnx: ^1.12.0
+  record: ^6.0.0
+  path_provider: ^2.1.5
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/models/asr/encoder.int8.onnx
+    - assets/models/asr/decoder.onnx
+    - assets/models/asr/joiner.int8.onnx
+    - assets/models/asr/tokens.txt
+    - assets/test/0.wav
+    - assets/test/1.wav
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
   flutter_lints: ^4.0.0

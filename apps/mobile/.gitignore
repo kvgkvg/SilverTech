@@ -44,3 +44,7 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /android/local.properties
+
+# On-device ASR model (~32MB, download separately; see assets/models/asr/README.md)
+/assets/models/asr/*.onnx
+/assets/models/asr/tokens.txt

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'backend/silver_backend.dart';
 import 'guidance/guidance_client.dart';
 import 'templates/template_repository_client.dart';
+import 'voice/stt_client.dart';
 
 void main() {
   runApp(const SilverTechApp());
@@ -177,6 +178,20 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   TemplateDetailDto? _selectedTemplate;
   String _selectedTemplateId = 'template_daikin_ac_remote_v1';
   List<GuideStepData> _currentGuideSteps = guideSteps;
+  final STTClient _stt = STTClient();
+
+  @override
+  void initState() {
+    super.initState();
+    // Preload ASR model so first hold-to-talk is responsive.
+    _stt.warmUp();
+  }
+
+  @override
+  void dispose() {
+    _stt.dispose();
+    super.dispose();
+  }
 
   RouteState get _current => _stack.last;
 
@@ -243,7 +258,30 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
     }
   }
 
-  Future<void> _askBackendGuidance(DemoDevice device) async {
+  Future<void> _startListening() async {
+    final ok = await _stt.startListening();
+    if (!ok) {
+      setState(() => _toast = 'Cần cấp quyền micro để nói câu hỏi.');
+    }
+  }
+
+  Future<void> _stopAndAskGuidance(DemoDevice device) async {
+    String query;
+    try {
+      query = await _stt.stopAndTranscribe();
+    } catch (_) {
+      setState(() => _toast = 'Không nhận diện được giọng nói. Thử lại.');
+      return;
+    }
+    if (query.isEmpty) {
+      setState(() => _toast = 'Chưa nghe rõ câu hỏi. Giữ nút và nói lại.');
+      return;
+    }
+    await _askBackendGuidance(device, query: query);
+  }
+
+  Future<void> _askBackendGuidance(DemoDevice device,
+      {required String query}) async {
     setState(() {
       _voiceBusy = true;
       _toast = null;
@@ -251,7 +289,7 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
     try {
       final guidance = await widget.backend.createGuidance(
         templateId: _selectedTemplateId,
-        userQueryText: 'Toi muon chinh nhiet do dieu hoa',
+        userQueryText: query,
       );
       setState(() {
         _currentGuideSteps = _guideStepsFromBackend(guidance);
@@ -358,7 +396,8 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
           buttonCount: _selectedTemplate?.buttons.length ?? 6,
           busy: _voiceBusy,
           onNavigate: _nav,
-          onAskGuidance: _askBackendGuidance,
+          onStartListening: _startListening,
+          onStopAndAsk: _stopAndAskGuidance,
         ),
       'guide' => GuideScreen(
           device: _current.device ?? acDevice,
@@ -596,7 +635,8 @@ class VoiceScreen extends StatefulWidget {
     required this.buttonCount,
     required this.busy,
     required this.onNavigate,
-    required this.onAskGuidance,
+    required this.onStartListening,
+    required this.onStopAndAsk,
     super.key,
   });
 
@@ -604,7 +644,8 @@ class VoiceScreen extends StatefulWidget {
   final int buttonCount;
   final bool busy;
   final void Function(String target, {DemoDevice? device}) onNavigate;
-  final Future<void> Function(DemoDevice device) onAskGuidance;
+  final Future<void> Function() onStartListening;
+  final Future<void> Function(DemoDevice device) onStopAndAsk;
 
   @override
   State<VoiceScreen> createState() => _VoiceScreenState();
@@ -662,12 +703,15 @@ class _VoiceScreenState extends State<VoiceScreen> {
                     ),
                     const SizedBox(height: 22),
                     GestureDetector(
-                      onTapDown: (_) => setState(() => holding = true),
+                      onTapDown: (_) {
+                        if (widget.busy) return;
+                        setState(() => holding = true);
+                        widget.onStartListening();
+                      },
                       onTapUp: (_) {
+                        if (!holding) return;
                         setState(() => holding = false);
-                        if (!widget.busy) {
-                          widget.onAskGuidance(widget.device);
-                        }
+                        widget.onStopAndAsk(widget.device);
                       },
                       onTapCancel: () => setState(() => holding = false),
                       child: AnimatedScale(
