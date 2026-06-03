@@ -31,7 +31,6 @@ def main() -> None:
                 rec["status"] = "rejected"
                 rec["reject_reason"] = "download_fail"
                 _reject_count(report, "download_fail")
-                _move_reject(s, None, "download_fail")  # nothing to move; count only
                 f.write(json.dumps(rec) + "\n")
                 continue
             report["downloaded"] += 1
