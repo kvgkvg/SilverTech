@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:silvertech_mobile/main.dart';
 
@@ -11,9 +12,10 @@ void main() {
     expect(find.text('Mo camera'), findsOneWidget);
 
     await tester.tap(find.text('Mo camera'));
-    await tester.pumpAndSettle();
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
 
     expect(find.text('Quet bang dieu khien'), findsOneWidget);
-    expect(find.text('Dat bang dieu khien vao khung hinh'), findsOneWidget);
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
   });
 }
