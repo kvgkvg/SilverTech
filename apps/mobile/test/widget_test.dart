@@ -88,26 +88,45 @@ void main() {
     await tester.tap(find.text('Dùng kết quả này'));
     await tester.pumpAndSettle();
 
-    expect(fakeBackend.recognitionCalls, 1);
+    expect(fakeBackend.recognitionCalls, 0);
     expect(find.textContaining('Điều hòa Daikin'), findsOneWidget);
-    expect(find.text('1 nút'), findsOneWidget);
+    expect(find.text('6 nút'), findsOneWidget);
     expect(find.text('Mic'), findsOneWidget);
     expect(find.textContaining('Tăng nhiệt độ'), findsOneWidget);
 
     await tester.tap(find.text('Mic'));
     await tester.pumpAndSettle();
 
-    expect(fakeBackend.guidanceCalls, 1);
-    expect(fakeBackend.lastTemplateId, 'template_daikin_ac_remote_v1');
-    expect(find.text('Bước 1 / 2'), findsOneWidget);
-    expect(find.text('Nhấn nút Tăng nhiệt độ.'), findsOneWidget);
+    expect(fakeBackend.guidanceCalls, 0);
+    expect(fakeBackend.lastTemplateId, isNull);
+    expect(find.text('Bước 1 / 3'), findsOneWidget);
+    expect(find.text('Nút màu xanh phía bên phải điều khiển'), findsOneWidget);
     expect(find.text('Nhiệt độ +'), findsWidgets);
 
     await tester.tap(find.text('Tiếp theo'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Bước 2 / 2'), findsOneWidget);
+    expect(find.text('Bước 2 / 3'), findsOneWidget);
+    expect(find.text('Bấm thêm một lần nữa để lên 27°C'), findsOneWidget);
+
+    await tester.tap(find.text('Tiếp theo'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Bước 3 / 3'), findsOneWidget);
     expect(find.text('Xong rồi!'), findsOneWidget);
+
+    await tester.tap(find.text('Hoàn thành'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Mic'), findsOneWidget);
+    expect(find.text('Sẵn sàng - giữ nút mic và nói câu hỏi'), findsOneWidget);
+    expect(find.text('Xin chào!'), findsNothing);
+
+    await tester.tap(find.byIcon(Icons.chevron_left).first);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Nhận diện thiết bị'), findsOneWidget);
+    expect(find.text('Đang nhận diện trực tiếp'), findsOneWidget);
   });
 
   testWidgets('adds a device through four-step wizard',

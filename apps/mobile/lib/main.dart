@@ -4,7 +4,6 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 import 'backend/silver_backend.dart';
-import 'guidance/guidance_client.dart';
 import 'templates/template_repository_client.dart';
 import 'voice/stt_client.dart';
 
@@ -159,6 +158,66 @@ const List<GuideStepData> guideSteps = <GuideStepData>[
   ),
 ];
 
+const TemplateDetailDto mockRecognizedTemplate = TemplateDetailDto(
+  id: 'template_daikin_ac_remote_v1',
+  brand: 'Daikin',
+  applianceType: 'air_conditioner',
+  templateCode: 'daikin_ac_remote_v1',
+  version: 1,
+  status: 'official',
+  templateImageUrl: 'data/templates/daikin_ac_remote_v1.txt',
+  buttons: <TemplateButtonDto>[
+    TemplateButtonDto(
+      buttonId: 'temp_up',
+      label: 'Temp +',
+      vietnameseName: 'Tăng nhiệt độ',
+      functionDescription: 'Tăng nhiệt độ điều hòa',
+      bbox: TemplateBBoxDto(x: 180, y: 235, width: 70, height: 55),
+      buttonType: 'physical',
+    ),
+    TemplateButtonDto(
+      buttonId: 'temp_down',
+      label: 'Temp -',
+      vietnameseName: 'Giảm nhiệt độ',
+      functionDescription: 'Giảm nhiệt độ điều hòa',
+      bbox: TemplateBBoxDto(x: 75, y: 235, width: 70, height: 55),
+      buttonType: 'physical',
+    ),
+    TemplateButtonDto(
+      buttonId: 'power',
+      label: 'Power',
+      vietnameseName: 'Nguồn',
+      functionDescription: 'Bật hoặc tắt điều hòa',
+      bbox: TemplateBBoxDto(x: 220, y: 60, width: 55, height: 55),
+      buttonType: 'physical',
+    ),
+    TemplateButtonDto(
+      buttonId: 'mode',
+      label: 'Mode',
+      vietnameseName: 'Chế độ',
+      functionDescription: 'Đổi chế độ hoạt động',
+      bbox: TemplateBBoxDto(x: 75, y: 310, width: 70, height: 50),
+      buttonType: 'physical',
+    ),
+    TemplateButtonDto(
+      buttonId: 'fan',
+      label: 'Fan',
+      vietnameseName: 'Quạt',
+      functionDescription: 'Đổi tốc độ quạt',
+      bbox: TemplateBBoxDto(x: 180, y: 310, width: 70, height: 50),
+      buttonType: 'physical',
+    ),
+    TemplateButtonDto(
+      buttonId: 'timer',
+      label: 'Timer',
+      vietnameseName: 'Hẹn giờ',
+      functionDescription: 'Cài hẹn giờ',
+      bbox: TemplateBBoxDto(x: 130, y: 405, width: 75, height: 45),
+      buttonType: 'physical',
+    ),
+  ],
+);
+
 class SilverPrototypeShell extends StatefulWidget {
   const SilverPrototypeShell({required this.backend, super.key});
 
@@ -176,7 +235,6 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   bool _recognitionBusy = false;
   bool _voiceBusy = false;
   TemplateDetailDto? _selectedTemplate;
-  String _selectedTemplateId = 'template_daikin_ac_remote_v1';
   List<GuideStepData> _currentGuideSteps = guideSteps;
   final STTClient _stt = STTClient();
 
@@ -232,30 +290,13 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   }
 
   Future<void> _acceptBackendRecognition() async {
+    final device = _deviceFromTemplate(mockRecognizedTemplate);
     setState(() {
-      _recognitionBusy = true;
+      _selectedTemplate = mockRecognizedTemplate;
+      _recognitionBusy = false;
       _toast = null;
+      _stack = <RouteState>[..._stack, RouteState('voice', device: device)];
     });
-    try {
-      final result = await widget.backend.recognizeDefault();
-      final device = _deviceFromTemplate(result.template);
-      setState(() {
-        _selectedTemplate = result.template;
-        _selectedTemplateId = result.template.id;
-        _recognitionBusy = false;
-        _stack = <RouteState>[..._stack, RouteState('voice', device: device)];
-      });
-    } on FriendlyBackendException catch (error) {
-      setState(() {
-        _recognitionBusy = false;
-        _toast = error.messageVi;
-      });
-    } catch (_) {
-      setState(() {
-        _recognitionBusy = false;
-        _toast = 'Không kết nối được backend. Vui lòng thử lại.';
-      });
-    }
   }
 
   Future<void> _startListening() async {
@@ -283,30 +324,11 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   Future<void> _askBackendGuidance(DemoDevice device,
       {required String query}) async {
     setState(() {
-      _voiceBusy = true;
+      _currentGuideSteps = guideSteps;
+      _voiceBusy = false;
       _toast = null;
+      _stack = <RouteState>[..._stack, RouteState('guide', device: device)];
     });
-    try {
-      final guidance = await widget.backend.createGuidance(
-        templateId: _selectedTemplateId,
-        userQueryText: query,
-      );
-      setState(() {
-        _currentGuideSteps = _guideStepsFromBackend(guidance);
-        _voiceBusy = false;
-        _stack = <RouteState>[..._stack, RouteState('guide', device: device)];
-      });
-    } on FriendlyBackendException catch (error) {
-      setState(() {
-        _voiceBusy = false;
-        _toast = error.messageVi;
-      });
-    } catch (_) {
-      setState(() {
-        _voiceBusy = false;
-        _toast = 'Không lấy được hướng dẫn từ backend.';
-      });
-    }
   }
 
   DemoDevice _deviceFromTemplate(TemplateDetailDto template) {
@@ -322,56 +344,6 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
       model: template.templateCode,
       last: 'Vừa nhận diện',
     );
-  }
-
-  List<GuideStepData> _guideStepsFromBackend(GuidanceOutputDto guidance) {
-    final steps = guidance.steps.map((step) {
-      final button = _buttonFor(step.buttonId);
-      return GuideStepData(
-        kind: 'Bấm nút',
-        buttonId: _remoteButtonId(step.buttonId),
-        title: _displayButtonTitle(button, step.buttonId),
-        hint: step.instructionVi,
-      );
-    }).toList();
-    final expectedResult = guidance.steps.last.expectedResult;
-    return <GuideStepData>[
-      ...steps,
-      GuideStepData(
-        kind: 'Kiểm tra',
-        buttonId: '',
-        title: 'Xong rồi!',
-        hint: expectedResult,
-      ),
-    ];
-  }
-
-  TemplateButtonDto? _buttonFor(String buttonId) {
-    for (final button in _selectedTemplate?.buttons ?? <TemplateButtonDto>[]) {
-      if (button.buttonId == buttonId) {
-        return button;
-      }
-    }
-    return null;
-  }
-
-  String _displayButtonTitle(TemplateButtonDto? button, String buttonId) {
-    if (buttonId == 'temp_up') {
-      return 'Nhiệt độ +';
-    }
-    return button?.vietnameseName ?? buttonId;
-  }
-
-  String _remoteButtonId(String buttonId) {
-    return switch (buttonId) {
-      'temp_up' => 'tempup',
-      'temp_down' => 'tempdn',
-      'power' => 'power',
-      'mode' => 'mode',
-      'fan' => 'fan',
-      'timer' => 'timer',
-      _ => buttonId,
-    };
   }
 
   @override
@@ -929,7 +901,7 @@ class _GuideScreenState extends State<GuideScreen> {
                       child: GreenButton(
                           label: 'Hoàn thành',
                           icon: Icons.check,
-                          onTap: () => widget.onNavigate('home')),
+                          onTap: () => widget.onNavigate('back')),
                     ),
                   ],
                 ),
@@ -1774,27 +1746,31 @@ class _CameraCardState extends State<CameraCard> {
                 fontWeight: FontWeight.w900),
           ),
           const SizedBox(height: 12),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22),
-            child: FutureBuilder<void>(
-              future: _cameraInitialization,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done ||
-                    snapshot.hasError ||
-                    _cameraController == null) {
-                  return RemotePanel(
-                    display: '26°C',
-                    scanning: widget.scanning,
-                    height: 305,
-                  );
-                }
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final previewHeight =
+                  (constraints.maxWidth * 9 / 16).clamp(300.0, 460.0);
+              return FutureBuilder<void>(
+                future: _cameraInitialization,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState != ConnectionState.done ||
+                      snapshot.hasError ||
+                      _cameraController == null) {
+                    return RemotePanel(
+                      display: '26°C',
+                      scanning: widget.scanning,
+                      height: previewHeight,
+                    );
+                  }
 
-                return CameraPreviewPanel(
-                  controller: _cameraController!,
-                  scanning: widget.scanning,
-                );
-              },
-            ),
+                  return CameraPreviewPanel(
+                    controller: _cameraController!,
+                    scanning: widget.scanning,
+                    height: previewHeight,
+                  );
+                },
+              );
+            },
           ),
         ],
       ),
@@ -1806,11 +1782,13 @@ class CameraPreviewPanel extends StatelessWidget {
   const CameraPreviewPanel({
     required this.controller,
     required this.scanning,
+    required this.height,
     super.key,
   });
 
   final CameraController controller;
   final bool scanning;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -1821,7 +1799,7 @@ class CameraPreviewPanel extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(18),
       child: SizedBox(
-        height: 305,
+        height: height,
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
