@@ -5,6 +5,7 @@ appliance control panels. The MVP uses reviewed appliance templates,
 logo-guided template matching, confidence checks, Vietnamese voice/text queries,
 and validated `button_id` guidance.
 
+**Data link**: https://drive.google.com/drive/folders/1JwesdumQ9GoQBLPNvIU4FEUvrY0AW4lO?usp=sharing
 ## Current MVP Scope
 
 - Backend API with SQLite seed data for reviewed appliance templates.
