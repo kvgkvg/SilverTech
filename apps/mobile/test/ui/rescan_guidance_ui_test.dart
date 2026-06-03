@@ -1,7 +1,7 @@
-import '../../lib/ui/rescan_guidance_ui.dart';
-import '../../lib/vision/geometry.dart';
-import '../../lib/vision/match_confidence_state.dart';
-import '../../lib/vision/overlay_renderer.dart';
+import 'package:silvertech_mobile/ui/rescan_guidance_ui.dart';
+import 'package:silvertech_mobile/vision/geometry.dart';
+import 'package:silvertech_mobile/vision/match_confidence_state.dart';
+import 'package:silvertech_mobile/vision/overlay_renderer.dart';
 
 void main() {
   final low = MatchConfidenceState.score(
@@ -12,7 +12,7 @@ void main() {
 
   assert(!low.canShowHighlight);
   assert(
-    OverlayRenderer()
+    const OverlayRenderer()
         .visibleHighlights(
           confidence: low,
           projectedButtons: const <ProjectedButton>[],

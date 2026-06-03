@@ -9,8 +9,9 @@ class OverlayRenderer {
     required List<ProjectedButton> projectedButtons,
     required String? activeButtonId,
   }) {
-    if (!confidence.canShowHighlight || activeButtonId == null)
+    if (!confidence.canShowHighlight || activeButtonId == null) {
       return <ProjectedButton>[];
+    }
     return projectedButtons
         .where((button) => button.buttonId == activeButtonId)
         .toList();

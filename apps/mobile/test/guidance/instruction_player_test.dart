@@ -1,4 +1,4 @@
-import '../../lib/guidance/instruction_player.dart';
+import 'package:silvertech_mobile/guidance/instruction_player.dart';
 
 void main() {
   final player = InstructionPlayer(<GuidanceStep>[
