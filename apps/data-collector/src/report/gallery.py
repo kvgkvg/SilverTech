@@ -28,7 +28,8 @@ small{color:#999;word-break:break-all}
     <small><a href="{{ r.source_url }}">{{ r.source_url }}</a></small>
   </div>
 {% endfor %}
-</div></body></html>"""
+</div></body></html>""",
+    autoescape=True,
 )
 
 
