@@ -32,3 +32,6 @@ Thumbs.db
 *.swp
 .vscode/
 .idea/
+
+# data-collector Slice 1 runtime output (large, unreviewed)
+data/collected/
