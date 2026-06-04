@@ -1,32 +1,47 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart' show debugPrint;
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:path_provider/path_provider.dart';
-import 'package:sherpa_onnx/sherpa_onnx.dart' as sherpa;
 
 import 'voice_input.dart';
-import 'sherpa_recognizer.dart';
+import 'sherpa_recognizer_stub.dart'
+    if (dart.library.io) 'sherpa_recognizer.dart';
+
+abstract class SpeechToTextClient {
+  bool get isRecording;
+
+  Future<void> warmUp();
+
+  Future<bool> startListening();
+
+  Future<String> stopAndTranscribe();
+
+  /// Decodes a bundled WAV asset (mic-independent self-test).
+  Future<String> transcribeAsset(String assetKey);
+
+  void dispose();
+}
 
 /// On-device speech-to-text: mic capture (press/release) + sherpa-onnx
 /// Vietnamese transducer. Replaces the former server `/api/stt` mock.
-class STTClient {
+class STTClient implements SpeechToTextClient {
   STTClient();
 
   final VoiceCapture _capture = VoiceCapture();
   SherpaRecognizer? _recognizer;
 
+  @override
   bool get isRecording => _capture.isRecording;
 
   /// Preloads the ASR model so the first transcription is not slow.
+  @override
   Future<void> warmUp() async {
     _recognizer ??= await SherpaRecognizer.instance();
   }
 
   /// Begins listening. Returns false if mic permission denied.
+  @override
   Future<bool> startListening() => _capture.start();
 
   /// Stops listening and returns the recognized Vietnamese text ('' if none).
+  @override
   Future<String> stopAndTranscribe() async {
     final samples = await _capture.stop();
     final double seconds = samples.length / VoiceCapture.sampleRate;
@@ -41,26 +56,15 @@ class STTClient {
   }
 
   /// Mic-independent proof that the model works: decodes a bundled WAV asset
-  /// (16 kHz mono PCM) and returns the recognized text. Use to verify the
-  /// model → UI path even when the emulator mic is silent.
+  /// and returns the recognized text. Verifies the model → UI path even when
+  /// the mic is silent. Throws [UnsupportedError] on web.
+  @override
   Future<String> transcribeAsset(String assetKey) async {
     final recognizer = _recognizer ??= await SherpaRecognizer.instance();
-    final data = await rootBundle.load(assetKey);
-    final Directory tmp = await getTemporaryDirectory();
-    final File file = File('${tmp.path}/${assetKey.split('/').last}');
-    await file.writeAsBytes(
-      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
-      flush: true,
-    );
-    final sherpa.WaveData wave = sherpa.readWave(file.path);
-    debugPrint('[STT] wav ${wave.samples.length} samples sr=${wave.sampleRate}');
-    if (wave.samples.isEmpty) return '';
-    final String text =
-        recognizer.recognize(wave.samples, sampleRate: wave.sampleRate);
-    debugPrint('[STT] wav decoded: "$text"');
-    return text;
+    return recognizer.transcribeAsset(assetKey);
   }
 
+  @override
   void dispose() {
     _capture.dispose();
     _recognizer?.dispose();

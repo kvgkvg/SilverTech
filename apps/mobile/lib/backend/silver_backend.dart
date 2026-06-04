@@ -5,6 +5,14 @@ const String defaultSilverTechApiBaseUrl = String.fromEnvironment(
   'SILVERTECH_API_BASE_URL',
   defaultValue: 'http://10.0.2.2:8000',
 );
+const String defaultSilverTechMatchBrand = String.fromEnvironment(
+  'SILVERTECH_MATCH_BRAND',
+  defaultValue: 'Panasonic',
+);
+const String defaultSilverTechMatchApplianceType = String.fromEnvironment(
+  'SILVERTECH_MATCH_APPLIANCE_TYPE',
+  defaultValue: 'microwave',
+);
 
 abstract class SilverBackendGateway {
   Future<BackendRecognitionResult> recognizeDefault();
@@ -36,8 +44,8 @@ class HttpSilverBackendGateway implements SilverBackendGateway {
   @override
   Future<BackendRecognitionResult> recognizeDefault() async {
     final candidates = await _templates.findCandidates(
-      brand: 'Daikin',
-      applianceType: 'air_conditioner',
+      brand: defaultSilverTechMatchBrand,
+      applianceType: defaultSilverTechMatchApplianceType,
       brandConfidence: 0.92,
     );
     if (candidates.isEmpty) {

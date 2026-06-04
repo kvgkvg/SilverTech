@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart' show debugPrint;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
 import 'package:sherpa_onnx/sherpa_onnx.dart' as sherpa;
@@ -58,6 +59,25 @@ class SherpaRecognizer {
     final String text = _recognizer.getResult(stream).text;
     stream.free();
     return text.trim();
+  }
+
+  /// Mic-independent proof that the model works: decodes a bundled WAV asset
+  /// (16 kHz mono PCM) and returns the recognized text. Use to verify the
+  /// model → UI path even when the mic is silent.
+  Future<String> transcribeAsset(String assetKey) async {
+    final data = await rootBundle.load(assetKey);
+    final Directory tmp = await getTemporaryDirectory();
+    final File file = File('${tmp.path}/${assetKey.split('/').last}');
+    await file.writeAsBytes(
+      data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
+      flush: true,
+    );
+    final sherpa.WaveData wave = sherpa.readWave(file.path);
+    debugPrint('[STT] wav ${wave.samples.length} samples sr=${wave.sampleRate}');
+    if (wave.samples.isEmpty) return '';
+    final String text = recognize(wave.samples, sampleRate: wave.sampleRate);
+    debugPrint('[STT] wav decoded: "$text"');
+    return text;
   }
 
   void dispose() {
