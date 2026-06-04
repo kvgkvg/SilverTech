@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
 import 'backend/silver_backend.dart';
+import 'guidance/guidance_client.dart';
 import 'templates/template_repository_client.dart';
 import 'voice/stt_client.dart';
 
@@ -237,6 +238,8 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   TemplateDetailDto? _selectedTemplate;
   List<GuideStepData> _currentGuideSteps = guideSteps;
   final STTClient _stt = STTClient();
+  Future<bool>? _startFuture;
+  String _recognizedText = '';
 
   @override
   void initState() {
@@ -299,36 +302,131 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
     });
   }
 
+  bool _sttBusy = false;
+
   Future<void> _startListening() async {
-    final ok = await _stt.startListening();
+    setState(() => _recognizedText = '');
+    final future = _stt.startListening();
+    _startFuture = future;
+    final ok = await future;
     if (!ok) {
       setState(() => _toast = 'Cần cấp quyền micro để nói câu hỏi.');
     }
   }
 
-  Future<void> _stopAndAskGuidance(DemoDevice device) async {
+  /// Mic-independent check: decode a bundled sample WAV and show the model's
+  /// output in the transcript card. Proves the ASR model → UI path works.
+  Future<void> _testAsrSample() async {
+    setState(() {
+      _sttBusy = true;
+      _recognizedText = '';
+      _toast = null;
+    });
+    String text;
+    try {
+      text = await _stt.transcribeAsset('assets/test/0.wav');
+    } catch (e, st) {
+      debugPrint('[STT] sample test error: $e\n$st');
+      setState(() {
+        _sttBusy = false;
+        _toast = 'Lỗi khi chạy mẫu thử ASR.';
+      });
+      return;
+    }
+    setState(() {
+      _sttBusy = false;
+      _recognizedText = text;
+      _toast = text.isEmpty ? 'Mẫu thử không ra kết quả.' : null;
+    });
+  }
+
+  /// Stops mic, runs on-device ASR, shows the recognized text in the UI.
+  /// Does NOT auto-navigate — user reads the transcript then asks for guidance.
+  Future<void> _stopAndTranscribe(DemoDevice device) async {
+    // Ensure capture actually started before stopping (avoids stop-before-start
+    // race on fast taps / first-use permission prompt → empty waveform).
+    await _startFuture;
+    _startFuture = null;
+    setState(() => _sttBusy = true);
     String query;
     try {
       query = await _stt.stopAndTranscribe();
-    } catch (_) {
-      setState(() => _toast = 'Không nhận diện được giọng nói. Thử lại.');
+    } catch (e, st) {
+      debugPrint('[STT] transcribe error: $e\n$st');
+      setState(() {
+        _sttBusy = false;
+        _recognizedText = '';
+        _toast = 'Không nhận diện được giọng nói. Thử lại.';
+      });
       return;
     }
-    if (query.isEmpty) {
-      setState(() => _toast = 'Chưa nghe rõ câu hỏi. Giữ nút và nói lại.');
-      return;
-    }
-    await _askBackendGuidance(device, query: query);
+    debugPrint('[STT] recognized: "$query"');
+    setState(() {
+      _sttBusy = false;
+      _recognizedText = query;
+      _toast = query.isEmpty ? 'Chưa nghe rõ câu hỏi. Giữ nút và nói lại.' : null;
+    });
   }
 
   Future<void> _askBackendGuidance(DemoDevice device,
       {required String query}) async {
+    final String? templateId = _selectedTemplate?.id;
+    if (templateId == null) {
+      setState(() => _toast = 'Chưa nhận diện thiết bị. Quét lại.');
+      return;
+    }
     setState(() {
-      _currentGuideSteps = guideSteps;
-      _voiceBusy = false;
+      _voiceBusy = true;
       _toast = null;
-      _stack = <RouteState>[..._stack, RouteState('guide', device: device)];
     });
+    try {
+      final GuidanceOutputDto guidance = await widget.backend.createGuidance(
+        templateId: templateId,
+        userQueryText: query,
+      );
+      debugPrint('[GUIDE] intent=${guidance.intent} '
+          'steps=${guidance.steps.length}');
+      setState(() {
+        _currentGuideSteps = _mapGuidanceSteps(guidance);
+        _voiceBusy = false;
+        _toast = null;
+        _stack = <RouteState>[..._stack, RouteState('guide', device: device)];
+      });
+    } on FriendlyBackendException catch (e) {
+      debugPrint('[GUIDE] backend error ${e.statusCode}: ${e.messageVi}');
+      setState(() {
+        _voiceBusy = false;
+        _toast = e.messageVi;
+      });
+    } catch (e) {
+      debugPrint('[GUIDE] error: $e');
+      setState(() {
+        _voiceBusy = false;
+        _toast = 'Không lấy được hướng dẫn. Thử lại.';
+      });
+    }
+  }
+
+  List<GuideStepData> _mapGuidanceSteps(GuidanceOutputDto guidance) {
+    final List<GuideStepData> steps = <GuideStepData>[
+      for (final GuidanceStepDto s in guidance.steps)
+        GuideStepData(
+          kind: 'Bấm nút',
+          buttonId: s.buttonId,
+          title: s.instructionVi,
+          hint: s.expectedResult,
+        ),
+    ];
+    final String? note = guidance.safetyNote;
+    if (note != null && note.isNotEmpty) {
+      steps.add(GuideStepData(
+        kind: 'Lưu ý',
+        buttonId: steps.isNotEmpty ? steps.last.buttonId : '',
+        title: 'Lưu ý an toàn',
+        hint: note,
+      ));
+    }
+    return steps;
   }
 
   DemoDevice _deviceFromTemplate(TemplateDetailDto template) {
@@ -367,9 +465,14 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
           device: _current.device ?? acDevice,
           buttonCount: _selectedTemplate?.buttons.length ?? 6,
           busy: _voiceBusy,
+          sttBusy: _sttBusy,
+          recognizedText: _recognizedText,
           onNavigate: _nav,
           onStartListening: _startListening,
-          onStopAndAsk: _stopAndAskGuidance,
+          onStopListening: _stopAndTranscribe,
+          onTestSample: _testAsrSample,
+          onAskGuidance: (device) =>
+              _askBackendGuidance(device, query: _recognizedText),
         ),
       'guide' => GuideScreen(
           device: _current.device ?? acDevice,
@@ -606,18 +709,26 @@ class VoiceScreen extends StatefulWidget {
     required this.device,
     required this.buttonCount,
     required this.busy,
+    required this.sttBusy,
+    required this.recognizedText,
     required this.onNavigate,
     required this.onStartListening,
-    required this.onStopAndAsk,
+    required this.onStopListening,
+    required this.onTestSample,
+    required this.onAskGuidance,
     super.key,
   });
 
   final DemoDevice device;
   final int buttonCount;
   final bool busy;
+  final bool sttBusy;
+  final String recognizedText;
   final void Function(String target, {DemoDevice? device}) onNavigate;
   final Future<void> Function() onStartListening;
-  final Future<void> Function(DemoDevice device) onStopAndAsk;
+  final Future<void> Function(DemoDevice device) onStopListening;
+  final Future<void> Function() onTestSample;
+  final Future<void> Function(DemoDevice device) onAskGuidance;
 
   @override
   State<VoiceScreen> createState() => _VoiceScreenState();
@@ -662,9 +773,11 @@ class _VoiceScreenState extends State<VoiceScreen> {
                       child: Text(
                         holding
                             ? 'Đang nghe... hãy nói câu hỏi của ông/bà'
-                            : widget.busy
-                                ? 'Đang hỏi backend...'
-                                : 'Sẵn sàng - giữ nút mic và nói câu hỏi',
+                            : widget.sttBusy
+                                ? 'Đang nhận diện giọng nói...'
+                                : widget.busy
+                                    ? 'Đang hỏi backend...'
+                                    : 'Sẵn sàng - giữ nút mic và nói câu hỏi',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: Color(0xFFE9EEF4),
@@ -673,17 +786,31 @@ class _VoiceScreenState extends State<VoiceScreen> {
                         ),
                       ),
                     ),
+                    if (widget.recognizedText.isNotEmpty) ...<Widget>[
+                      const SizedBox(height: 14),
+                      _TranscriptCard(text: widget.recognizedText),
+                      const SizedBox(height: 14),
+                      SizedBox(
+                        width: double.infinity,
+                        child: PrimaryButton(
+                          label: 'Hỏi hướng dẫn',
+                          icon: Icons.help_outline,
+                          enabled: !widget.busy,
+                          onTap: () => widget.onAskGuidance(widget.device),
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 22),
                     GestureDetector(
                       onTapDown: (_) {
-                        if (widget.busy) return;
+                        if (widget.busy || widget.sttBusy) return;
                         setState(() => holding = true);
                         widget.onStartListening();
                       },
                       onTapUp: (_) {
                         if (!holding) return;
                         setState(() => holding = false);
-                        widget.onStopAndAsk(widget.device);
+                        widget.onStopListening(widget.device);
                       },
                       onTapCancel: () => setState(() => holding = false),
                       child: AnimatedScale(
@@ -746,6 +873,22 @@ class _VoiceScreenState extends State<VoiceScreen> {
                         color: Color(0xB3FFFFFF),
                         fontSize: 15,
                         fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    TextButton.icon(
+                      onPressed: widget.sttBusy
+                          ? null
+                          : () => widget.onTestSample(),
+                      icon: const Icon(Icons.science_outlined,
+                          color: Color(0xB3FFFFFF), size: 18),
+                      label: const Text(
+                        'Thử model với mẫu có sẵn',
+                        style: TextStyle(
+                          color: Color(0xB3FFFFFF),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ],
@@ -2647,6 +2790,56 @@ class FooterActions extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 30),
       child: column ? Column(children: children) : Row(children: children),
+    );
+  }
+}
+
+/// Shows the on-device ASR transcript on the voice screen so the user can see
+/// exactly what was heard before asking for guidance.
+class _TranscriptCard extends StatelessWidget {
+  const _TranscriptCard({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.18)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const Row(
+            children: <Widget>[
+              Icon(Icons.hearing, color: Color(0xFFBFE0FF), size: 18),
+              SizedBox(width: 6),
+              Text(
+                'Nghe được',
+                style: TextStyle(
+                  color: Color(0xFFBFE0FF),
+                  fontSize: 13,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            text,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 19,
+              fontWeight: FontWeight.w800,
+              height: 1.25,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

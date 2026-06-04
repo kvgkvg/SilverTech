@@ -65,21 +65,35 @@ class SherpaRecognizer {
     _instance = null;
   }
 
+  /// Bump when the bundled model files change so stale on-disk copies from a
+  /// previous install are wiped and re-copied (size alone is unreliable —
+  /// a wrong-model file can share byte length with the correct one).
+  static const String _modelVersion = 'vi-30M-int8-2026-02-09';
+
   static Future<String> _copyAssetsToDisk() async {
     final Directory docs = await getApplicationDocumentsDirectory();
     final Directory dir = Directory('${docs.path}/asr_model');
+    final File marker = File('${dir.path}/.model_version');
+
+    final bool current =
+        marker.existsSync() && marker.readAsStringSync() == _modelVersion;
+    if (!current && dir.existsSync()) {
+      dir.deleteSync(recursive: true); // drop stale/wrong-model files
+    }
     if (!dir.existsSync()) {
       dir.createSync(recursive: true);
     }
+
     for (final String name in _files) {
       final File dest = File('${dir.path}/$name');
-      if (dest.existsSync()) continue;
+      if (current && dest.existsSync()) continue;
       final ByteData data = await rootBundle.load('$_assetDir/$name');
       await dest.writeAsBytes(
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
         flush: true,
       );
     }
+    marker.writeAsStringSync(_modelVersion);
     return dir.path;
   }
 }
