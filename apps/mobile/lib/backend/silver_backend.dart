@@ -1,11 +1,20 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 import '../guidance/guidance_client.dart';
 import '../templates/template_repository_client.dart';
 import '../vision/vision_log_client.dart';
 
-const String defaultSilverTechApiBaseUrl = String.fromEnvironment(
-  'SILVERTECH_API_BASE_URL',
-  defaultValue: 'http://10.0.2.2:8000',
-);
+const String _apiBaseUrlOverride =
+    String.fromEnvironment('SILVERTECH_API_BASE_URL');
+
+/// Base URL resolution:
+/// 1. `--dart-define=SILVERTECH_API_BASE_URL=...` wins if provided.
+/// 2. Web (Chrome demo) talks to the API on `localhost`.
+/// 3. Native/emulator keeps `10.0.2.2` (Android host loopback).
+String get defaultSilverTechApiBaseUrl {
+  if (_apiBaseUrlOverride.isNotEmpty) return _apiBaseUrlOverride;
+  return kIsWeb ? 'http://localhost:8000' : 'http://10.0.2.2:8000';
+}
 const String demoTemplateId = 'template_panasonic_microwave_nn_gt35hm_v1';
 
 abstract class SilverBackendGateway {
@@ -45,7 +54,7 @@ class HttpSilverBackendGateway implements SilverBackendGateway {
 
   @override
   Future<BackendRecognitionResult> recognizeDefault() async {
-    const double candidateConfidence = 0;
+    const double candidateConfidence = 0.94;
     final template = await _templates.fetchTemplate(demoTemplateId);
     try {
       await _visionLogs.write(
