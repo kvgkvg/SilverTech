@@ -11,3 +11,15 @@ def test_template_contract(client):
     detail = client.get(f"/api/templates/{template_id}")
     assert detail.status_code == 200
     assert detail.json()["buttons"]
+
+
+def test_zero_confidence_returns_top_candidate(client):
+    response = client.post(
+        "/api/vision/candidates",
+        json={"brand_confidence": 0},
+    )
+
+    assert response.status_code == 200
+    candidates = response.json()["candidates"]
+    assert len(candidates) == 1
+    assert candidates[0]["status"] == "official"

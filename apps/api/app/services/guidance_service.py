@@ -20,6 +20,7 @@ def create_guidance(template_id: str, user_query: str) -> dict:
     if template is None:
         raise GuidanceError("missing_template")
     prompt_summary = build_prompt_summary(template, user_query)
+    time.sleep(1.2)
     raw = LLMService().generate(user_query, template)
     try:
         guidance = parse_guidance(raw)

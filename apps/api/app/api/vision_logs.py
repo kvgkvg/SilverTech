@@ -15,4 +15,12 @@ def ingest_vision_log(payload: VisionLogRequest) -> dict:
         log_id = write_vision_log(payload.model_dump())
     except ValueError as exc:
         raise friendly_error(400, "Thong tin nhan dien chua hop le.", "try_again") from exc
+    print(
+        "[VISION] log "
+        f"id={log_id} accepted={payload.accepted} template_id={payload.template_id} "
+        f"brand={payload.brand_candidate} match_score={payload.match_score} "
+        f"inliers={payload.inlier_count} ratio={payload.inlier_ratio} "
+        f"failure={payload.failure_reason}",
+        flush=True,
+    )
     return {"id": log_id}
