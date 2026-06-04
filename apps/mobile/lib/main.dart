@@ -617,12 +617,7 @@ class HomeScreen extends StatelessWidget {
         const SizedBox(height: 22),
         BigStartButton(onTap: () => onNavigate('recognize')),
         const SizedBox(height: 14),
-        ...steps.indexed.map(
-          (entry) => Padding(
-            padding: const EdgeInsets.only(bottom: 9),
-            child: StepSummaryRow(index: entry.$1 + 1, label: entry.$2),
-          ),
-        ),
+        HowToHintCard(steps: steps),
         const SizedBox(height: 17),
         const Text(
           'Đã dùng gần đây',
@@ -1584,42 +1579,90 @@ class BigStartButton extends StatelessWidget {
   }
 }
 
-class StepSummaryRow extends StatelessWidget {
-  const StepSummaryRow({required this.index, required this.label, super.key});
+/// Single flat info block summarizing the 3 usage steps.
+///
+/// Intentionally NOT interactive: no InkWell/onTap, no drop shadow, header
+/// label + vertical timeline so it reads as a description, not tappable rows.
+class HowToHintCard extends StatelessWidget {
+  const HowToHintCard({required this.steps, super.key});
 
-  final int index;
-  final String label;
+  final List<String> steps;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+      padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
       decoration: BoxDecoration(
-          color: SilverTokens.blueTint,
-          borderRadius: BorderRadius.circular(15)),
-      child: Row(
+        color: SilverTokens.surface2,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: SilverTokens.blueTint, width: 1.5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          CircleAvatar(
-            radius: 14,
-            backgroundColor: SilverTokens.blue,
-            child: Text(
-              '$index',
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w900),
+          const Text(
+            '3 bước đơn giản',
+            style: TextStyle(
+              color: SilverTokens.ink2,
+              fontSize: 14,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 0.3,
             ),
           ),
-          const SizedBox(width: 13),
-          Expanded(
-            child: Text(
-              label,
-              style: const TextStyle(
-                  color: SilverTokens.ink,
-                  fontSize: 16.5,
-                  fontWeight: FontWeight.w800),
-            ),
-          ),
+          const SizedBox(height: 14),
+          ...steps.indexed.map((entry) {
+            final bool last = entry.$1 == steps.length - 1;
+            return IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Container(
+                        width: 26,
+                        height: 26,
+                        alignment: Alignment.center,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: SilverTokens.blueTint2,
+                        ),
+                        child: Text(
+                          '${entry.$1 + 1}',
+                          style: const TextStyle(
+                            color: SilverTokens.blueDeep,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                      ),
+                      if (!last)
+                        Expanded(
+                          child: Container(
+                            width: 2,
+                            color: SilverTokens.blueTint2,
+                          ),
+                        ),
+                    ],
+                  ),
+                  const SizedBox(width: 13),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 3, bottom: last ? 0 : 16),
+                      child: Text(
+                        entry.$2,
+                        style: const TextStyle(
+                          color: SilverTokens.ink,
+                          fontSize: 16,
+                          height: 1.2,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
         ],
       ),
     );
