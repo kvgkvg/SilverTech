@@ -78,7 +78,20 @@ def test_openrouter_uses_qwen_model_and_parses_chat_completion(monkeypatch):
     assert captured["body"]["model"] == "qwen/qwen3.7-plus"
     assert captured["body"]["response_format"] == {"type": "json_object"}
     assert captured["body"]["messages"][0]["role"] == "system"
-    assert "temp_up" in captured["body"]["messages"][1]["content"]
+    system_prompt = captured["body"]["messages"][0]["content"]
+    assert "JSON only" in system_prompt
+    assert "client-side processing" in system_prompt
+    assert "step_number" in system_prompt
+    assert "instruction_vi" in system_prompt
+    assert "button_id" in system_prompt
+    assert "expected_result" in system_prompt
+    assert "template database" in system_prompt
+    assert "one clear user action" in system_prompt
+    user_prompt = json.loads(captured["body"]["messages"][1]["content"])
+    assert user_prompt["task"] == "process_user_query_against_template_database"
+    assert user_prompt["user_query_text"] == "Tôi muốn chỉnh nhiệt độ"
+    assert user_prompt["template_database"]["template_id"] == "template_daikin_ac_remote_v1"
+    assert user_prompt["template_database"]["valid_buttons"][0]["button_id"] == "temp_up"
     assert captured["timeout"] == 30
     assert guidance["steps"][0]["button_id"] == "temp_up"
 

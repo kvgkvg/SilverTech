@@ -63,14 +63,7 @@ class LLMService:
             "messages": [
                 {
                     "role": "system",
-                    "content": (
-                        "You are SilverTech, an elderly-first Vietnamese appliance guidance "
-                        "assistant. Return only JSON matching this schema: "
-                        '{"intent":"string","steps":[{"step_number":1,'
-                        '"instruction_vi":"string","button_id":"string",'
-                        '"expected_result":"string"}],"safety_note":null}. '
-                        "Every step button_id must be one of the provided valid buttons."
-                    ),
+                    "content": _openrouter_system_prompt(),
                 },
                 {
                     "role": "user",
@@ -106,6 +99,25 @@ def _openrouter_headers(api_key: str) -> dict[str, str]:
     return headers
 
 
+def _openrouter_system_prompt() -> str:
+    return (
+        "You are SilverTech, an elderly-first Vietnamese appliance guidance assistant. "
+        "Process the user's Vietnamese query together with the provided template database. "
+        "Return JSON only for client-side processing, with no Markdown, prose, or code fences. "
+        "The JSON schema is "
+        '{"intent":"string","steps":[{"step_number":1,"instruction_vi":"string",'
+        '"button_id":"string","expected_result":"string"}],"safety_note":null}. '
+        "The steps array must show what the user needs to do step by step. "
+        "Each step must contain one clear user action, use sequential step_number values, "
+        "and reference exactly one valid button_id from the template database. "
+        "Write instruction_vi and expected_result in simple Vietnamese for elderly users. "
+        "Do not invent buttons, brands, modes, sensors, or appliance features that are not in "
+        "the template database. If the user's request cannot be handled with the valid buttons, "
+        "return one safe step using the closest valid button only when it is clearly appropriate; "
+        "otherwise return a brief Vietnamese safety_note asking the user to try a different query."
+    )
+
+
 def _openrouter_user_prompt(user_query: str, template: dict[str, Any]) -> str:
     valid_buttons = [
         {
@@ -117,12 +129,15 @@ def _openrouter_user_prompt(user_query: str, template: dict[str, Any]) -> str:
     ]
     return json.dumps(
         {
+            "task": "process_user_query_against_template_database",
             "user_query_text": user_query,
-            "template_id": template.get("id"),
-            "template_code": template.get("template_code"),
-            "brand": template.get("brand"),
-            "appliance_type": template.get("appliance_type"),
-            "valid_buttons": valid_buttons,
+            "template_database": {
+                "template_id": template.get("id"),
+                "template_code": template.get("template_code"),
+                "brand": template.get("brand"),
+                "appliance_type": template.get("appliance_type"),
+                "valid_buttons": valid_buttons,
+            },
         },
         ensure_ascii=False,
     )
