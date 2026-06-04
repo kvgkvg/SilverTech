@@ -243,6 +243,7 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   String? _toast;
   bool _recognitionBusy = false;
   bool _voiceBusy = false;
+  double _recognitionMatchScore = 0;
   TemplateDetailDto? _selectedTemplate;
   List<GuideStepData> _currentGuideSteps = guideSteps;
   late final SpeechToTextClient _stt;
@@ -312,6 +313,7 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
       if (!mounted) return;
       setState(() {
         _selectedTemplate = result.template;
+        _recognitionMatchScore = result.matchScore;
         _recognitionBusy = false;
         _stack = <RouteState>[..._stack, RouteState('voice', device: device)];
       });
@@ -392,7 +394,8 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
     setState(() {
       _sttBusy = false;
       _recognizedText = query;
-      _toast = query.isEmpty ? 'Chưa nghe rõ câu hỏi. Giữ nút và nói lại.' : null;
+      _toast =
+          query.isEmpty ? 'Chưa nghe rõ câu hỏi. Giữ nút và nói lại.' : null;
     });
   }
 
@@ -499,9 +502,11 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
           onNavigate: _nav,
           onUseResult: _acceptBackendRecognition,
           busy: _recognitionBusy,
+          matchScore: _recognitionMatchScore,
         ),
       'voice' => VoiceScreen(
           device: _current.device ?? acDevice,
+          template: _selectedTemplate,
           buttonCount: _selectedTemplate?.buttons.length ?? 6,
           busy: _voiceBusy,
           sttBusy: _sttBusy,
@@ -515,6 +520,7 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
         ),
       'guide' => GuideScreen(
           device: _current.device ?? acDevice,
+          template: _selectedTemplate,
           steps: _currentGuideSteps,
           onNavigate: _nav,
         ),
@@ -652,12 +658,14 @@ class RecognizeScreen extends StatelessWidget {
     required this.onNavigate,
     required this.onUseResult,
     required this.busy,
+    required this.matchScore,
     super.key,
   });
 
   final void Function(String target, {DemoDevice? device}) onNavigate;
   final Future<void> Function() onUseResult;
   final bool busy;
+  final double matchScore;
 
   @override
   Widget build(BuildContext context) {
@@ -668,18 +676,19 @@ class RecognizeScreen extends StatelessWidget {
         Expanded(
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
-            children: const <Widget>[
-              CameraCard(scanning: true),
-              SizedBox(height: 16),
+            children: <Widget>[
+              const CameraCard(scanning: true),
+              const SizedBox(height: 16),
               Center(
                 child: StatusPill(
-                  label: 'Đang nhận diện trực tiếp',
+                  label:
+                      'Đang nhận diện trực tiếp • ${(matchScore * 100).round()}%',
                   color: SilverTokens.green,
                   bg: SilverTokens.greenTint,
                 ),
               ),
-              SizedBox(height: 14),
-              Text(
+              const SizedBox(height: 14),
+              const Text(
                 'Camera tự tìm thiết bị và nút bấm',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -689,8 +698,8 @@ class RecognizeScreen extends StatelessWidget {
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              SizedBox(height: 6),
-              Text(
+              const SizedBox(height: 6),
+              const Text(
                 'Giữ điện thoại ổn định để hệ thống khoanh vùng các nút',
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -700,15 +709,20 @@ class RecognizeScreen extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 children: <Widget>[
-                  Expanded(
+                  const Expanded(
                       child:
                           StatBox(big: '1', small: 'thiết bị', tone: 'green')),
-                  SizedBox(width: 12),
+                  const SizedBox(width: 12),
                   Expanded(
-                      child: StatBox(big: '6', small: 'nút bấm', tone: 'red')),
+                    child: StatBox(
+                      big: '${(matchScore * 100).round()}%',
+                      small: 'độ tin cậy',
+                      tone: 'green',
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -744,6 +758,7 @@ class RecognizeScreen extends StatelessWidget {
 class VoiceScreen extends StatefulWidget {
   const VoiceScreen({
     required this.device,
+    required this.template,
     required this.buttonCount,
     required this.busy,
     required this.sttBusy,
@@ -757,6 +772,7 @@ class VoiceScreen extends StatefulWidget {
   });
 
   final DemoDevice device;
+  final TemplateDetailDto? template;
   final int buttonCount;
   final bool busy;
   final bool sttBusy;
@@ -789,149 +805,165 @@ class _VoiceScreenState extends State<VoiceScreen> {
           onBack: () => widget.onNavigate('back'),
         ),
         Expanded(
-          child: Column(
-            children: <Widget>[
-              const Padding(
-                padding: EdgeInsets.fromLTRB(48, 6, 48, 0),
-                child: RemotePanel(display: '26°C', height: 300),
-              ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 48),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 18, vertical: 11),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.08),
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Text(
-                        holding
-                            ? 'Đang nghe... hãy nói câu hỏi của ông/bà'
-                            : widget.sttBusy
-                                ? 'Đang nhận diện giọng nói...'
-                                : widget.busy
-                                    ? 'Đang hỏi backend...'
-                                    : 'Sẵn sàng - giữ nút mic và nói câu hỏi',
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Color(0xFFE9EEF4),
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    if (widget.recognizedText.isNotEmpty) ...<Widget>[
-                      const SizedBox(height: 14),
-                      _TranscriptCard(text: widget.recognizedText),
-                      const SizedBox(height: 14),
-                      SizedBox(
-                        width: double.infinity,
-                        child: PrimaryButton(
-                          label: 'Hỏi hướng dẫn',
-                          icon: Icons.help_outline,
-                          enabled: !widget.busy,
-                          onTap: () => widget.onAskGuidance(widget.device),
-                        ),
-                      ),
-                    ],
-                    const SizedBox(height: 22),
-                    GestureDetector(
-                      onTapDown: (_) {
-                        if (widget.busy || widget.sttBusy) return;
-                        setState(() => holding = true);
-                        widget.onStartListening();
-                      },
-                      onTapUp: (_) {
-                        if (!holding) return;
-                        setState(() => holding = false);
-                        widget.onStopListening(widget.device);
-                      },
-                      onTapCancel: () => setState(() => holding = false),
-                      child: AnimatedScale(
-                        scale: holding ? 1.06 : 1,
-                        duration: const Duration(milliseconds: 150),
-                        child: Container(
-                          width: 92,
-                          height: 92,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: const LinearGradient(
-                              colors: <Color>[
-                                SilverTokens.blueBright,
-                                SilverTokens.blueDeep
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            boxShadow: <BoxShadow>[
-                              BoxShadow(
-                                color: SilverTokens.blueDeep
-                                    .withValues(alpha: 0.45),
-                                blurRadius: 30,
-                                offset: const Offset(0, 14),
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
+                        child: widget.template == null
+                            ? const RemotePanel(display: '26°C', height: 300)
+                            : TemplateDataPanel(
+                                template: widget.template!,
                               ),
-                            ],
-                          ),
-                          child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(Icons.mic, color: Colors.white, size: 34),
-                              Text(
-                                'Mic',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w900,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 20, 20, 48),
+                        child: Column(
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 18, vertical: 11),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.08),
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: Text(
+                                holding
+                                    ? 'Đang nghe... hãy nói câu hỏi của ông/bà'
+                                    : widget.sttBusy
+                                        ? 'Đang nhận diện giọng nói...'
+                                        : widget.busy
+                                            ? 'Đang hỏi backend...'
+                                            : 'Sẵn sàng - giữ nút mic và nói câu hỏi',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Color(0xFFE9EEF4),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            if (widget.recognizedText.isNotEmpty) ...<Widget>[
+                              const SizedBox(height: 14),
+                              _TranscriptCard(text: widget.recognizedText),
+                              const SizedBox(height: 14),
+                              SizedBox(
+                                width: double.infinity,
+                                child: PrimaryButton(
+                                  label: 'Hỏi hướng dẫn',
+                                  icon: Icons.help_outline,
+                                  enabled: !widget.busy,
+                                  onTap: () =>
+                                      widget.onAskGuidance(widget.device),
                                 ),
                               ),
                             ],
-                          ),
+                            const SizedBox(height: 22),
+                            GestureDetector(
+                              onTapDown: (_) {
+                                if (widget.busy || widget.sttBusy) return;
+                                setState(() => holding = true);
+                                widget.onStartListening();
+                              },
+                              onTapUp: (_) {
+                                if (!holding) return;
+                                setState(() => holding = false);
+                                widget.onStopListening(widget.device);
+                              },
+                              onTapCancel: () =>
+                                  setState(() => holding = false),
+                              child: AnimatedScale(
+                                scale: holding ? 1.06 : 1,
+                                duration: const Duration(milliseconds: 150),
+                                child: Container(
+                                  width: 92,
+                                  height: 92,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: const LinearGradient(
+                                      colors: <Color>[
+                                        SilverTokens.blueBright,
+                                        SilverTokens.blueDeep
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                    boxShadow: <BoxShadow>[
+                                      BoxShadow(
+                                        color: SilverTokens.blueDeep
+                                            .withValues(alpha: 0.45),
+                                        blurRadius: 30,
+                                        offset: const Offset(0, 14),
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Icon(Icons.mic,
+                                          color: Colors.white, size: 34),
+                                      Text(
+                                        'Mic',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+                            const Text.rich(
+                              TextSpan(
+                                text: 'Giữ để hỏi: ',
+                                children: <InlineSpan>[
+                                  TextSpan(
+                                    text: '"Tăng nhiệt độ"',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w900),
+                                  ),
+                                ],
+                              ),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Color(0xB3FFFFFF),
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            TextButton.icon(
+                              onPressed: widget.sttBusy
+                                  ? null
+                                  : () => widget.onTestSample(),
+                              icon: const Icon(Icons.science_outlined,
+                                  color: Color(0xB3FFFFFF), size: 18),
+                              label: const Text(
+                                'Thử model với mẫu có sẵn',
+                                style: TextStyle(
+                                  color: Color(0xB3FFFFFF),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text.rich(
-                      TextSpan(
-                        text: 'Giữ để hỏi: ',
-                        children: <InlineSpan>[
-                          TextSpan(
-                            text: '"Tăng nhiệt độ"',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w900),
-                          ),
-                        ],
-                      ),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xB3FFFFFF),
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    TextButton.icon(
-                      onPressed: widget.sttBusy
-                          ? null
-                          : () => widget.onTestSample(),
-                      icon: const Icon(Icons.science_outlined,
-                          color: Color(0xB3FFFFFF), size: 18),
-                      label: const Text(
-                        'Thử model với mẫu có sẵn',
-                        style: TextStyle(
-                          color: Color(0xB3FFFFFF),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              );
+            },
           ),
         ),
       ],
@@ -942,12 +974,14 @@ class _VoiceScreenState extends State<VoiceScreen> {
 class GuideScreen extends StatefulWidget {
   const GuideScreen({
     required this.device,
+    required this.template,
     required this.steps,
     required this.onNavigate,
     super.key,
   });
 
   final DemoDevice device;
+  final TemplateDetailDto? template;
   final List<GuideStepData> steps;
   final void Function(String target, {DemoDevice? device}) onNavigate;
 
@@ -974,13 +1008,18 @@ class _GuideScreenState extends State<GuideScreen> {
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(48, 6, 48, 10),
-            child: RemotePanel(
-              display: done ? '27°C' : '26°C',
-              highlight: done ? null : current.buttonId,
-              showArrow: !done,
-              height: 300,
-            ),
+            padding: const EdgeInsets.fromLTRB(16, 6, 16, 10),
+            child: widget.template == null
+                ? RemotePanel(
+                    display: done ? '27°C' : '26°C',
+                    highlight: done ? null : current.buttonId,
+                    showArrow: !done,
+                    height: 300,
+                  )
+                : TemplateDataPanel(
+                    template: widget.template!,
+                    activeButtonId: current.buttonId,
+                  ),
           ),
         ),
         Container(
@@ -2129,6 +2168,145 @@ class RemotePanel extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class TemplateDataPanel extends StatelessWidget {
+  const TemplateDataPanel({
+    required this.template,
+    this.activeButtonId,
+    super.key,
+  });
+
+  final TemplateDetailDto template;
+  final String? activeButtonId;
+
+  @override
+  Widget build(BuildContext context) {
+    final List<TemplateButtonDto> buttons = template.buttons;
+    final Size imageSize = _templateImageSize(template);
+    final double sourceWidth = imageSize.width;
+    final double sourceHeight = imageSize.height;
+
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final double width = constraints.maxWidth;
+        final double panelHeight = width * sourceHeight / sourceWidth;
+        final double scale = width / sourceWidth;
+
+        return Container(
+          height: panelHeight,
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: <Color>[Color(0xFF222A33), Color(0xFF171D24)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            borderRadius: BorderRadius.circular(18),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+          ),
+          child: Stack(
+            clipBehavior: Clip.hardEdge,
+            children: <Widget>[
+              Positioned.fill(
+                child: Image.network(
+                  '$defaultSilverTechApiBaseUrl/${template.templateImageUrl}',
+                  fit: BoxFit.fill,
+                  errorBuilder: (BuildContext context, Object error,
+                      StackTrace? stackTrace) {
+                    return const SizedBox.shrink();
+                  },
+                ),
+              ),
+              Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.24),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 16,
+                top: 12,
+                right: 16,
+                child: Text(
+                  '${template.brand} • ${template.buttons.length} nút từ DB',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Color(0xFFE9EEF4),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              for (final TemplateButtonDto button in buttons)
+                Positioned(
+                  left: button.bbox.x * scale,
+                  top: button.bbox.y * scale,
+                  width: button.bbox.width * scale,
+                  height: button.bbox.height * scale,
+                  child: _TemplateButtonBox(
+                    button: button,
+                    active: activeButtonId == button.buttonId,
+                  ),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+Size _templateImageSize(TemplateDetailDto template) {
+  if (template.id == demoTemplateId) {
+    return const Size(5712, 4284);
+  }
+  final double maxX = template.buttons
+      .map((TemplateButtonDto button) => button.bbox.x + button.bbox.width)
+      .fold<double>(1, (double a, double b) => a > b ? a : b);
+  final double maxY = template.buttons
+      .map((TemplateButtonDto button) => button.bbox.y + button.bbox.height)
+      .fold<double>(1, (double a, double b) => a > b ? a : b);
+  return Size(maxX, maxY);
+}
+
+class _TemplateButtonBox extends StatelessWidget {
+  const _TemplateButtonBox({required this.button, required this.active});
+
+  final TemplateButtonDto button;
+  final bool active;
+
+  @override
+  Widget build(BuildContext context) {
+    final String label =
+        button.vietnameseName.isNotEmpty ? button.vietnameseName : button.label;
+    return Container(
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 2),
+      decoration: BoxDecoration(
+        color: (active ? SilverTokens.green : SilverTokens.red)
+            .withValues(alpha: active ? 0.32 : 0.14),
+        border: Border.all(
+          color: active ? SilverTokens.green : SilverTokens.red,
+          width: active ? 2.2 : 1.4,
+        ),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          label,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 11,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+      ),
     );
   }
 }

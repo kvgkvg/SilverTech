@@ -17,24 +17,25 @@ class FakeBackendGateway implements SilverBackendGateway {
     recognitionCalls += 1;
     return const BackendRecognitionResult(
       template: TemplateDetailDto(
-        id: 'template_daikin_ac_remote_v1',
-        brand: 'Daikin',
-        applianceType: 'air_conditioner',
-        templateCode: 'daikin_ac_remote_v1',
+        id: 'template_panasonic_microwave_nn_gt35hm_v1',
+        brand: 'Panasonic',
+        applianceType: 'microwave',
+        templateCode: 'panasonic_microwave_nn_gt35hm_v1',
         version: 1,
         status: 'official',
-        templateImageUrl: 'data/templates/daikin_ac_remote_v1.txt',
+        templateImageUrl: 'data/templates/panasonic_microwave_nn_gt35hm.png',
         buttons: <TemplateButtonDto>[
           TemplateButtonDto(
-            buttonId: 'temp_up',
-            label: 'Temp +',
-            vietnameseName: 'Tăng nhiệt độ',
-            functionDescription: 'Tăng nhiệt độ điều hòa',
+            buttonId: 'start',
+            label: 'Start',
+            vietnameseName: 'Bắt đầu',
+            functionDescription: 'Bắt đầu lò vi sóng',
             bbox: TemplateBBoxDto(x: 180, y: 235, width: 70, height: 55),
             buttonType: 'physical',
           ),
         ],
       ),
+      matchScore: 0,
     );
   }
 
@@ -51,9 +52,9 @@ class FakeBackendGateway implements SilverBackendGateway {
       steps: <GuidanceStepDto>[
         GuidanceStepDto(
           stepNumber: 1,
-          instructionVi: 'Nhấn nút Tăng nhiệt độ.',
-          buttonId: 'temp_up',
-          expectedResult: 'Nhiệt độ tăng lên.',
+          instructionVi: 'Nhấn nút Bắt đầu.',
+          buttonId: 'start',
+          expectedResult: 'Lò vi sóng bắt đầu chạy.',
         ),
       ],
     );
@@ -82,6 +83,11 @@ class FakeSpeechToTextClient implements SpeechToTextClient {
   @override
   Future<String> stopAndTranscribe() async {
     recording = false;
+    return 'Tăng nhiệt độ lên 27 độ';
+  }
+
+  @override
+  Future<String> transcribeAsset(String assetKey) async {
     return 'Tăng nhiệt độ lên 27 độ';
   }
 
@@ -118,15 +124,15 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Nhận diện thiết bị'), findsOneWidget);
-    expect(find.text('Đang nhận diện trực tiếp'), findsOneWidget);
-    expect(find.text('6'), findsOneWidget);
-    expect(find.text('nút bấm'), findsOneWidget);
+    expect(find.textContaining('Đang nhận diện trực tiếp'), findsOneWidget);
+    expect(find.textContaining('0%'), findsWidgets);
+    expect(find.text('độ tin cậy'), findsOneWidget);
 
     await tester.tap(find.text('Dùng kết quả này'));
     await tester.pumpAndSettle();
 
     expect(fakeBackend.recognitionCalls, 1);
-    expect(find.textContaining('Điều hòa Daikin'), findsOneWidget);
+    expect(find.textContaining('Lò vi sóng Panasonic'), findsOneWidget);
     expect(find.text('1 nút'), findsOneWidget);
     expect(find.text('Mic'), findsOneWidget);
     expect(find.textContaining('Tăng nhiệt độ'), findsOneWidget);
@@ -136,21 +142,18 @@ void main() {
 
     expect(fakeBackend.guidanceCalls, 0);
     expect(fakeBackend.lastTemplateId, isNull);
-    expect(find.text('Bước 1 / 3'), findsOneWidget);
-    expect(find.text('Nút màu xanh phía bên phải điều khiển'), findsOneWidget);
-    expect(find.text('Nhiệt độ +'), findsWidgets);
 
-    await tester.tap(find.text('Tiếp theo'));
+    expect(find.textContaining('Tăng nhiệt độ lên 27 độ'), findsOneWidget);
+    expect(find.text('Hỏi hướng dẫn'), findsOneWidget);
+
+    await tester.tap(find.text('Hỏi hướng dẫn'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Bước 2 / 3'), findsOneWidget);
-    expect(find.text('Bấm thêm một lần nữa để lên 27°C'), findsOneWidget);
-
-    await tester.tap(find.text('Tiếp theo'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Bước 3 / 3'), findsOneWidget);
-    expect(find.text('Xong rồi!'), findsOneWidget);
+    expect(fakeBackend.guidanceCalls, 1);
+    expect(fakeBackend.lastTemplateId,
+        'template_panasonic_microwave_nn_gt35hm_v1');
+    expect(find.text('Bước 1 / 1'), findsOneWidget);
+    expect(find.text('Nhấn nút Bắt đầu.'), findsOneWidget);
 
     await tester.tap(find.text('Hoàn thành'));
     await tester.pumpAndSettle();
@@ -163,7 +166,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Nhận diện thiết bị'), findsOneWidget);
-    expect(find.text('Đang nhận diện trực tiếp'), findsOneWidget);
+    expect(find.textContaining('Đang nhận diện trực tiếp'), findsOneWidget);
   });
 
   testWidgets('adds a device through four-step wizard',

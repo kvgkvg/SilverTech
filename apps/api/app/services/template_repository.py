@@ -21,7 +21,12 @@ def _template_summary(row: Any) -> dict[str, Any]:
     }
 
 
-def list_candidates(brand: str | None, appliance_type: str | None) -> list[dict[str, Any]]:
+def list_candidates(
+    brand: str | None,
+    appliance_type: str | None,
+    *,
+    limit: int | None = None,
+) -> list[dict[str, Any]]:
     query = """
         SELECT t.*, d.brand, d.appliance_type
         FROM templates t
@@ -36,6 +41,9 @@ def list_candidates(brand: str | None, appliance_type: str | None) -> list[dict[
         query += " AND d.appliance_type = :appliance_type"
         params["appliance_type"] = appliance_type
     query += " ORDER BY d.brand, t.template_code"
+    if limit is not None:
+        query += " LIMIT :limit"
+        params["limit"] = limit
     with db_session() as conn:
         return [_template_summary(row) for row in conn.execute(query, params).fetchall()]
 
