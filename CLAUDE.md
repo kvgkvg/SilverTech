@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 SilverTech is an elderly-first mobile assistant for operating household appliance control panels. A user points the camera at an appliance panel; the app matches it to a reviewed template, projects button locations onto the live frame, accepts a Vietnamese voice/text query, and returns step-by-step guidance where every step references a validated `button_id`.
 
-The MVP uses logo-guided template matching with confidence checks (NOT QR anchors, NOT a custom-trained button detector). STT and LLM are mocked by default for local development.
+The MVP uses logo-guided template matching with confidence checks (NOT QR anchors, NOT a custom-trained button detector). STT is mocked in the backend and runs on-device in the mobile app; LLM guidance is mocked by default for local development and can use OpenRouter when configured.
 
 ## Environment & Commands
 
@@ -75,9 +75,9 @@ Raw `sqlite3` (no ORM at runtime), schema as a single `SCHEMA_SQL` string in `st
 
 Core tables: `devices` → `templates` → `buttons`; plus `submissions` (user-proposed templates, review workflow), `llm_logs`, `vision_logs`.
 
-### Mock providers
+### Mock and OpenRouter providers
 
-`SILVERTECH_STT_PROVIDER` and `SILVERTECH_LLM_PROVIDER` default to `mock`. `services/llm_service.py` is a keyword matcher over the Vietnamese query (no real API call). Real provider keys (`GEMINI_API_KEY`, `GOOGLE_STT_API_KEY`, etc.) are defined in `.env.example` but not connected in this repo.
+`SILVERTECH_STT_PROVIDER` and `SILVERTECH_LLM_PROVIDER` default to `mock`. In mock mode, `services/llm_service.py` is a keyword matcher over the Vietnamese query (no real API call). To use OpenRouter, set `SILVERTECH_LLM_PROVIDER=openrouter`, `OPENROUTER_API_KEY`, and `OPENROUTER_MODEL=qwen/qwen3.7-plus`. The backend still validates every returned `button_id` against the matched official template before returning guidance.
 
 ### Vision pipeline (offline POC, `apps/vision-tools/scripts`)
 
@@ -89,7 +89,7 @@ This repo uses Spec Kit. The active feature spec, plan, data model, and task lis
 
 ## Known limitations
 
-STT/LLM mocked; Flutter build pending on a Flutter-capable machine; vision tests use synthetic fixtures; real appliance photos must be added under `data/templates/` before a real-device demo.
+Backend STT is mocked; backend LLM is mocked unless OpenRouter credentials are configured. Flutter build pending on a Flutter-capable machine; vision tests use synthetic fixtures; real appliance photos must be added under `data/templates/` before a real-device demo.
 
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,

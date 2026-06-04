@@ -1,6 +1,8 @@
 # Known Limitations
 
-- STT and LLM providers use mock implementations by default.
+- Backend STT and LLM providers use mock implementations by default. LLM
+  guidance can call OpenRouter when `SILVERTECH_LLM_PROVIDER=openrouter`,
+  `OPENROUTER_API_KEY`, and `OPENROUTER_MODEL=qwen/qwen3.7-plus` are set.
 - Flutter is installed at `$HOME/development/flutter` and Flutter tests pass
   when `$HOME/development/flutter/bin` is used. The Flutter binary is not on the
   default shell PATH yet.

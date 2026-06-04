@@ -10,8 +10,9 @@ and validated `button_id` guidance.
 
 - Backend API with SQLite seed data for reviewed appliance templates.
 - On-device Vietnamese STT in the mobile app (sherpa-onnx zipformer-vi-30M
-  int8); mock LLM flow for local development. Backend `/api/stt` mock retained
-  but unused by the app.
+  int8); mock LLM flow for local development, with optional OpenRouter support
+  using `qwen/qwen3.7-plus`. Backend `/api/stt` mock retained but unused by
+  the app.
 - `button_id` validation before guidance is returned.
 - Offline vision proof of concept for feature matching, confidence scoring, and
   homography/affine button projection.
@@ -59,8 +60,9 @@ cd apps/mobile && flutter test
 
 ## Current Limitations
 
-- LLM provider is mocked by default. Provider adapters are configured but not
-  connected to real external credentials in this repo.
+- LLM provider is mocked by default. Set `SILVERTECH_LLM_PROVIDER=openrouter`,
+  `OPENROUTER_API_KEY`, and optionally `OPENROUTER_MODEL=qwen/qwen3.7-plus` to
+  use OpenRouter for backend guidance generation.
 - Mobile STT runs fully on-device via sherpa-onnx. The model files
   (~32 MB) are not committed; download them into
   `apps/mobile/assets/models/asr/` before `flutter build` (see that dir's
