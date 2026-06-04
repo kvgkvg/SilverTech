@@ -8,6 +8,7 @@ import 'guidance/guidance_client.dart';
 import 'templates/template_repository_client.dart';
 import 'voice/stt_client.dart';
 import 'voice/stt_factory.dart';
+import 'voice/tts_manager.dart';
 
 void main() {
   runApp(const SilverTechApp());
@@ -243,7 +244,7 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   String? _toast;
   bool _recognitionBusy = false;
   bool _voiceBusy = false;
-  double _recognitionMatchScore = 0;
+  double _recognitionMatchScore = 0.94;
   TemplateDetailDto? _selectedTemplate;
   List<GuideStepData> _currentGuideSteps = guideSteps;
   late final SpeechToTextClient _stt;
@@ -342,32 +343,6 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
     if (!ok) {
       setState(() => _toast = 'Cần cấp quyền micro để nói câu hỏi.');
     }
-  }
-
-  /// Mic-independent check: decode a bundled sample WAV and show the model's
-  /// output in the transcript card. Proves the ASR model → UI path works.
-  Future<void> _testAsrSample() async {
-    setState(() {
-      _sttBusy = true;
-      _recognizedText = '';
-      _toast = null;
-    });
-    String text;
-    try {
-      text = await _stt.transcribeAsset('assets/test/0.wav');
-    } catch (e, st) {
-      debugPrint('[STT] sample test error: $e\n$st');
-      setState(() {
-        _sttBusy = false;
-        _toast = 'Lỗi khi chạy mẫu thử ASR.';
-      });
-      return;
-    }
-    setState(() {
-      _sttBusy = false;
-      _recognizedText = text;
-      _toast = text.isEmpty ? 'Mẫu thử không ra kết quả.' : null;
-    });
   }
 
   /// Stops mic, runs on-device ASR, shows the recognized text in the UI.
@@ -514,7 +489,6 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
           onNavigate: _nav,
           onStartListening: _startListening,
           onStopListening: _stopAndTranscribe,
-          onTestSample: _testAsrSample,
           onAskGuidance: (device) =>
               _askBackendGuidance(device, query: _recognizedText),
         ),
@@ -766,7 +740,6 @@ class VoiceScreen extends StatefulWidget {
     required this.onNavigate,
     required this.onStartListening,
     required this.onStopListening,
-    required this.onTestSample,
     required this.onAskGuidance,
     super.key,
   });
@@ -780,7 +753,6 @@ class VoiceScreen extends StatefulWidget {
   final void Function(String target, {DemoDevice? device}) onNavigate;
   final Future<void> Function() onStartListening;
   final Future<void> Function(DemoDevice device) onStopListening;
-  final Future<void> Function() onTestSample;
   final Future<void> Function(DemoDevice device) onAskGuidance;
 
   @override
@@ -921,39 +893,13 @@ class _VoiceScreenState extends State<VoiceScreen> {
                               ),
                             ),
                             const SizedBox(height: 16),
-                            const Text.rich(
-                              TextSpan(
-                                text: 'Giữ để hỏi: ',
-                                children: <InlineSpan>[
-                                  TextSpan(
-                                    text: '"Tăng nhiệt độ"',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w900),
-                                  ),
-                                ],
-                              ),
+                            const Text(
+                              'Bấm giữ và hỏi',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: Color(0xB3FFFFFF),
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            TextButton.icon(
-                              onPressed: widget.sttBusy
-                                  ? null
-                                  : () => widget.onTestSample(),
-                              icon: const Icon(Icons.science_outlined,
-                                  color: Color(0xB3FFFFFF), size: 18),
-                              label: const Text(
-                                'Thử model với mẫu có sẵn',
-                                style: TextStyle(
-                                  color: Color(0xB3FFFFFF),
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                ),
                               ),
                             ),
                           ],
@@ -991,6 +937,32 @@ class GuideScreen extends StatefulWidget {
 
 class _GuideScreenState extends State<GuideScreen> {
   int step = 0;
+  final TtsManager _tts = TtsManager();
+
+  @override
+  void initState() {
+    super.initState();
+    // Read the first step aloud as soon as guidance opens.
+    WidgetsBinding.instance.addPostFrameCallback((_) => _speakCurrent());
+  }
+
+  @override
+  void dispose() {
+    _tts.dispose();
+    super.dispose();
+  }
+
+  void _speakCurrent() {
+    final GuideStepData data = widget.steps[step];
+    _tts.speak('${data.title}. ${data.hint}');
+  }
+
+  /// Jump to [next] step (clamped) and read it aloud.
+  void _go(int next) {
+    final int clamped = next.clamp(0, widget.steps.length - 1);
+    setState(() => step = clamped);
+    _speakCurrent();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1002,7 +974,8 @@ class _GuideScreenState extends State<GuideScreen> {
           device: widget.device,
           trailing: IconButton(
             icon: const Icon(Icons.volume_up, color: Colors.white),
-            onPressed: () {},
+            tooltip: 'Đọc lại bước này',
+            onPressed: _speakCurrent,
           ),
           onBack: () => widget.onNavigate('back'),
         ),
@@ -1084,7 +1057,7 @@ class _GuideScreenState extends State<GuideScreen> {
                             label: 'Lặp lại',
                             icon: Icons.refresh,
                             compact: true,
-                            onTap: () {})),
+                            onTap: _speakCurrent)),
                     const SizedBox(width: 8),
                     Expanded(
                       child: NeutralButton(
@@ -1092,7 +1065,7 @@ class _GuideScreenState extends State<GuideScreen> {
                         icon: Icons.arrow_back,
                         compact: true,
                         enabled: step > 0,
-                        onTap: () => setState(() => step -= 1),
+                        onTap: () => _go(step - 1),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -1101,7 +1074,7 @@ class _GuideScreenState extends State<GuideScreen> {
                         label: 'Tiếp theo',
                         iconAfter: Icons.arrow_forward,
                         compact: true,
-                        onTap: () => setState(() => step += 1),
+                        onTap: () => _go(step + 1),
                       ),
                     ),
                   ],
@@ -1113,7 +1086,7 @@ class _GuideScreenState extends State<GuideScreen> {
                         child: NeutralButton(
                             label: 'Làm lại',
                             icon: Icons.refresh,
-                            onTap: () => setState(() => step = 0))),
+                            onTap: () => _go(0))),
                     const SizedBox(width: 10),
                     Expanded(
                       flex: 2,
@@ -2059,22 +2032,25 @@ class CameraPreviewPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Sensor preview is reported width-by-height of the raw frame; swap so the
+    // FittedBox source keeps the true aspect ratio regardless of orientation.
     final previewSize = controller.value.previewSize;
-    final width = previewSize?.height ?? 305;
-    final height = previewSize?.width ?? 305;
+    final double srcWidth = previewSize?.height ?? 305;
+    final double srcHeight = previewSize?.width ?? 305;
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(18),
       child: SizedBox(
         height: height,
+        width: double.infinity,
         child: Stack(
           fit: StackFit.expand,
           children: <Widget>[
             FittedBox(
               fit: BoxFit.cover,
               child: SizedBox(
-                width: width,
-                height: height,
+                width: srcWidth,
+                height: srcHeight,
                 child: CameraPreview(controller),
               ),
             ),
