@@ -5,10 +5,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app.api import admin_submissions, docs, query, stt, submissions, templates, vision, vision_logs
+from app.services.env_loader import load_env_file
 from app.services.logging_config import configure_logging
 from app.storage.database import ROOT
 from app.storage.database import initialize_database
 
+load_env_file()
 configure_logging()
 initialize_database()
 

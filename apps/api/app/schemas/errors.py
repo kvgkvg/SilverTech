@@ -21,6 +21,7 @@ def friendly_error(status_code: int, message_vi: str, recovery_action: str) -> H
 ERRORS = {
     "missing_template": ("Khong tim thay mau thiet bi. Vui long chon lai thiet bi.", "manual_select"),
     "invalid_button": ("Huong dan chua chac chan. Vui long thu lai cau hoi.", "try_again"),
+    "llm_failed": ("Chua lay duoc huong dan tu AI. Vui long thu lai.", "try_again"),
     "stt_failed": ("Khong nghe ro cau hoi. Vui long noi lai hoac nhap bang chu.", "type_query"),
     "low_confidence": ("Chua nhan dien chac chan. Vui long quet lai gan hon.", "rescan"),
 }
