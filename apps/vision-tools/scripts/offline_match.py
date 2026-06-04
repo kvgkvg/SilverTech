@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 
 from scripts.confidence import compute_reprojection_error, score_confidence
-from scripts.estimate_transform import estimate_homography, transform_points
+from scripts.estimate_transform import estimate_homography_with_inliers, transform_points
 from scripts.extract_orb_features import extract_orb_features
 from scripts.match_descriptors import filter_good_matches, match_descriptors
 from scripts.project_buttons import project_buttons
@@ -17,10 +17,16 @@ def match_and_project(template_points: np.ndarray, frame_points: np.ndarray, but
         return {"accepted": False, "failure_reason": "low_confidence", "projected_buttons": {}}
     src = np.array([tpl_pts[i] for i, _, _ in matches], dtype=float)
     dst = np.array([frm_pts[j] for _, j, _ in matches], dtype=float)
-    matrix = estimate_homography(src, dst)
-    projected = transform_points(src, matrix)
-    error = compute_reprojection_error(projected, dst)
-    confidence = score_confidence(match_count=len(matches), total_keypoints=len(tpl_pts), reprojection_error=error)
+    matrix, inlier_mask = estimate_homography_with_inliers(src, dst)
+    inlier_src = src[inlier_mask]
+    inlier_dst = dst[inlier_mask]
+    projected = transform_points(inlier_src, matrix)
+    error = compute_reprojection_error(projected, inlier_dst)
+    confidence = score_confidence(
+        match_count=len(inlier_src),
+        total_keypoints=len(tpl_pts),
+        reprojection_error=error,
+    )
     if not confidence.accepted:
         return {
             "accepted": False,

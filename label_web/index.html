@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SilverTech Template Labeler</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">SilverTech</div>
+        <h1>Template Labeler</h1>
+      </div>
+      <div class="actions">
+        <button id="saveDraft" type="button">Save draft</button>
+        <button id="loadDraft" type="button">Load draft</button>
+        <button id="clearDraft" type="button">Clear</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="workspace">
+        <div class="toolbar">
+          <label class="fileButton">
+            <input id="imageInput" type="file" accept="image/*" />
+            Load image
+          </label>
+          <select id="drawMode" aria-label="Draw mode">
+            <option value="panel">Panel box</option>
+            <option value="logo">Logo box</option>
+            <option value="button">Button box</option>
+          </select>
+          <button id="fitImage" type="button">Fit</button>
+          <button id="deleteSelected" type="button">Delete selected</button>
+        </div>
+        <div class="canvasShell">
+          <canvas id="canvas" width="960" height="640"></canvas>
+          <div id="emptyState" class="emptyState">
+            Load an appliance panel image, then drag boxes around the panel,
+            logo, and each usable button.
+          </div>
+        </div>
+      </section>
+
+      <aside class="side">
+        <section class="panel">
+          <h2>Device</h2>
+          <div class="grid2">
+            <label>
+              Brand
+              <input id="brand" placeholder="Daikin" />
+            </label>
+            <label>
+              Appliance type
+              <input id="applianceType" placeholder="air_conditioner" />
+            </label>
+          </div>
+          <label>
+            Model name
+            <input id="modelName" placeholder="FTKM35RVMV" />
+          </label>
+          <label>
+            Display name
+            <input id="displayName" placeholder="Dieu hoa Daikin mau 1" />
+          </label>
+          <div class="grid2">
+            <label>
+              Device ID
+              <input id="deviceId" placeholder="device_daikin_ac_01" />
+            </label>
+            <label>
+              Device status
+              <select id="deviceStatus">
+                <option value="active">active</option>
+                <option value="archived">archived</option>
+              </select>
+            </label>
+          </div>
+        </section>
+
+        <section class="panel">
+          <h2>Template</h2>
+          <label>
+            Template code
+            <input id="templateCode" placeholder="daikin_ac_remote_v1" />
+          </label>
+          <label>
+            Template image URL/path
+            <input id="templateImageUrl" placeholder="data/templates/daikin_ac_remote_v1.png" />
+          </label>
+          <label>
+            Feature descriptor path
+            <input id="descriptorPath" placeholder="data/descriptors/daikin_ac_remote_v1.npz" />
+          </label>
+          <div class="grid3">
+            <label>
+              Template ID
+              <input id="templateId" placeholder="template_daikin_ac_remote_v1" />
+            </label>
+            <label>
+              Version
+              <input id="version" type="number" min="1" value="1" />
+            </label>
+            <label>
+              Status
+              <select id="templateStatus">
+                <option value="official">official</option>
+                <option value="submitted">submitted</option>
+                <option value="archived">archived</option>
+              </select>
+            </label>
+          </div>
+          <div class="boxReadout">
+            <div><span>Panel</span><code id="panelReadout">not labeled</code></div>
+            <div><span>Logo</span><code id="logoReadout">not labeled</code></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panelHeader">
+            <h2>Selected Button</h2>
+            <button id="newButton" type="button">New button</button>
+          </div>
+          <div class="grid2">
+            <label>
+              Button ID
+              <input id="buttonId" placeholder="temp_up" />
+            </label>
+            <label>
+              Button type
+              <select id="buttonType">
+                <option value="physical">physical</option>
+                <option value="touch">touch</option>
+                <option value="dial">dial</option>
+                <option value="display">display</option>
+                <option value="unknown">unknown</option>
+              </select>
+            </label>
+          </div>
+          <label>
+            Label
+            <input id="buttonLabel" placeholder="Temp +" />
+          </label>
+          <label>
+            Vietnamese name
+            <input id="buttonVietnameseName" placeholder="Tăng nhiệt độ" />
+          </label>
+          <label>
+            Function description
+            <textarea id="buttonDescription" rows="2" placeholder="Tăng nhiệt độ điều hòa"></textarea>
+          </label>
+          <code id="buttonBoxReadout" class="singleReadout">No selected button</code>
+        </section>
+
+        <section class="panel">
+          <div class="panelHeader">
+            <h2>Buttons</h2>
+            <span id="buttonCount">0</span>
+          </div>
+          <div id="buttonList" class="buttonList"></div>
+        </section>
+
+        <section class="panel">
+          <h2>Export</h2>
+          <div class="exportActions">
+            <button id="copyJson" type="button">Copy JSON</button>
+            <button id="downloadJson" type="button">Download JSON</button>
+            <button id="copySql" type="button">Copy SQL</button>
+          </div>
+          <textarea id="exportOutput" rows="12" spellcheck="false"></textarea>
+        </section>
+      </aside>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

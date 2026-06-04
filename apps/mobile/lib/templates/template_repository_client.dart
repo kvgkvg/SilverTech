@@ -52,6 +52,14 @@ void _throwIfError(http.Response response) {
     return;
   }
   final body = jsonDecode(response.body) as Map<String, Object?>;
+  final detail = body['detail'];
+  if (detail is Map<String, Object?>) {
+    throw FriendlyBackendException(
+      messageVi: detail['message_vi'] as String? ?? 'Co loi xay ra.',
+      recoveryAction: detail['recovery_action'] as String? ?? 'try_again',
+      statusCode: response.statusCode,
+    );
+  }
   throw FriendlyBackendException(
     messageVi: body['message_vi'] as String? ?? 'Co loi xay ra.',
     recoveryAction: body['recovery_action'] as String? ?? 'try_again',

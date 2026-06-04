@@ -12,9 +12,10 @@ void main() {
 }
 
 class SilverTechApp extends StatelessWidget {
-  const SilverTechApp({this.backend, super.key});
+  const SilverTechApp({this.backend, this.speechToText, super.key});
 
   final SilverBackendGateway? backend;
+  final SpeechToTextClient? speechToText;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +36,7 @@ class SilverTechApp extends StatelessWidget {
       ),
       home: SilverPrototypeShell(
         backend: backend ?? HttpSilverBackendGateway(),
+        speechToText: speechToText,
       ),
     );
   }
@@ -219,9 +221,14 @@ const TemplateDetailDto mockRecognizedTemplate = TemplateDetailDto(
 );
 
 class SilverPrototypeShell extends StatefulWidget {
-  const SilverPrototypeShell({required this.backend, super.key});
+  const SilverPrototypeShell({
+    required this.backend,
+    this.speechToText,
+    super.key,
+  });
 
   final SilverBackendGateway backend;
+  final SpeechToTextClient? speechToText;
 
   @override
   State<SilverPrototypeShell> createState() => _SilverPrototypeShellState();
@@ -236,11 +243,12 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   bool _voiceBusy = false;
   TemplateDetailDto? _selectedTemplate;
   List<GuideStepData> _currentGuideSteps = guideSteps;
-  final STTClient _stt = STTClient();
+  late final SpeechToTextClient _stt;
 
   @override
   void initState() {
     super.initState();
+    _stt = widget.speechToText ?? STTClient();
     // Preload ASR model so first hold-to-talk is responsive.
     _stt.warmUp();
   }
@@ -290,13 +298,32 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   }
 
   Future<void> _acceptBackendRecognition() async {
-    final device = _deviceFromTemplate(mockRecognizedTemplate);
     setState(() {
-      _selectedTemplate = mockRecognizedTemplate;
-      _recognitionBusy = false;
       _toast = null;
-      _stack = <RouteState>[..._stack, RouteState('voice', device: device)];
+      _recognitionBusy = true;
     });
+    try {
+      final result = await widget.backend.recognizeDefault();
+      final device = _deviceFromTemplate(result.template);
+      if (!mounted) return;
+      setState(() {
+        _selectedTemplate = result.template;
+        _recognitionBusy = false;
+        _stack = <RouteState>[..._stack, RouteState('voice', device: device)];
+      });
+    } on FriendlyBackendException catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _recognitionBusy = false;
+        _toast = error.messageVi;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _recognitionBusy = false;
+        _toast = 'Không nhận diện được thiết bị. Vui lòng thử lại.';
+      });
+    }
   }
 
   Future<void> _startListening() async {
@@ -333,13 +360,24 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
 
   DemoDevice _deviceFromTemplate(TemplateDetailDto template) {
     final isAc = template.applianceType == 'air_conditioner';
+    final isMicrowave = template.applianceType == 'microwave';
     return DemoDevice(
       id: template.id,
-      kind: isAc ? 'ac' : 'tv',
-      tone: isAc ? 'green' : 'blue',
+      kind: isAc
+          ? 'ac'
+          : isMicrowave
+              ? 'microwave'
+              : 'tv',
+      tone: isAc
+          ? 'green'
+          : isMicrowave
+              ? 'orange'
+              : 'blue',
       name: isAc
           ? 'Điều hòa ${template.brand}'
-          : '${template.brand} ${template.applianceType}',
+          : isMicrowave
+              ? 'Lò vi sóng ${template.brand}'
+              : '${template.brand} ${template.applianceType}',
       short: template.templateCode,
       model: template.templateCode,
       last: 'Vừa nhận diện',
@@ -381,7 +419,10 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
           onSave: _saveDevice,
         ),
       'settings' => SettingsScreen(onNavigate: _nav),
-      _ => HomeScreen(devices: _devices, onNavigate: _nav),
+      _ => HomeScreen(
+          devices: _devices,
+          onNavigate: _nav,
+        ),
     };
 
     if (_current.screen == 'home' || _current.screen == 'devices') {

@@ -1,0 +1,325 @@
+{
+  "device": {
+    "id": "device_panasonic_microwave_nn_gt35hm",
+    "brand": "Panasonic",
+    "appliance_type": "microwave",
+    "model_name": "NN-GT35HM",
+    "display_name": "Lò vi sóng Panasonic NN-GT35HM",
+    "status": "active",
+    "created_at": "2026-06-04T07:19:36.759Z",
+    "updated_at": "2026-06-04T07:19:36.759Z"
+  },
+  "template": {
+    "id": "template_panasonic_microwave_nn_gt35hm_v1",
+    "device_id": "device_panasonic_microwave_nn_gt35hm",
+    "template_code": "panasonic_microwave_nn_gt35hm_v1",
+    "template_image_url": "data/templates/panasonic_microwave_nn_gt35hm.png",
+    "logo_bbox": {
+      "x": 476,
+      "y": 3862,
+      "width": 857,
+      "height": 226
+    },
+    "panel_bbox": {
+      "x": 4201,
+      "y": 559,
+      "width": 1261,
+      "height": 3457
+    },
+    "feature_descriptor_path": "data/descriptors/panasonic_microwave_nn_gt35hm_v1.npz",
+    "version": 1,
+    "status": "official",
+    "created_at": "2026-06-04T07:19:36.759Z",
+    "updated_at": "2026-06-04T07:19:36.759Z"
+  },
+  "buttons": [
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_micro_power",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "micro_power",
+      "label": "micro_power",
+      "vietnamese_name": "Vi sóng",
+      "function_description": "Nút Micro Power là nút dùng để chọn mức công suất của lò vi sóng trước khi nấu.\n\nCách hoạt động:\n\nBấm Micro Power 1 lần: High\nDùng để đun nước, nấu rau củ, cơm, mì, trái cây tươi, món tráng miệng.\n\nBấm Micro Power 2 lần: Med-high\nDùng để nấu thịt, gia cầm, bánh, hoặc hâm nóng sữa.\n\nBấm Micro Power 3 lần: Medium\nDùng để nấu cá, hải sản, trứng, phô mai.\n\nBấm Micro Power 4 lần: Defrost\nDùng để rã đông thực phẩm, làm mềm kem hoặc cream cheese.\n\nBấm Micro Power 5 lần: Low\nDùng để giữ ấm thức ăn đã nấu, hoặc nấu chậm/liu riu.\n\nCách sử dụng:\n\nĐầu tiên, bấm Micro Power để chọn mức công suất mong muốn.\n\nSau đó, cài thời gian nấu bằng các nút như 10 min, 1 min, 10 sec.\n\nCuối cùng, bấm Start để bắt đầu nấu.\n\nVí dụ:\n\nMuốn rã đông thực phẩm thì bấm Micro Power 4 lần để chọn Defrost, sau đó chọn thời gian và bấm Start.\n\nLưu ý: khay thủy tinh phải luôn được đặt đúng vị trí khi sử dụng lò.",
+      "bbox_template_coordinates": {
+        "x": 4284,
+        "y": 1214,
+        "width": 583,
+        "height": 345
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    },
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_time_10_min",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "time_10_min",
+      "label": "10_min",
+      "vietnamese_name": "10 phút",
+      "function_description": "tăng thời gian lên 10 phút",
+      "bbox_template_coordinates": {
+        "x": 4873,
+        "y": 1238,
+        "width": 553,
+        "height": 345
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    },
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_grill",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "grill",
+      "label": "grill",
+      "vietnamese_name": "nướng",
+      "function_description": "Nút Grill là nút dùng để chọn chế độ nướng của lò.\n\nChế độ Grill phù hợp để nướng các loại thực phẩm mỏng như lát thịt, sườn, kebab, xúc xích, miếng gà. Nó cũng dùng được cho sandwich nóng và các món gratin.\n\nCách hoạt động:\n\nBấm Grill 1 lần: Grill 1\nDùng cho thịt và gia cầm dạng miếng.\n\nBấm Grill 2 lần: Grill 2\nDùng cho hải sản, bánh mì bơ tỏi, bánh mì nướng.\n\nCách sử dụng:\n\nĐầu tiên, đặt thức ăn lên vỉ nướng, sau đó đặt vỉ lên khay thủy tinh.\n\nNên đặt một đĩa chịu nhiệt bên dưới để hứng mỡ hoặc nước chảy ra từ thức ăn.\n\nSau đó, bấm nút Grill để chọn mức nướng mong muốn.\n\nTiếp theo, cài thời gian nấu bằng các nút như 10 min, 1 min, 10 sec.\n\nCuối cùng, bấm Start để bắt đầu nướng.\n\nLưu ý quan trọng:\n\nKhông đậy thức ăn khi đang nướng.\n\nKhông cần làm nóng lò trước.\n\nChế độ Grill không dùng công suất vi sóng.\n\nPhần thanh nhiệt của lò sẽ sáng lên rồi tắt luân phiên trong khi nấu. Điều này là bình thường.\n\nHầu hết thức ăn cần được lật giữa chừng khi nướng.\n\nKhi lật thức ăn, hãy mở cửa lò và cẩn thận lấy vỉ nướng ra bằng găng tay.\n\nSau khi lật xong, đặt thức ăn lại vào lò, đóng cửa và bấm Start để tiếp tục.\n\nKhông chạm vào phần thanh nhiệt trên nóc khoang lò vì khu vực này rất nóng.\n\nSau khi dùng chế độ Grill, lò có thể tạm thời không hoạt động một lúc để tránh quá nhiệt.",
+      "bbox_template_coordinates": {
+        "x": 4278,
+        "y": 1583,
+        "width": 583,
+        "height": 315
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    },
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_time_1_min",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "time_1_min",
+      "label": "1_min",
+      "vietnamese_name": "1 phút",
+      "function_description": "tăng thời gian lên 1 phút",
+      "bbox_template_coordinates": {
+        "x": 4855,
+        "y": 1577,
+        "width": 577,
+        "height": 298
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    },
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_combination",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "combination",
+      "label": "combination",
+      "vietnamese_name": "Nấu kết hợp",
+      "function_description": "Nút Combination là nút dùng để chọn chế độ nấu kết hợp giữa vi sóng và nướng.\n\nỞ chế độ này, công suất Microwave giúp làm chín thức ăn nhanh, còn Grill giúp làm vàng và giòn bề mặt thức ăn.\n\nCách hoạt động:\n\nBấm Combination 1 lần: Combination 1\nDùng cho gà nguyên con.\n\nBấm Combination 2 lần: Combination 2\nDùng cho thịt bò, thịt cừu, hải sản.\n\nBấm Combination 3 lần: Combination 3\nDùng cho khoai tây nướng, pudding.\n\nCách sử dụng:\n\nĐầu tiên, bấm nút Combination để chọn mức nấu kết hợp mong muốn.\n\nSau đó, cài thời gian nấu bằng các nút như 10 min, 1 min, 10 sec.\n\nThời gian tối đa có thể cài là 99 phút 50 giây.\n\nCuối cùng, bấm Start để bắt đầu nấu.\n\nLưu ý quan trọng:\n\nKhi nấu, khay thủy tinh có thể rung nhẹ. Điều này không ảnh hưởng đến hiệu quả nấu.\n\nVỉ nướng được thiết kế để dùng cho chế độ Combination và Grill.\n\nKhông dùng phụ kiện kim loại khác ngoài phụ kiện đi kèm lò.\n\nNên đặt một đĩa chịu nhiệt bên dưới để hứng mỡ hoặc nước chảy ra.\n\nChỉ dùng vỉ nướng đúng theo hướng dẫn.\n\nKhông dùng vỉ nướng khi thức ăn dưới 200g. Với lượng thức ăn nhỏ, nên dùng Grill hoặc Microwave riêng để có kết quả tốt hơn.\n\nKhông đậy thức ăn khi nấu bằng Combination.\n\nKhông cần làm nóng lò trước.\n\nNếu thấy có tia lửa xanh trong lò, có thể do dùng sai khối lượng thức ăn, vỉ bị hỏng, hoặc có vật kim loại trong lò. Nếu xảy ra, hãy dừng lò ngay.\n\nMột số món nên nấu bằng Combination mà không dùng vỉ nướng, ví dụ như thịt quay, gratin, bánh pie và pudding. Khi đó, đặt thức ăn vào đĩa chịu nhiệt không kim loại rồi đặt trực tiếp lên khay thủy tinh.\n\nKhông dùng hộp nhựa dùng cho Microwave trong chế độ Combination, trừ khi hộp đó được ghi rõ là dùng được cho Combination cooking.\n\nNên dùng đĩa thủy tinh chịu nhiệt hoặc gốm chịu nhiệt.\n\nKhông dùng đĩa hoặc hộp kim loại vì sóng vi ba sẽ không xuyên vào thức ăn đều.",
+      "bbox_template_coordinates": {
+        "x": 4266,
+        "y": 1880,
+        "width": 577,
+        "height": 339
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    },
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_time_10_sec",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "time_10_sec",
+      "label": "10_sec",
+      "vietnamese_name": "10 giây",
+      "function_description": "tăng thời gian lên 10 giây",
+      "bbox_template_coordinates": {
+        "x": 4831,
+        "y": 1874,
+        "width": 607,
+        "height": 333
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    },
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_turbo_defrost",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "turbo_defrost",
+      "label": "defrost",
+      "vietnamese_name": "rã đông",
+      "function_description": "Nút Turbo Defrost là nút dùng để rã đông thực phẩm đông lạnh nhanh hơn bằng cách nhập khối lượng thực phẩm.\n\nCách sử dụng:\n\nĐầu tiên, bấm nút Turbo Defrost.\n\nSau đó, dùng nút Up hoặc Down để chỉnh khối lượng thực phẩm đông lạnh.\n\nKhối lượng sẽ tăng hoặc giảm theo từng mức 0.1 kg.\n\nCuối cùng, bấm Start để bắt đầu rã đông.\n\nKhi lò chạy, thời gian sẽ đếm ngược trên màn hình.\n\nGiới hạn khối lượng:\n\nThịt băm, miếng gà, sườn/chop: tối đa 2.0 kg\n\nThịt bò quay, thịt cừu, gà nguyên con: tối đa 2.0 kg\n\nCá nguyên con, sò điệp, tôm, phi lê cá: tối đa 1.0 kg\n\nLưu ý:\n\nHình dạng và kích thước của thực phẩm sẽ ảnh hưởng đến khối lượng tối đa mà lò có thể rã đông tốt.\n\nNên đặt thực phẩm trong hộp hoặc đĩa phù hợp.\n\nCác khối thịt lớn hoặc gà nên đặt trên một chiếc đĩa úp ngược hoặc giá nhựa nếu có.\n\nTrong khi rã đông, nên kiểm tra thực phẩm vì tốc độ rã đông có thể khác nhau.\n\nKhông cần đậy kín toàn bộ thực phẩm khi rã đông.\n\nLuôn lật hoặc đảo thực phẩm khi lò phát tiếng “beep”.\n\nThịt băm, sườn và các miếng nhỏ nên được tách ra hoặc bẻ rời càng sớm càng tốt, rồi xếp thành một lớp.\n\nNên che chắn một số phần thực phẩm để tránh bị chín trong lúc rã đông, đặc biệt là cánh gà, ức gà, phần mỡ hoặc đầu xương.\n\nCó thể dùng miếng giấy bạc nhỏ, nhẵn và cố định bằng que cocktail để che các phần này.\n\nSau khi rã đông, nên để thực phẩm nghỉ một thời gian để phần giữa tiếp tục tan đá.\n\nVới các khối thịt lớn hoặc gà, nên để nghỉ ít nhất 1 giờ sau khi rã đông.",
+      "bbox_template_coordinates": {
+        "x": 4278,
+        "y": 2207,
+        "width": 559,
+        "height": 333
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    },
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_up",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "up",
+      "label": "up",
+      "vietnamese_name": "tăng",
+      "function_description": "tăng thời gian lên 10 giây",
+      "bbox_template_coordinates": {
+        "x": 4837,
+        "y": 2184,
+        "width": 595,
+        "height": 333
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    },
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_auto_reheat",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "auto_reheat",
+      "label": "auto_reheat",
+      "vietnamese_name": "hâm nóng",
+      "function_description": "Nút Auto Reheat là nút dùng để hâm nóng thức ăn tự động.\n\nKhi dùng chế độ này, bạn chọn chương trình hâm nóng phù hợp, sau đó chỉnh khẩu phần hoặc khối lượng thức ăn. Lò sẽ tự tính thời gian hâm nóng.\n\nCách sử dụng:\n\nĐầu tiên, bấm nút Auto Reheat để chọn chương trình mong muốn.\n\nSau đó, dùng nút Up hoặc Down để chỉnh khẩu phần hoặc khối lượng thức ăn.\n\nCuối cùng, bấm Start để bắt đầu.\n\nKhi lò chạy, thời gian sẽ đếm ngược trên màn hình.\n\nCác chương trình:\n\nBấm Auto Reheat 1 lần: Reheat Meal\n\nDùng để hâm nóng bữa ăn đã nấu sẵn.\n\nKhối lượng có thể chọn: 200 g, 400 g, 600 g hoặc 800 g.\n\nThức ăn nên ở nhiệt độ tủ lạnh, khoảng 5 đến 8°C.\n\nCho thức ăn vào hộp hoặc đĩa dùng được trong lò vi sóng.\n\nThêm khoảng 3 đến 5 muỗng canh nước nếu cần.\n\nĐậy bằng nắp hoặc màng bọc thực phẩm phù hợp.\n\nĐặt hộp/đĩa lên khay thủy tinh, bấm Auto Reheat 1 lần, chỉnh khối lượng rồi bấm Start.\n\nBấm Auto Reheat 2 lần: Reheat Bread\n\nDùng để hâm nóng bánh mì.\n\nKhối lượng có thể chọn: 50 g, 100 g, 150 g hoặc 200 g.\n\nBánh mì nên ở nhiệt độ tủ lạnh, khoảng 5 đến 8°C.\n\nĐặt bánh mì lên đĩa dùng được trong lò vi sóng.\n\nKhông đậy bánh mì khi hâm nóng.\n\nĐặt đĩa lên khay thủy tinh, bấm Auto Reheat 2 lần, chỉnh khối lượng rồi bấm Start.\n\nLưu ý:\n\nChỉ dùng phụ kiện đúng như hướng dẫn.\n\nDo thức ăn có thể khác nhau về kích thước, độ đặc hoặc nhiệt độ ban đầu, hãy kiểm tra kỹ xem thức ăn đã nóng đều và chín kỹ chưa trước khi ăn.\n\nVới bánh mì, 50 g tương đương khoảng 1 lát bánh mì tiêu chuẩn.",
+      "bbox_template_coordinates": {
+        "x": 4248,
+        "y": 2535,
+        "width": 595,
+        "height": 315
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    },
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_down",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "down",
+      "label": "down",
+      "vietnamese_name": "giảm",
+      "function_description": "giảm thời gian 10 giây",
+      "bbox_template_coordinates": {
+        "x": 4843,
+        "y": 2523,
+        "width": 589,
+        "height": 298
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    },
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_auto_menu",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "auto_menu",
+      "label": "auto_menu",
+      "vietnamese_name": "nấu tự động",
+      "function_description": "Nút Auto Menu là nút dùng để chọn các chương trình nấu tự động của lò.\n\nKhi dùng Auto Menu, bạn không cần tự chọn công suất. Bạn chỉ cần chọn đúng chương trình, chỉnh khẩu phần hoặc khối lượng thức ăn, rồi bấm Start. Lò sẽ tự tính thời gian và cách nấu phù hợp.\n\nCách sử dụng chung:\n\nBấm Auto Menu để chọn chương trình mong muốn.\n\nSau đó dùng nút Up hoặc Down để chỉnh khẩu phần hoặc khối lượng thức ăn.\n\nCuối cùng bấm Start để bắt đầu.\n\nKhi lò chạy, thời gian sẽ đếm ngược trên màn hình.\n\nCác chương trình trong hình:\n\n3. Reheat Soup\n\nBấm Auto Reheat 3 lần.\n\nDùng để hâm nóng súp.\n\nKhẩu phần có thể chọn: 1, 2, 3 hoặc 4 cốc.\n\nSúp nên ở nhiệt độ tủ lạnh, khoảng 5 đến 8°C.\n\nDùng cốc dùng được trong lò vi sóng, không đậy nắp.\n\nĐặt cốc lên khay thủy tinh.\n\nBấm Auto Reheat 3 lần, chọn khẩu phần rồi bấm Start.\n\nLưu ý: 1 cốc = 180 ml.\n\n4. Congee/Porridge\n\nBấm Auto Menu 1 lần.\n\nDùng để nấu cháo hoặc porridge.\n\nKhối lượng gạo có thể chọn: 50 g, 100 g hoặc 150 g.\n\nLượng nước khuyến nghị:\n\n50 g gạo: 250–400 ml nước\n\n100 g gạo: 600–800 ml nước\n\n150 g gạo: 800–1000 ml nước\n\nCho gạo vào nồi hoặc tô chịu nhiệt dùng được trong lò vi sóng.\n\nThêm lượng nước phù hợp.\n\nChừa ít nhất một nửa dung tích tô/nồi để tránh trào khi sôi.\n\nTrong lúc nấu, đậy hờ bằng nắp.\n\nĐặt lên khay thủy tinh, bấm Auto Menu 1 lần, chỉnh khối lượng rồi bấm Start.\n\nKhi lò kêu beep, khuấy thức ăn.\n\n5. Instant Noodle\n\nBấm Auto Menu 2 lần.\n\nDùng để nấu mì ăn liền.\n\nKhẩu phần có thể chọn: 1 hoặc 2 phần.\n\nLượng nước khuyến nghị:\n\n1 phần: 450 ml nước\n\n2 phần: 800 ml nước\n\nCho mì và gia vị vào tô hoặc nồi dùng được trong lò vi sóng.\n\nThêm lượng nước phù hợp.\n\nChừa ít nhất một nửa dung tích tô/nồi để tránh trào khi sôi.\n\nĐậy nắp.\n\nĐặt lên khay thủy tinh.\n\nBấm Auto Menu 2 lần, chọn khẩu phần rồi bấm Start.\n\nSau khi nấu xong, để yên 1–2 phút trước khi ăn.\n\n6. Double Boil\n\nBấm Auto Menu 3 lần.\n\nDùng để nấu các món súp truyền thống như súp thảo mộc, súp tổ yến, hoặc các món cần nấu chậm.\n\nChế độ này giúp thức ăn mềm nhưng vẫn giữ được hình dạng, đồng thời giúp chiết xuất hương vị và dưỡng chất.\n\nKhẩu phần có thể chọn: 1–3 phần hoặc 4–6 phần.\n\nNguyên liệu khuyến nghị:\n\n1–3 phần: 200 g thịt, 150 g rau củ, 600 ml nước\n\n4–6 phần: 400 g thịt, 300 g rau củ, 800 ml nước\n\nCho tất cả nguyên liệu vào tô/nồi dùng được trong lò vi sóng.\n\nThêm nước theo hướng dẫn.\n\nChừa ít nhất một nửa dung tích tô/nồi để tránh trào.\n\nĐậy nắp.\n\nĐặt lên khay thủy tinh.\n\nBấm Auto Menu 3 lần, chọn khẩu phần rồi bấm Start.\n\nKhi lò kêu beep, khuấy thức ăn.\n\n7. Vegetables\n\nBấm Auto Menu 4 lần.\n\nDùng để nấu các loại rau như bông cải xanh, bí, súp lơ, bắp cải, măng tây, đậu, cần tây, bí ngòi, rau bina, ớt chuông hoặc hỗn hợp nhiều loại rau.\n\nKhối lượng có thể chọn: 120 g, 180 g, 250 g hoặc 370 g.\n\nCắt rau thành các miếng có kích thước gần bằng nhau để chín đều.\n\nCho rau vào hộp hoặc tô dùng được trong lò vi sóng.\n\nCó thể thêm 2–4 muỗng canh nước nếu cần.\n\nĐậy nắp.\n\nĐặt lên khay thủy tinh.\n\nBấm Auto Menu 4 lần, chỉnh khối lượng rồi bấm Start.\n\nKhi lò kêu beep, khuấy hoặc đảo rau.\n\n8. Casserole Rice\n\nBấm Auto Menu 5 lần.\n\nDùng để nấu cơm trắng, bao gồm gạo hạt ngắn, hạt dài, gạo jasmine hoặc basmati.\n\nKhối lượng gạo có thể chọn: 100 g, 200 g hoặc 300 g.\n\nLượng nước khuyến nghị:\n\n100 g gạo: 180 ml nước\n\n200 g gạo: 300 ml nước\n\n300 g gạo: 450 ml nước\n\nCho gạo vào nồi hoặc tô chịu nhiệt dùng được trong lò vi sóng.\n\nThêm lượng nước phù hợp.\n\nChừa ít nhất một nửa dung tích tô/nồi để tránh trào khi sôi.\n\nĐậy nắp.\n\nĐặt lên khay thủy tinh.\n\nBấm Auto Menu 5 lần, chỉnh khối lượng rồi bấm Start.\n\nSau khi nấu xong, để cơm nghỉ 5 phút.\n\n9. Fish\n\nBấm Auto Menu 6 lần.\n\nDùng để nấu cá nguyên con hoặc phi lê cá.\n\nKhối lượng có thể chọn: 100 g, 200 g, 300 g hoặc 400 g.\n\nLượng nước khuyến nghị:\n\n100 g cá: 2 muỗng cà phê nước hoặc nước dùng\n\n200 g cá: 2 muỗng cà phê nước hoặc nước dùng\n\n300 g cá: 3 muỗng cà phê nước hoặc nước dùng\n\n400 g cá: 3 muỗng cà phê nước hoặc nước dùng\n\nCho cá vào đĩa dùng được trong lò vi sóng.\n\nThêm nước hoặc nước dùng theo hướng dẫn.\n\nBọc kín đĩa bằng màng bọc thực phẩm.\n\nĐặt lên khay thủy tinh.\n\nBấm Auto Menu 6 lần, chỉnh khối lượng rồi bấm Start.\n\n10. Roast Chicken\n\nBấm Auto Menu 7 lần.\n\nDùng để quay gà nguyên con.\n\nKhối lượng có thể chọn: 600 g, 900 g hoặc 1.2 kg.\n\nTrước khi quay, nên cắt mở và xăm/chọc nhẹ vào thịt gà.\n\nCho gà đã chuẩn bị vào đĩa dùng được trong lò vi sóng.\n\nĐặt đĩa lên khay thủy tinh.\n\nBấm Auto Menu 7 lần, chỉnh khối lượng rồi bấm Start.\n\nKhi lò kêu beep, lật gà.\n\n11. Chicken Pieces\n\nBấm Auto Menu 8 lần.\n\nDùng để nấu các miếng gà như cánh gà, đùi gà, phần đùi trên, nửa ức gà.\n\nKhối lượng có thể chọn: 200 g, 300 g hoặc 400 g.\n\nTrước khi nấu, nên xăm/chọc nhẹ vào miếng gà.\n\nĐặt các miếng gà lên vỉ nướng, bên dưới có đĩa hứng nước/mỡ.\n\nĐặt vỉ và đĩa lên khay thủy tinh.\n\nBấm Auto Menu 8 lần, chỉnh khối lượng rồi bấm Start.\n\nKhi lò kêu beep, lật miếng gà.\n\n12. Roast Beef/Lamb\n\nBấm Auto Menu 9 lần.\n\nDùng để quay thịt bò hoặc thịt cừu.\n\nKhối lượng có thể chọn: 200 g, 400 g hoặc 600 g.\n\nCó thể ướp thịt với nước xốt hoặc rau củ trước khi nấu.\n\nĐặt thịt bò hoặc thịt cừu lên vỉ nướng, bên dưới có đĩa hứng nước/mỡ.\n\nĐặt vỉ và đĩa lên khay thủy tinh.\n\nBấm Auto Menu 9 lần, chỉnh khối lượng rồi bấm Start.\n\nKhi lò kêu beep, lật thịt.\n\nLưu ý chung:\n\nChỉ dùng đúng phụ kiện được hướng dẫn cho từng chương trình.\n\nVì thức ăn có thể khác nhau về kích thước, độ đặc và nhiệt độ ban đầu, cần kiểm tra xem thức ăn đã chín kỹ và đủ nóng trước khi ăn hay chưa.\n\nKhi lò phát tiếng beep trong lúc nấu, thường là dấu hiệu cần khuấy, đảo hoặc lật thức ăn.",
+      "bbox_template_coordinates": {
+        "x": 4260,
+        "y": 2826,
+        "width": 571,
+        "height": 321
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    },
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_time_clock",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "time_clock",
+      "label": "time/clock",
+      "vietnamese_name": "hẹn giờ/đồng hồ",
+      "function_description": "Nút Timer/Clock dùng cho 2 việc chính:\n\n1. Làm đồng hồ đếm giờ trong bếp\n2. Cài thời gian chờ trước hoặc sau khi nấu\n\nNó không phải là nút nấu trực tiếp. Khi dùng Timer/Clock một mình, lò chỉ đếm giờ, không phát nhiệt và không nấu thức ăn.\n\nCách 1: Dùng như Kitchen Timer\n\nDùng khi bạn chỉ muốn đếm giờ, ví dụ đếm 5 phút.\n\nCách làm:\n\nBấm Timer/Clock.\n\nCài thời gian muốn đếm bằng các nút 10 min, 1 min, 10 sec.\n\nVí dụ muốn 5 phút thì bấm nút 1 min 5 lần.\n\nBấm Start.\n\nLò sẽ bắt đầu đếm ngược thời gian, nhưng không hoạt động nấu.\n\nVí dụ:\n\nMuốn hẹn giờ 5 phút:\n\nBấm Timer/Clock.\n\nBấm 1 min 5 lần.\n\nBấm Start.\n\nMàn hình sẽ đếm ngược 5 phút.\n\nCách 2: Standing Time\n\nStanding Time là thời gian để thức ăn nghỉ sau khi nấu.\n\nVí dụ: nấu bằng Microwave mức Medium trong 3 phút, sau đó để thức ăn nghỉ 5 phút.\n\nCách làm:\n\nBấm Micro Power 3 lần để chọn Medium.\n\nCài thời gian nấu 3 phút bằng cách bấm 1 min 3 lần.\n\nBấm Timer/Clock.\n\nCài thời gian nghỉ 5 phút bằng cách bấm 1 min 5 lần.\n\nBấm Start.\n\nLò sẽ nấu trước. Sau khi nấu xong, lò sẽ tự đếm ngược 5 phút nhưng không hoạt động.\n\nTác dụng:\n\nGiúp nhiệt bên trong thức ăn tiếp tục phân bố đều.\n\nHay dùng sau khi nấu cơm, thịt, súp, món đông lạnh hoặc món cần “nghỉ” để chín đều hơn.\n\nCách 3: Delay Start\n\nDelay Start là hẹn giờ chờ trước khi bắt đầu nấu.\n\nVí dụ: muốn chờ 5 phút rồi mới nấu bằng Microwave mức Medium trong 3 phút.\n\nCách làm:\n\nBấm Timer/Clock.\n\nCài thời gian chờ 5 phút bằng cách bấm 1 min 5 lần.\n\nBấm Micro Power 3 lần để chọn Medium.\n\nCài thời gian nấu 3 phút bằng cách bấm 1 min 3 lần.\n\nBấm Start.\n\nLò sẽ đếm ngược 5 phút trước. Sau khi hết thời gian chờ, lò mới bắt đầu nấu 3 phút.\n\nLưu ý:\n\nCó thể lập trình nhiều giai đoạn nấu, bao gồm cả Standing Time và Delay Start.\n\nNếu mở cửa lò trong lúc Kitchen Timer, Standing Time hoặc Delay Start đang chạy, thời gian trên màn hình vẫn tiếp tục đếm ngược.\n\nKhông thể dùng Standing Time hoặc Delay Start trước hoặc sau các chương trình Auto Programme.\n\nThời gian tối đa có thể cài là 99 phút 50 giây.",
+      "bbox_template_coordinates": {
+        "x": 4831,
+        "y": 2838,
+        "width": 589,
+        "height": 286
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    },
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_add_time",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "add_time",
+      "label": "add_time",
+      "vietnamese_name": "thêm thời gian",
+      "function_description": "Nút Add Time dùng để cộng thêm thời gian nấu.\n\nChức năng này dùng được với các chế độ:\n\nMicrowave\n\nGrill\n\nCombination\n\nNó có thể dùng trong lúc đang nấu hoặc sau khi nấu xong.\n\nCách dùng sau khi nấu xong:\n\nNgay sau khi nấu xong, bấm Add Time.\n\nSau đó cài thêm thời gian bằng các nút 10 min, 1 min, 10 sec.\n\nVí dụ muốn thêm 5 phút thì bấm nút 1 min 5 lần.\n\nBấm Start.\n\nLò sẽ tiếp tục nấu thêm thời gian vừa cài.\n\nCách dùng trong lúc đang nấu:\n\nTrong khi lò đang chạy, bấm Add Time.\n\nMỗi lần bấm Add Time sẽ cộng thêm thời gian nấu.\n\nCó thể cộng thêm từ 1 đến 10 phút.\n\nThời gian được cộng theo từng bước 5 giây.\n\nVí dụ:\n\nNếu món ăn chưa đủ nóng hoặc chưa chín sau khi nấu xong, bạn có thể bấm Add Time, chọn thêm 2 phút hoặc 5 phút, rồi bấm Start để nấu tiếp.\n\nGiới hạn thời gian:\n\nSau khi nấu xong, Add Time có thể cài tối đa:\n\n30 phút với chế độ Microwave công suất High\n\n99 phút 50 giây với các chế độ Microwave khác, Grill và Combination\n\nLưu ý:\n\nNếu sau khi nấu xong bạn không thao tác trong vòng 1 phút, chức năng Add Time sẽ bị hủy.\n\nAdd Time có thể dùng sau khi nấu nhiều giai đoạn.\n\nMức công suất khi dùng Add Time sẽ giống với giai đoạn nấu cuối cùng.\n\nNếu giai đoạn cuối là Standing Time, chức năng Add Time sẽ không hoạt động.\n\nAdd Time không dùng được với các chương trình Auto Programmes.",
+      "bbox_template_coordinates": {
+        "x": 4296,
+        "y": 3350,
+        "width": 547,
+        "height": 309
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    },
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_quick_30",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "quick_30",
+      "label": "quick_30",
+      "vietnamese_name": "chọn nhanh 30",
+      "function_description": "Nút Quick 30 dùng để cài nhanh thời gian nấu theo từng mức 30 giây.\n\nChức năng này chỉ dùng cho chế độ Microwave.\n\nCách hoạt động:\n\nMỗi lần bấm Quick 30 sẽ cộng thêm 30 giây.\n\nCó thể cài tối đa 5 phút.\n\nLò sẽ nấu ở công suất Microwave High.\n\nCách sử dụng:\n\nBấm Quick 30 cho đến khi thời gian mong muốn hiện trên màn hình.\n\nSau đó bấm Start.\n\nVí dụ:\n\nMuốn nấu 30 giây:\n\nBấm Quick 30 1 lần.\n\nBấm Start.\n\nMuốn nấu 1 phút:\n\nBấm Quick 30 2 lần.\n\nBấm Start.\n\nMuốn nấu 2 phút 30 giây:\n\nBấm Quick 30 5 lần.\n\nBấm Start.\n\nLưu ý:\n\nQuick 30 mặc định dùng công suất Microwave High.\n\nNếu muốn dùng mức công suất khác, hãy chọn mức công suất trước bằng nút Micro Power, sau đó mới bấm Quick 30.\n\nChức năng này chỉ hoạt động trong vòng 1 phút sau khi nấu thủ công xong.\n\nQuick 30 không dùng cho Grill, Combination hoặc Auto Programmes.",
+      "bbox_template_coordinates": {
+        "x": 4849,
+        "y": 3320,
+        "width": 547,
+        "height": 327
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    },
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_stop_reset",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "stop_reset",
+      "label": "stop/reset",
+      "vietnamese_name": "dừng/cài đặt lại",
+      "function_description": "Nút Stop/Reset dùng để dừng hoặc xoá thao tác trên lò.\n\nTrước khi nấu:\n\nBấm Stop/Reset 1 lần để xoá các lệnh hoặc cài đặt bạn vừa nhập.\n\nVí dụ:\n\nNếu bạn chọn sai chế độ hoặc nhập sai thời gian, bấm Stop/Reset để xoá rồi cài lại từ đầu.\n\nTrong khi đang nấu:\n\nBấm Stop/Reset 1 lần:\n\nLò sẽ tạm dừng quá trình nấu.\n\nThức ăn vẫn ở trong lò, thời gian nấu vẫn còn trên màn hình.\n\nNếu muốn tiếp tục nấu, bấm Start.\n\nBấm Stop/Reset thêm 1 lần nữa:\n\nLò sẽ huỷ toàn bộ chương trình nấu.\n\nMàn hình sẽ trở về dấu hai chấm “:” hoặc hiển thị giờ hiện tại.\n\nTóm lại:\n\nBấm 1 lần trước khi nấu: xoá cài đặt.\n\nBấm 1 lần khi đang nấu: tạm dừng.\n\nBấm lần thứ 2 khi đang tạm dừng: huỷ chương trình nấu.",
+      "bbox_template_coordinates": {
+        "x": 4260,
+        "y": 3653,
+        "width": 565,
+        "height": 321
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    },
+    {
+      "id": "btn_panasonic_microwave_nn_gt35hm_start",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "button_id": "start",
+      "label": "start",
+      "vietnamese_name": "khởi động",
+      "function_description": "Nút Start dùng để bắt đầu cho lò hoạt động.\n\nCách dùng:\n\nSau khi bạn đã chọn chế độ nấu và cài thời gian, bấm Start 1 lần để lò bắt đầu chạy.\n\nVí dụ:\n\nChọn Micro Power.\n\nCài thời gian nấu.\n\nBấm Start.\n\nLò sẽ bắt đầu nấu và thời gian sẽ đếm ngược trên màn hình.\n\nKhi lò đang nấu:\n\nNếu bạn bấm Stop/Reset 1 lần, lò sẽ tạm dừng.\n\nSau đó, nếu muốn tiếp tục nấu, bấm Start lần nữa.\n\nLò sẽ tiếp tục chạy từ thời gian còn lại.\n\nTóm lại:\n\nStart = bắt đầu nấu.\n\nStart cũng dùng để tiếp tục nấu sau khi đã tạm dừng bằng Stop/Reset.",
+      "bbox_template_coordinates": {
+        "x": 4825,
+        "y": 3647,
+        "width": 583,
+        "height": 333
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-06-04T07:19:36.759Z",
+      "updated_at": "2026-06-04T07:19:36.759Z"
+    }
+  ]
+}

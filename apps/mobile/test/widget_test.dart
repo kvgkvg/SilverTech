@@ -4,6 +4,7 @@ import 'package:silvertech_mobile/backend/silver_backend.dart';
 import 'package:silvertech_mobile/guidance/guidance_client.dart';
 import 'package:silvertech_mobile/main.dart';
 import 'package:silvertech_mobile/templates/template_repository_client.dart';
+import 'package:silvertech_mobile/voice/stt_client.dart';
 
 class FakeBackendGateway implements SilverBackendGateway {
   int recognitionCalls = 0;
@@ -59,11 +60,47 @@ class FakeBackendGateway implements SilverBackendGateway {
   }
 }
 
+class FakeSpeechToTextClient implements SpeechToTextClient {
+  bool disposed = false;
+  bool warmedUp = false;
+  bool recording = false;
+
+  @override
+  bool get isRecording => recording;
+
+  @override
+  Future<void> warmUp() async {
+    warmedUp = true;
+  }
+
+  @override
+  Future<bool> startListening() async {
+    recording = true;
+    return true;
+  }
+
+  @override
+  Future<String> stopAndTranscribe() async {
+    recording = false;
+    return 'Tăng nhiệt độ lên 27 độ';
+  }
+
+  @override
+  void dispose() {
+    disposed = true;
+  }
+}
+
 void main() {
   Future<FakeBackendGateway> pumpApp(WidgetTester tester) async {
     final fakeBackend = FakeBackendGateway();
     await tester.binding.setSurfaceSize(const Size(402, 874));
-    await tester.pumpWidget(SilverTechApp(backend: fakeBackend));
+    await tester.pumpWidget(
+      SilverTechApp(
+        backend: fakeBackend,
+        speechToText: FakeSpeechToTextClient(),
+      ),
+    );
     await tester.pumpAndSettle();
     return fakeBackend;
   }
@@ -88,9 +125,9 @@ void main() {
     await tester.tap(find.text('Dùng kết quả này'));
     await tester.pumpAndSettle();
 
-    expect(fakeBackend.recognitionCalls, 0);
+    expect(fakeBackend.recognitionCalls, 1);
     expect(find.textContaining('Điều hòa Daikin'), findsOneWidget);
-    expect(find.text('6 nút'), findsOneWidget);
+    expect(find.text('1 nút'), findsOneWidget);
     expect(find.text('Mic'), findsOneWidget);
     expect(find.textContaining('Tăng nhiệt độ'), findsOneWidget);
 
