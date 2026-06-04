@@ -7,6 +7,7 @@ import 'backend/silver_backend.dart';
 import 'guidance/guidance_client.dart';
 import 'templates/template_repository_client.dart';
 import 'voice/stt_client.dart';
+import 'voice/stt_factory.dart';
 
 void main() {
   runApp(const SilverTechApp());
@@ -251,7 +252,7 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   @override
   void initState() {
     super.initState();
-    _stt = widget.speechToText ?? STTClient();
+    _stt = widget.speechToText ?? createPlatformSpeechToText();
     // Preload ASR model so first hold-to-talk is responsive.
     _stt.warmUp();
   }
