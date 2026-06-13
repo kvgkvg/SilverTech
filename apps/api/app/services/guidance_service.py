@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 import time
 
 from app.services.button_validator import validate_guidance_buttons
@@ -21,8 +20,6 @@ def create_guidance(template_id: str, user_query: str) -> dict:
     if template is None:
         raise GuidanceError("missing_template")
     prompt_summary = build_prompt_summary(template, user_query)
-    if os.getenv("SILVERTECH_LLM_PROVIDER", "mock").strip().lower() != "mock":
-        time.sleep(1.2)
     try:
         raw = LLMService().generate(user_query, template)
     except LLMProviderError as exc:

@@ -16,5 +16,10 @@ def query(payload: QueryRequest) -> dict:
     except GuidanceError as exc:
         key = str(exc)
         message, action = ERRORS.get(key, ERRORS["invalid_button"])
-        status = 404 if key == "missing_template" else 409
+        if key == "missing_template":
+            status = 404
+        elif key == "llm_failed":
+            status = 502
+        else:
+            status = 409
         raise friendly_error(status, message, action) from exc
