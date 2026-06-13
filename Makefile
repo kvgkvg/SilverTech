@@ -10,7 +10,7 @@ run-api:
 	PYTHONPATH=apps/api uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 
 test-api:
-	PYTHONPATH=apps/api pytest -q apps/api/tests tests/contract
+	PYTHONPATH=apps/api:apps/vision-tools pytest -q apps/api/tests tests/contract
 
 test-vision:
 	PYTHONPATH=apps/vision-tools pytest -q apps/vision-tools/tests

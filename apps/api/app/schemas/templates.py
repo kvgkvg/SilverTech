@@ -89,6 +89,23 @@ class VisionLogRequest(BaseModel):
     failure_reason: str | None = None
 
 
+class ProjectedButton(BaseModel):
+    button_id: str
+    polygon: list[Point]
+
+
+class VisionMatchResponse(BaseModel):
+    accepted: bool
+    template_id: str | None = None
+    match_score: float | None = None
+    inlier_count: int | None = None
+    inlier_ratio: float | None = None
+    reprojection_error: float | None = None
+    failure_reason: str | None = None
+    recovery_action: str | None = None
+    projected_buttons: list[ProjectedButton] = Field(default_factory=list)
+
+
 class SubmissionCreate(BaseModel):
     submitted_by: str | None = None
     brand: str

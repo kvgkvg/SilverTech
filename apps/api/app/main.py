@@ -4,7 +4,17 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from app.api import admin_submissions, docs, query, stt, submissions, templates, vision, vision_logs
+from app.api import (
+    admin_submissions,
+    docs,
+    query,
+    stt,
+    submissions,
+    templates,
+    vision,
+    vision_logs,
+    vision_match,
+)
 from app.services.env_loader import load_env_file
 from app.services.logging_config import configure_logging
 from app.storage.database import ROOT
@@ -34,6 +44,7 @@ app.include_router(templates.router)
 app.include_router(stt.router)
 app.include_router(query.router)
 app.include_router(vision_logs.router)
+app.include_router(vision_match.router)
 app.include_router(submissions.router)
 app.include_router(admin_submissions.router)
 app.include_router(docs.router)
