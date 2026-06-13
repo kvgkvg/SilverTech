@@ -186,4 +186,34 @@ void main() {
     expect(guidance.steps.single.buttonId, 'temp_up');
     expect(guidance.steps.single.instructionVi, 'Nhan nut Tang nhiet do.');
   });
+
+  test('guidance client surfaces nested detail message on error', () async {
+    final client = GuidanceClient(
+      baseUrl: 'http://api.test',
+      httpClient: MockClient((http.Request request) async {
+        return http.Response(
+          jsonEncode(<String, Object?>{
+            'detail': <String, Object?>{
+              'message_vi': 'Huong dan chua chac chan. Vui long thu lai cau hoi.',
+              'recovery_action': 'try_again',
+            },
+          }),
+          409,
+        );
+      }),
+    );
+
+    expect(
+      () => client.createGuidance(
+        templateId: 'template_daikin_ac_remote_v1',
+        userQueryText: 'abc',
+      ),
+      throwsA(
+        isA<FriendlyBackendException>()
+            .having((e) => e.messageVi, 'messageVi',
+                'Huong dan chua chac chan. Vui long thu lai cau hoi.')
+            .having((e) => e.statusCode, 'statusCode', 409),
+      ),
+    );
+  });
 }

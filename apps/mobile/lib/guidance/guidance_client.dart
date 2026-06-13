@@ -28,10 +28,19 @@ class GuidanceClient {
       }),
     );
     if (response.statusCode < 200 || response.statusCode >= 300) {
-      final body = jsonDecode(response.body) as Map<String, Object?>;
+      final decoded = jsonDecode(response.body);
+      Map<String, Object?> payload;
+      if (decoded is Map<String, Object?> &&
+          decoded['detail'] is Map<String, Object?>) {
+        payload = decoded['detail'] as Map<String, Object?>;
+      } else if (decoded is Map<String, Object?>) {
+        payload = decoded;
+      } else {
+        payload = const <String, Object?>{};
+      }
       throw FriendlyBackendException(
-        messageVi: body['message_vi'] as String? ?? 'Co loi xay ra.',
-        recoveryAction: body['recovery_action'] as String? ?? 'try_again',
+        messageVi: payload['message_vi'] as String? ?? 'Co loi xay ra.',
+        recoveryAction: payload['recovery_action'] as String? ?? 'try_again',
         statusCode: response.statusCode,
       );
     }
