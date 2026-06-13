@@ -30,7 +30,7 @@ def _rejected(reason: str, extra: dict[str, Any] | None = None) -> dict[str, Any
 
 
 def match_images(
-    template_image: np.ndarray,
+    template_image: np.ndarray | None,
     frame_image: np.ndarray,
     buttons: dict[str, dict[str, float]],
     *,

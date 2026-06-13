@@ -35,8 +35,11 @@ def _template_assets(template: dict[str, Any]):
     if descriptor_url:
         npz_path = ROOT / descriptor_url
         if npz_path.exists():
-            kp, desc = load_descriptors(str(npz_path))
-            return None, kp, desc
+            try:
+                kp, desc = load_descriptors(str(npz_path))
+                return None, kp, desc
+            except Exception:
+                pass  # corrupt/invalid .npz -> fall back to template image
     image_url = template.get("template_image_url")
     if image_url:
         img_path = ROOT / image_url
@@ -70,7 +73,7 @@ def match_frame(
         if tpl_gray is None and desc is None:
             continue  # placeholder template with no real image/descriptors
         result = match_images(
-            tpl_gray if tpl_gray is not None else np.zeros((1, 1), dtype=np.uint8),
+            tpl_gray,
             frame,
             _buttons_map(template),
             template_keypoints=kp,

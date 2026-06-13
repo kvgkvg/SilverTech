@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+import logging
+
 from fastapi import APIRouter, File, Form, UploadFile
+
+logger = logging.getLogger(__name__)
 
 from app.schemas.templates import VisionMatchResponse
 from app.services.match_service import match_frame
@@ -30,6 +34,6 @@ async def match(
                 "failure_reason": result.get("failure_reason"),
             }
         )
-    except Exception:
-        pass  # telemetry must not break detection
+    except Exception as exc:  # telemetry must not break detection
+        logger.warning("vision_log write failed: %s", exc)
     return result
