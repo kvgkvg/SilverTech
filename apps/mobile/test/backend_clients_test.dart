@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -7,6 +8,7 @@ import 'package:silvertech_mobile/backend/silver_backend.dart';
 import 'package:silvertech_mobile/guidance/guidance_client.dart';
 import 'package:silvertech_mobile/templates/template_repository_client.dart';
 import 'package:silvertech_mobile/vision/vision_log_client.dart';
+import 'package:silvertech_mobile/vision/vision_match_client.dart';
 
 void main() {
   test('backend recognition uses Panasonic microwave demo template', () async {
@@ -48,10 +50,41 @@ void main() {
     final result = await backend.recognizeDefault();
 
     expect(result.template.id, 'template_panasonic_microwave_nn_gt35hm_v1');
-    expect(result.matchScore, 0);
+    expect(result.matchScore, 0.94);
     expect(requests.first.url.path,
         '/api/templates/template_panasonic_microwave_nn_gt35hm_v1');
     expect(requests.last.url.path, '/api/vision/logs');
+  });
+
+  test('backend.match delegates to VisionMatchClient with brand fields',
+      () async {
+    late http.Request captured;
+    final matchClient = VisionMatchClient(
+      baseUrl: 'http://api.test',
+      httpClient: MockClient((http.Request request) async {
+        captured = request;
+        return http.Response(
+          jsonEncode(<String, Object?>{
+            'accepted': true,
+            'template_id': 'template_panasonic_microwave_nn_gt35hm_v1',
+            'match_score': 0.4,
+            'projected_buttons': <Object?>[],
+          }),
+          200,
+        );
+      }),
+    );
+    final backend = HttpSilverBackendGateway(visionMatch: matchClient);
+
+    final result = await backend.match(
+      Uint8List.fromList('FAKEJPEG'.codeUnits),
+      brand: 'Panasonic',
+      applianceType: 'microwave',
+    );
+
+    expect(captured.url.path, '/api/vision/match');
+    expect(result.accepted, isTrue);
+    expect(result.templateId, 'template_panasonic_microwave_nn_gt35hm_v1');
   });
 
   test('template client posts candidate context and parses templates',

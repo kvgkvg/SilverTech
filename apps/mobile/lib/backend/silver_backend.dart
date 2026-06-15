@@ -1,8 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 import '../guidance/guidance_client.dart';
 import '../templates/template_repository_client.dart';
 import '../vision/vision_log_client.dart';
+import '../vision/vision_match_client.dart';
 
 const String _apiBaseUrlOverride =
     String.fromEnvironment('SILVERTECH_API_BASE_URL');
@@ -24,6 +27,14 @@ abstract class SilverBackendGateway {
     required String templateId,
     required String userQueryText,
   });
+
+  Future<VisionMatchResult> match(
+    Uint8List frame, {
+    String? brand,
+    String? applianceType,
+  });
+
+  Future<TemplateDetailDto> fetchTemplate(String templateId);
 }
 
 class BackendRecognitionResult {
@@ -41,16 +52,20 @@ class HttpSilverBackendGateway implements SilverBackendGateway {
     TemplateRepositoryClient? templates,
     GuidanceClient? guidance,
     VisionLogClient? visionLogs,
+    VisionMatchClient? visionMatch,
   })  : _templates = templates ??
             TemplateRepositoryClient(baseUrl: defaultSilverTechApiBaseUrl),
         _guidance =
             guidance ?? GuidanceClient(baseUrl: defaultSilverTechApiBaseUrl),
         _visionLogs =
-            visionLogs ?? VisionLogClient(baseUrl: defaultSilverTechApiBaseUrl);
+            visionLogs ?? VisionLogClient(baseUrl: defaultSilverTechApiBaseUrl),
+        _visionMatch =
+            visionMatch ?? VisionMatchClient(baseUrl: defaultSilverTechApiBaseUrl);
 
   final TemplateRepositoryClient _templates;
   final GuidanceClient _guidance;
   final VisionLogClient _visionLogs;
+  final VisionMatchClient _visionMatch;
 
   @override
   Future<BackendRecognitionResult> recognizeDefault() async {
@@ -81,5 +96,19 @@ class HttpSilverBackendGateway implements SilverBackendGateway {
       templateId: templateId,
       userQueryText: userQueryText,
     );
+  }
+
+  @override
+  Future<VisionMatchResult> match(
+    Uint8List frame, {
+    String? brand,
+    String? applianceType,
+  }) {
+    return _visionMatch.match(frame, brand: brand, applianceType: applianceType);
+  }
+
+  @override
+  Future<TemplateDetailDto> fetchTemplate(String templateId) {
+    return _templates.fetchTemplate(templateId);
   }
 }
