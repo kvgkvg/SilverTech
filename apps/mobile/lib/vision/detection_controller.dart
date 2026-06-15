@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 
@@ -31,6 +30,9 @@ class DetectionState {
 /// Drives a ~1 fps detect loop: grab frame -> match -> emit state.
 /// Pure logic (no widgets); inject [source] and [matcher] for tests. Tests
 /// drive [tick] directly; [start] wires it to a periodic timer.
+///
+/// Single-use: after [stop] the instance is terminal; create a new controller
+/// for a new session. The owning widget should dispose [state].
 class DetectionController {
   DetectionController({
     required FrameSource source,
