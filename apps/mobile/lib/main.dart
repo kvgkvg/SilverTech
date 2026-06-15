@@ -366,9 +366,11 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   Future<void> _onTemplateMatched(DetectionState s) async {
     final templateId = s.templateId;
     if (templateId == null) return;
+    final controller = _detection;
+    if (controller == null) return; // already handled by a prior matched tick
+    _detection = null; // claim synchronously so re-entry returns above
     // Self-stop the loop on lock-on (also frees the periodic Timer).
-    await _detection?.stop();
-    _detection = null;
+    await controller.stop();
     try {
       final template = await widget.backend.fetchTemplate(templateId);
       if (!mounted) return;
