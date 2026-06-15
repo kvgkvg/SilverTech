@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'backend/silver_backend.dart';
 import 'guidance/guidance_client.dart';
 import 'templates/template_repository_client.dart';
+import 'vision/detection_controller.dart';
+import 'vision/frame_source_factory.dart';
+import 'vision/geometry.dart';
 import 'voice/stt_client.dart';
 import 'voice/stt_factory.dart';
 import 'voice/tts_manager.dart';
@@ -244,8 +247,10 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   String? _toast;
   bool _recognitionBusy = false;
   bool _voiceBusy = false;
-  double _recognitionMatchScore = 0.94;
+  double _recognitionMatchScore = 0;
   TemplateDetailDto? _selectedTemplate;
+  DetectionController? _detection;
+  List<ProjectedButton> _projectedButtons = const <ProjectedButton>[];
   List<GuideStepData> _currentGuideSteps = guideSteps;
   late final SpeechToTextClient _stt;
   Future<bool>? _startFuture;
@@ -261,6 +266,7 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
 
   @override
   void dispose() {
+    _detection?.stop();
     _stt.dispose();
     super.dispose();
   }
@@ -268,6 +274,7 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   RouteState get _current => _stack.last;
 
   void _nav(String target, {DemoDevice? device}) {
+    final String fromScreen = _current.screen;
     setState(() {
       _toast = null;
       if (target == 'back') {
@@ -282,6 +289,117 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
         return;
       }
       _stack = <RouteState>[..._stack, RouteState(target, device: device)];
+    });
+    final String toScreen = _current.screen;
+    // Stop any live detection loop the moment we leave the recognize screen so
+    // no periodic Timer leaks (back button, proceeding to voice, etc.).
+    if (fromScreen == 'recognize' && toScreen != 'recognize') {
+      _stopLiveDetection();
+    }
+    // Entering the recognize screen kicks off the real detect loop.
+    if (toScreen == 'recognize' && fromScreen != 'recognize') {
+      _startLiveDetection();
+    }
+  }
+
+  void _stopLiveDetection() {
+    _detection?.stop();
+    _detection = null;
+  }
+
+  Future<void> _startLiveDetection() async {
+    setState(() {
+      _recognitionBusy = true;
+      _recognitionMatchScore = 0;
+      _selectedTemplate = null;
+      _projectedButtons = const <ProjectedButton>[];
+    });
+    try {
+      final source = await createFrameSource();
+      // We may have navigated away while the frame source was opening; abort so
+      // no orphaned periodic Timer is created after leaving the recognize screen.
+      if (!mounted || _current.screen != 'recognize') {
+        await source.stop();
+        return;
+      }
+      final controller = DetectionController(
+        source: source,
+        matcher: (frame) => widget.backend
+            .match(frame, brand: 'Panasonic', applianceType: 'microwave'),
+      );
+      _detection = controller;
+      controller.state.addListener(() => _onDetectionState(controller));
+      await controller.start();
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _recognitionBusy = false;
+        _toast = 'Không mở được camera.';
+      });
+    }
+  }
+
+  void _onDetectionState(DetectionController controller) {
+    if (!mounted) return;
+    final s = controller.state.value;
+    switch (s.phase) {
+      case DetectionPhase.scanning:
+        setState(() {
+          _recognitionMatchScore = s.matchScore ?? 0;
+          _projectedButtons = s.polygons;
+        });
+        break;
+      case DetectionPhase.rejected:
+        setState(() {
+          _recognitionMatchScore = 0;
+          _projectedButtons = const <ProjectedButton>[];
+        });
+        break;
+      case DetectionPhase.matched:
+        _onTemplateMatched(s);
+        break;
+      case DetectionPhase.idle:
+        break;
+    }
+  }
+
+  Future<void> _onTemplateMatched(DetectionState s) async {
+    final templateId = s.templateId;
+    if (templateId == null) return;
+    // Self-stop the loop on lock-on (also frees the periodic Timer).
+    await _detection?.stop();
+    _detection = null;
+    try {
+      final template = await widget.backend.fetchTemplate(templateId);
+      if (!mounted) return;
+      setState(() {
+        _selectedTemplate = template;
+        _recognitionMatchScore = s.matchScore ?? 0;
+        _projectedButtons = s.polygons;
+        _recognitionBusy = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _recognitionBusy = false;
+        _toast = 'Không tải được mẫu thiết bị.';
+      });
+    }
+  }
+
+  /// User confirmed the locked-on template. Proceed to the voice step using the
+  /// matched [_selectedTemplate] (does NOT call recognizeDefault anymore).
+  void _useRecognitionResult() {
+    final TemplateDetailDto? template = _selectedTemplate;
+    if (template == null) {
+      setState(() => _toast = 'Chưa nhận diện được thiết bị. Vui lòng giữ máy ổn định.');
+      return;
+    }
+    final DemoDevice device = _deviceFromTemplate(template);
+    _stopLiveDetection();
+    setState(() {
+      _recognitionBusy = false;
+      _stack = <RouteState>[..._stack, RouteState('voice', device: device)];
     });
   }
 
@@ -301,36 +419,6 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
       _stack = const <RouteState>[RouteState('devices')];
       _toast = 'Đã lưu "$name"';
     });
-  }
-
-  Future<void> _acceptBackendRecognition() async {
-    setState(() {
-      _toast = null;
-      _recognitionBusy = true;
-    });
-    try {
-      final result = await widget.backend.recognizeDefault();
-      final device = _deviceFromTemplate(result.template);
-      if (!mounted) return;
-      setState(() {
-        _selectedTemplate = result.template;
-        _recognitionMatchScore = result.matchScore;
-        _recognitionBusy = false;
-        _stack = <RouteState>[..._stack, RouteState('voice', device: device)];
-      });
-    } on FriendlyBackendException catch (error) {
-      if (!mounted) return;
-      setState(() {
-        _recognitionBusy = false;
-        _toast = error.messageVi;
-      });
-    } catch (_) {
-      if (!mounted) return;
-      setState(() {
-        _recognitionBusy = false;
-        _toast = 'Không nhận diện được thiết bị. Vui lòng thử lại.';
-      });
-    }
   }
 
   bool _sttBusy = false;
@@ -475,9 +563,11 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
         ),
       'recognize' => RecognizeScreen(
           onNavigate: _nav,
-          onUseResult: _acceptBackendRecognition,
+          onUseResult: _useRecognitionResult,
           busy: _recognitionBusy,
           matchScore: _recognitionMatchScore,
+          template: _selectedTemplate,
+          projectedButtons: _projectedButtons,
         ),
       'voice' => VoiceScreen(
           device: _current.device ?? acDevice,
@@ -633,16 +723,32 @@ class RecognizeScreen extends StatelessWidget {
     required this.onUseResult,
     required this.busy,
     required this.matchScore,
+    this.template,
+    this.projectedButtons = const <ProjectedButton>[],
     super.key,
   });
 
   final void Function(String target, {DemoDevice? device}) onNavigate;
-  final Future<void> Function() onUseResult;
+  final void Function() onUseResult;
   final bool busy;
   final double matchScore;
+  final TemplateDetailDto? template;
+  final List<ProjectedButton> projectedButtons;
+
+  String _matchedDeviceName(TemplateDetailDto t) {
+    switch (t.applianceType) {
+      case 'air_conditioner':
+        return 'Điều hòa ${t.brand}';
+      case 'microwave':
+        return 'Lò vi sóng ${t.brand}';
+      default:
+        return '${t.brand} ${t.applianceType}';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final TemplateDetailDto? matched = template;
     return Column(
       children: <Widget>[
         AppHeader(
@@ -651,7 +757,7 @@ class RecognizeScreen extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
             children: <Widget>[
-              const CameraCard(scanning: true),
+              CameraCard(scanning: matched == null, polygons: projectedButtons),
               const SizedBox(height: 16),
               Center(
                 child: StatusPill(
@@ -662,27 +768,51 @@ class RecognizeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 14),
-              const Text(
-                'Camera tự tìm thiết bị và nút bấm',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: SilverTokens.ink,
-                  fontSize: 21,
-                  height: 1.16,
-                  fontWeight: FontWeight.w900,
+              if (matched != null) ...<Widget>[
+                Text(
+                  _matchedDeviceName(matched),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: SilverTokens.ink,
+                    fontSize: 21,
+                    height: 1.16,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 6),
-              const Text(
-                'Giữ điện thoại ổn định để hệ thống khoanh vùng các nút',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: SilverTokens.ink2,
-                  fontSize: 16,
-                  height: 1.35,
-                  fontWeight: FontWeight.w700,
+                const SizedBox(height: 6),
+                Text(
+                  '${matched.buttons.length} nút',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: SilverTokens.ink2,
+                    fontSize: 16,
+                    height: 1.35,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
-              ),
+              ] else ...<Widget>[
+                const Text(
+                  'Camera tự tìm thiết bị và nút bấm',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: SilverTokens.ink,
+                    fontSize: 21,
+                    height: 1.16,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                const Text(
+                  'Giữ điện thoại ổn định để hệ thống khoanh vùng các nút',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: SilverTokens.ink2,
+                    fontSize: 16,
+                    height: 1.35,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ],
               const SizedBox(height: 16),
               Row(
                 children: <Widget>[
@@ -1916,9 +2046,17 @@ class OpenDeviceButton extends StatelessWidget {
 }
 
 class CameraCard extends StatefulWidget {
-  const CameraCard({required this.scanning, super.key});
+  const CameraCard({
+    required this.scanning,
+    this.polygons = const <ProjectedButton>[],
+    super.key,
+  });
 
   final bool scanning;
+
+  /// Projected button polygons (in template image pixel space) from the live
+  /// detection loop. Drawn as a best-effort overlay over the camera preview.
+  final List<ProjectedButton> polygons;
 
   @override
   State<CameraCard> createState() => _CameraCardState();
@@ -2007,6 +2145,7 @@ class _CameraCardState extends State<CameraCard> {
                     controller: _cameraController!,
                     scanning: widget.scanning,
                     height: previewHeight,
+                    polygons: widget.polygons,
                   );
                 },
               );
@@ -2023,12 +2162,14 @@ class CameraPreviewPanel extends StatelessWidget {
     required this.controller,
     required this.scanning,
     required this.height,
+    this.polygons = const <ProjectedButton>[],
     super.key,
   });
 
   final CameraController controller;
   final bool scanning;
   final double height;
+  final List<ProjectedButton> polygons;
 
   @override
   Widget build(BuildContext context) {
@@ -2054,12 +2195,81 @@ class CameraPreviewPanel extends StatelessWidget {
                 child: CameraPreview(controller),
               ),
             ),
+            if (polygons.isNotEmpty)
+              Positioned.fill(
+                child: CustomPaint(
+                  painter: ButtonPolygonPainter(polygons: polygons),
+                ),
+              ),
             if (scanning) const ScanFrame(),
           ],
         ),
       ),
     );
   }
+}
+
+/// Best-effort overlay that draws the projected button polygons onto the live
+/// preview. Polygon coordinates arrive in template-image pixel space; we fit
+/// their shared bounding box into the preview rect so the boxes land roughly
+/// where the buttons are without needing the source image's exact dimensions.
+class ButtonPolygonPainter extends CustomPainter {
+  ButtonPolygonPainter({required this.polygons});
+
+  final List<ProjectedButton> polygons;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (polygons.isEmpty) return;
+    double minX = double.infinity;
+    double minY = double.infinity;
+    double maxX = double.negativeInfinity;
+    double maxY = double.negativeInfinity;
+    for (final ProjectedButton b in polygons) {
+      for (final Point2 p in b.polygon) {
+        if (p.x < minX) minX = p.x;
+        if (p.y < minY) minY = p.y;
+        if (p.x > maxX) maxX = p.x;
+        if (p.y > maxY) maxY = p.y;
+      }
+    }
+    final double spanX = (maxX - minX).abs() < 1e-6 ? 1 : maxX - minX;
+    final double spanY = (maxY - minY).abs() < 1e-6 ? 1 : maxY - minY;
+    // Inset the fitted box a little so polygons sit inside the preview frame.
+    const double pad = 16;
+    final double w = size.width - pad * 2;
+    final double h = size.height - pad * 2;
+
+    final Paint stroke = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3
+      ..color = SilverTokens.green;
+    final Paint fill = Paint()
+      ..style = PaintingStyle.fill
+      ..color = SilverTokens.green.withValues(alpha: 0.18);
+
+    for (final ProjectedButton b in polygons) {
+      if (b.polygon.isEmpty) continue;
+      final Path path = Path();
+      for (int i = 0; i < b.polygon.length; i++) {
+        final Point2 p = b.polygon[i];
+        final double dx = pad + ((p.x - minX) / spanX) * w;
+        final double dy = pad + ((p.y - minY) / spanY) * h;
+        if (i == 0) {
+          path.moveTo(dx, dy);
+        } else {
+          path.lineTo(dx, dy);
+        }
+      }
+      path.close();
+      canvas.drawPath(path, fill);
+      canvas.drawPath(path, stroke);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant ButtonPolygonPainter oldDelegate) =>
+      !identical(oldDelegate.polygons, polygons);
 }
 
 class RemotePanel extends StatelessWidget {

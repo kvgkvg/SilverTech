@@ -1,16 +1,40 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:silvertech_mobile/backend/silver_backend.dart';
 import 'package:silvertech_mobile/guidance/guidance_client.dart';
 import 'package:silvertech_mobile/main.dart';
 import 'package:silvertech_mobile/templates/template_repository_client.dart';
+import 'package:silvertech_mobile/vision/vision_match_client.dart';
 import 'package:silvertech_mobile/voice/stt_client.dart';
 
 class FakeBackendGateway implements SilverBackendGateway {
   int recognitionCalls = 0;
+  int matchCalls = 0;
   int guidanceCalls = 0;
   String? lastTemplateId;
   String? lastQuery;
+
+  @override
+  Future<VisionMatchResult> match(
+    Uint8List frame, {
+    String? brand,
+    String? applianceType,
+  }) async {
+    matchCalls += 1;
+    return const VisionMatchResult(
+      accepted: true,
+      templateId: 'template_panasonic_microwave_nn_gt35hm_v1',
+      matchScore: 0.4,
+    );
+  }
+
+  @override
+  Future<TemplateDetailDto> fetchTemplate(String templateId) async {
+    // Reuse the same TemplateDetailDto recognizeDefault returns.
+    return (await recognizeDefault()).template;
+  }
 
   @override
   Future<BackendRecognitionResult> recognizeDefault() async {
@@ -121,21 +145,40 @@ void main() {
     expect(find.text('Đưa thiết bị vào khung'), findsOneWidget);
 
     await tester.tap(find.text('Bắt đầu hướng dẫn'));
-    await tester.pumpAndSettle();
+    await tester.pump(); // enter recognition screen + start live loop
 
     expect(find.text('Nhận diện thiết bị'), findsOneWidget);
     expect(find.textContaining('Đang nhận diện trực tiếp'), findsOneWidget);
     expect(find.textContaining('0%'), findsWidgets);
     expect(find.text('độ tin cậy'), findsOneWidget);
 
+    // The live loop opens a real FrameSource (camera->asset fallback) before it
+    // arms its Timer.periodic(1s). Opening + the first asset load are real I/O,
+    // so let the real event loop spin via runAsync until the source is ready.
+    await tester.runAsync(() async {
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+    });
+    await tester.pump(); // flush the setState that armed the timer
+
+    // Now the periodic timer lives in fake-async: pump intervals to advance the
+    // detect ticks until the controller locks on (lockThreshold 2) and self-
+    // stops. grabFrame returns the cached frame so each tick settles under pump.
+    await tester.pump(const Duration(seconds: 1)); // tick 1 -> scanning
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1)); // tick 2 -> matched -> stop
+    await tester.pumpAndSettle(); // fetchTemplate + matched UI; loop stopped
+
+    expect(fakeBackend.matchCalls, greaterThan(0));
+    expect(find.textContaining('Lò vi sóng Panasonic'), findsOneWidget);
+    expect(find.text('1 nút'), findsOneWidget);
+
     await tester.tap(find.text('Dùng kết quả này'));
     await tester.pumpAndSettle();
 
-    expect(fakeBackend.recognitionCalls, 1);
-    expect(find.textContaining('Lò vi sóng Panasonic'), findsOneWidget);
-    expect(find.text('1 nút'), findsOneWidget);
+    // Voice screen now carries the matched microwave template (button "Bắt đầu",
+    // header "Panasonic • 1 nút từ DB"), not the old AC sample query.
     expect(find.text('Mic'), findsOneWidget);
-    expect(find.textContaining('Tăng nhiệt độ'), findsOneWidget);
+    expect(find.textContaining('1 nút từ DB'), findsOneWidget);
 
     await tester.tap(find.text('Mic'));
     await tester.pumpAndSettle();
@@ -163,10 +206,14 @@ void main() {
     expect(find.text('Xin chào!'), findsNothing);
 
     await tester.tap(find.byIcon(Icons.chevron_left).first);
-    await tester.pumpAndSettle();
+    await tester.pump(); // back to recognize -> live loop restarts (do NOT settle)
 
     expect(find.text('Nhận diện thiết bị'), findsOneWidget);
     expect(find.textContaining('Đang nhận diện trực tiếp'), findsOneWidget);
+
+    // Stop the restarted loop so no periodic Timer is pending at teardown.
+    await tester.tap(find.byIcon(Icons.chevron_left).first);
+    await tester.pumpAndSettle();
   });
 
   testWidgets('adds a device through four-step wizard',
