@@ -72,8 +72,8 @@ void main() {
       }),
     );
 
-    expect(
-      () => client.match(Uint8List.fromList('X'.codeUnits)),
+    await expectLater(
+      client.match(Uint8List.fromList('X'.codeUnits)),
       throwsA(isA<FriendlyBackendException>()
           .having((e) => e.statusCode, 'statusCode', 502)),
     );

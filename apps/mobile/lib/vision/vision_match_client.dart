@@ -43,6 +43,8 @@ class VisionMatchResult {
       buttonId: json['button_id'] as String? ?? '',
       polygon: rawPolygon
           .whereType<Map<String, Object?>>()
+          // x/y are required by the backend Point schema; a missing coord is a
+          // contract violation we want to surface, so cast hard (no fallback).
           .map((p) =>
               Point2((p['x'] as num).toDouble(), (p['y'] as num).toDouble()))
           .toList(),
