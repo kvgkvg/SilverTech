@@ -8,7 +8,7 @@ import 'frame_source.dart';
 /// mobile via takePicture(); the `camera` plugin has no Linux implementation,
 /// so [createFrameSource] falls back to [FileFrameSource] there.
 class CameraFrameSource implements FrameSource {
-  CameraFrameSource(this.controller);
+  CameraFrameSource._(this.controller);
 
   final CameraController controller;
 
@@ -23,8 +23,13 @@ class CameraFrameSource implements FrameSource {
     );
     final controller =
         CameraController(camera, ResolutionPreset.medium, enableAudio: false);
-    await controller.initialize();
-    return CameraFrameSource(controller);
+    try {
+      await controller.initialize();
+    } catch (_) {
+      await controller.dispose();
+      rethrow;
+    }
+    return CameraFrameSource._(controller);
   }
 
   @override
@@ -41,6 +46,8 @@ class CameraFrameSource implements FrameSource {
   }
 
   @override
+  // Terminal: disposes the controller. A stopped source cannot be restarted;
+  // create a new one via [open] / createFrameSource() for a fresh session.
   Future<void> stop() async {
     await controller.dispose();
   }
