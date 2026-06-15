@@ -25,6 +25,7 @@ flutter:
     - assets/models/asr/tokens.txt
     - assets/test/0.wav
     - assets/test/1.wav
+    - assets/test/panel.jpg
 
 dev_dependencies:
   flutter_test:
