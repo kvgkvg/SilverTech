@@ -16,12 +16,15 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
-ROOT = Path(__file__).resolve().parents[3]
+ROOT = Path(__file__).resolve().parents[4]
 DEFAULT_CACHE_DIR = ROOT / ".cache" / "label_pipeline"
 DEFAULT_MODEL = "gemini-3.5-flash"
 ENDPOINT = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 
-RETRY_STATUS = frozenset({429, 500, 502, 503, 504})
+
+def _is_retryable(status: int) -> bool:
+    return status == 429 or 500 <= status < 600
+
 
 # (url, payload) -> (status_code, body). Injected so tests never open a socket.
 Transport = Callable[[str, dict[str, Any]], tuple[int, dict[str, Any]]]
@@ -87,7 +90,7 @@ class GeminiClient:
         digest.update(b"\0")
         digest.update(self.prompt_version(prompt).encode("utf-8"))
         digest.update(b"\0")
-        digest.update(hashlib.sha256(image or b"").digest())
+        digest.update(hashlib.sha256(b"\0no-image" if image is None else image).digest())
         digest.update(b"\0")
         digest.update(cache_salt)
         return self.cache_dir / f"{digest.hexdigest()}.json"
@@ -132,7 +135,7 @@ class GeminiClient:
             status, body = self.transport(url, payload)
             if status == 200:
                 return body
-            if status not in RETRY_STATUS:
+            if not _is_retryable(status):
                 message = body.get("error", {}).get("message", "")
                 raise GeminiError(f"Gemini HTTP {status}: {message}")
             last_status = status

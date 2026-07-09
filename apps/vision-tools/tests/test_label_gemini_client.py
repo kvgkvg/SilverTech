@@ -4,7 +4,8 @@ import json
 
 import pytest
 
-from scripts.label_pipeline.gemini_client import GeminiClient, GeminiError
+from scripts.label_pipeline import gemini_client
+from scripts.label_pipeline.gemini_client import GeminiClient, GeminiError, ROOT, load_api_key
 
 
 def ok_body(payload: object) -> dict:
@@ -71,6 +72,15 @@ def test_changing_the_image_misses_the_cache(tmp_path):
     assert len(transport.calls) == 2
 
 
+def test_no_image_and_empty_bytes_image_do_not_share_a_cache_entry(tmp_path):
+    # image=None sends no inline_data part; image=b"" sends one with empty data.
+    # Different payloads must not collide on the same cache key.
+    client, transport = make_client(tmp_path, [(200, ok_body({"a": 1})), (200, ok_body({"a": 2}))])
+    assert client.generate_json("p", image=None) == {"a": 1}
+    assert client.generate_json("p", image=b"") == {"a": 2}
+    assert len(transport.calls) == 2
+
+
 def test_changing_the_model_misses_the_cache(tmp_path):
     responses = [(200, ok_body({"a": 1})), (200, ok_body({"a": 2}))]
     transport = FakeTransport(responses)
@@ -88,8 +98,16 @@ def test_a_429_is_retried_and_then_succeeds(tmp_path):
     assert len(transport.calls) == 3
 
 
-def test_a_500_is_retried(tmp_path):
+def test_a_503_is_retried(tmp_path):
     client, transport = make_client(tmp_path, [(503, {}), (200, ok_body({"a": 1}))])
+    assert client.generate_json("p") == {"a": 1}
+    assert len(transport.calls) == 2
+
+
+def test_a_501_is_retried(tmp_path):
+    # 501 is a 5xx not in the old hardcoded RETRY_STATUS set; the predicate must
+    # still treat it as retryable.
+    client, transport = make_client(tmp_path, [(501, {}), (200, ok_body({"a": 1}))])
     assert client.generate_json("p") == {"a": 1}
     assert len(transport.calls) == 2
 
@@ -159,3 +177,46 @@ def test_the_image_is_sent_as_inline_base64(tmp_path):
     assert parts[0] == {"text": "p"}
     assert parts[1]["inline_data"]["mime_type"] == "image/png"
     assert parts[1]["inline_data"]["data"] == "iVBORy1ieXRlcw=="
+
+
+def test_root_is_the_directory_containing_apps():
+    # Pins the parents[N] arithmetic in gemini_client.py. gemini_client.py lives at
+    # apps/vision-tools/scripts/label_pipeline/gemini_client.py, so ROOT must climb
+    # four levels to reach the repo root, not three (that lands one directory
+    # shallow, inside apps/).
+    assert (ROOT / "apps" / "vision-tools").is_dir()
+
+
+def test_load_api_key_returns_the_env_var_when_set(monkeypatch):
+    monkeypatch.setenv("GEMINI_API_KEY", "from-environment")
+    assert load_api_key() == "from-environment"
+
+
+def test_load_api_key_falls_back_to_the_repo_root_env_file(monkeypatch, tmp_path):
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    (tmp_path / ".env").write_text("GEMINI_API_KEY=from-dot-env\n", encoding="utf-8")
+    monkeypatch.setattr(gemini_client, "ROOT", tmp_path)
+    assert load_api_key() == "from-dot-env"
+
+
+def test_load_api_key_ignores_a_commented_out_line(monkeypatch, tmp_path):
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    (tmp_path / ".env").write_text("#GEMINI_API_KEY=commented-out\n", encoding="utf-8")
+    monkeypatch.setattr(gemini_client, "ROOT", tmp_path)
+    with pytest.raises(GeminiError, match="GEMINI_API_KEY is not set"):
+        load_api_key()
+
+
+def test_load_api_key_ignores_an_empty_value(monkeypatch, tmp_path):
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    (tmp_path / ".env").write_text("GEMINI_API_KEY=\n", encoding="utf-8")
+    monkeypatch.setattr(gemini_client, "ROOT", tmp_path)
+    with pytest.raises(GeminiError, match="GEMINI_API_KEY is not set"):
+        load_api_key()
+
+
+def test_load_api_key_raises_when_the_key_is_nowhere(monkeypatch, tmp_path):
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    monkeypatch.setattr(gemini_client, "ROOT", tmp_path)
+    with pytest.raises(GeminiError, match="GEMINI_API_KEY is not set"):
+        load_api_key()
