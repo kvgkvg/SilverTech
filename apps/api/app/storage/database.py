@@ -56,6 +56,17 @@ CREATE TABLE IF NOT EXISTS buttons (
   UNIQUE(template_id, button_id)
 );
 
+CREATE TABLE IF NOT EXISTS button_offsets (
+  template_id TEXT NOT NULL REFERENCES templates(id),
+  button_id TEXT NOT NULL,
+  dx REAL NOT NULL,
+  dy REAL NOT NULL,
+  dw REAL NOT NULL,
+  dh REAL NOT NULL,
+  updated_at TEXT NOT NULL,
+  PRIMARY KEY (template_id, button_id)
+);
+
 CREATE TABLE IF NOT EXISTS submissions (
   id TEXT PRIMARY KEY,
   submitted_by TEXT,

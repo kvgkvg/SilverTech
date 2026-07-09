@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SilverTech Vision Debugger</title>
+<style>
+:root {
+  --bg: #0d0f18; --surface: #161923; --surface2: #1e2336;
+  --border: #2a3050; --accent: #4f8ef7; --green: #3ecf8e;
+  --red: #f7574f; --yellow: #f7c948; --purple: #a78bfa;
+  --text: #e2e8f0; --muted: #64748b;
+  --font: 'Segoe UI', system-ui, sans-serif; --mono: 'Cascadia Code','Fira Mono',monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 13px; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+
+/* ── Header ── */
+header {
+  display: flex; align-items: center; gap: 10px; padding: 10px 16px;
+  background: var(--surface); border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+header h1 { font-size: 15px; font-weight: 600; }
+.badge { font-size: 11px; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 2px 8px; color: var(--muted); font-family: var(--mono); }
+.api-status { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.dot.ok { background: var(--green); }
+.dot.err { background: var(--red); }
+#api-url { background: var(--surface2); border: 1px solid var(--border); border-radius: 5px; color: var(--text); padding: 4px 8px; font-size: 12px; font-family: var(--mono); width: 200px; outline: none; }
+#api-url:focus { border-color: var(--accent); }
+
+/* ── Body layout ── */
+.body { display: grid; grid-template-columns: 260px 1fr 300px; flex: 1; overflow: hidden; }
+
+/* ── Shared panel ── */
+.panel { border-right: 1px solid var(--border); overflow-y: auto; padding: 14px 12px; display: flex; flex-direction: column; gap: 14px; }
+.panel:last-child { border-right: none; }
+.section-title { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 6px; }
+
+/* ── Form elements ── */
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 11px; color: var(--muted); display: flex; justify-content: space-between; }
+.field label span { color: var(--text); font-family: var(--mono); }
+input[type=text], select, input[type=number] {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+  color: var(--text); padding: 6px 9px; font-size: 12px; font-family: var(--mono); outline: none; width: 100%;
+}
+input[type=text]:focus, select:focus { border-color: var(--accent); }
+input[type=range] { -webkit-appearance: none; width: 100%; height: 4px; background: var(--border); border-radius: 2px; outline: none; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; background: var(--accent); border-radius: 50%; cursor: pointer; }
+
+/* ── Buttons ── */
+.btn { background: var(--accent); color: white; border: none; border-radius: 7px; padding: 7px 12px; font-size: 12px; font-weight: 600; cursor: pointer; transition: opacity .15s; width: 100%; }
+.btn:hover { opacity: .85; }
+.btn.ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn.danger { background: var(--red); }
+.btn.success { background: var(--green); color: #000; }
+.btn.sm { padding: 4px 10px; font-size: 11px; width: auto; }
+
+/* ── Upload zone ── */
+.upload-zone {
+  border: 2px dashed var(--border); border-radius: 10px; padding: 20px 10px;
+  text-align: center; cursor: pointer; transition: border-color .2s, background .2s;
+  color: var(--muted); font-size: 12px;
+}
+.upload-zone:hover, .upload-zone.drag { border-color: var(--accent); background: rgba(79,142,247,.05); }
+.upload-zone input { display: none; }
+
+/* ── Candidate cards ── */
+.candidate-card {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px 10px; cursor: pointer; transition: border-color .15s;
+}
+.candidate-card:hover { border-color: var(--accent); }
+.candidate-card.selected { border-color: var(--green); background: rgba(62,207,142,.06); }
+.card-brand { font-weight: 600; font-size: 12px; }
+.card-sub { font-size: 11px; color: var(--muted); margin-top: 2px; font-family: var(--mono); }
+.card-id { font-size: 10px; color: var(--muted); margin-top: 3px; font-family: var(--mono); }
+
+/* ── Button list ── */
+.btn-item {
+  display: flex; align-items: center; gap: 8px; padding: 5px 8px;
+  border-radius: 6px; cursor: pointer; transition: background .1s;
+}
+.btn-item:hover { background: var(--surface2); }
+.btn-item.active { background: rgba(79,142,247,.12); }
+.btn-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.btn-item-id { font-family: var(--mono); font-size: 11px; flex: 1; }
+.btn-item-label { font-size: 11px; color: var(--muted); }
+
+/* ── Main canvas area ── */
+.main { display: flex; flex-direction: column; overflow: hidden; }
+.canvas-wrap {
+  flex: 1; position: relative; background: #0a0b11; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+#main-canvas { max-width: 100%; max-height: 100%; display: block; cursor: crosshair; }
+.canvas-placeholder {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  color: var(--muted); font-size: 13px;
+}
+.canvas-placeholder svg { opacity: .3; }
+
+/* ── Controls bar below canvas ── */
+.controls-bar {
+  flex-shrink: 0; background: var(--surface); border-top: 1px solid var(--border);
+  padding: 10px 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.ctrl-group { display: flex; flex-direction: column; gap: 6px; }
+.ctrl-group h3 { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.slider-row { display: flex; align-items: center; gap: 8px; }
+.slider-row label { font-size: 11px; color: var(--muted); font-family: var(--mono); min-width: 70px; }
+.slider-row input[type=range] { flex: 1; }
+.slider-row span { font-family: var(--mono); font-size: 11px; min-width: 42px; text-align: right; color: var(--text); }
+.toggle-row { display: flex; align-items: center; gap: 8px; }
+.toggle { position: relative; width: 32px; height: 18px; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.slider-t { position: absolute; inset: 0; background: var(--border); border-radius: 18px; cursor: pointer; transition: .2s; }
+.slider-t:before { content:''; position:absolute; width:12px; height:12px; left:3px; top:3px; background:white; border-radius:50%; transition:.2s; }
+input:checked + .slider-t { background: var(--green); }
+input:checked + .slider-t:before { transform: translateX(14px); }
+
+/* ── Right pipeline panel ── */
+.step-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; opacity: .5; transition: opacity .2s, border-color .2s; margin-bottom: 8px; }
+.step-card.active { opacity: 1; }
+.step-card.pass { border-color: var(--green); }
+.step-card.fail { border-color: var(--red); }
+.step-head { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: var(--surface); cursor: pointer; user-select: none; }
+.step-n { width: 20px; height: 20px; border-radius: 50%; background: var(--border); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-family: var(--mono); color: var(--muted); }
+.step-card.pass .step-n { background: var(--green); color: #000; }
+.step-card.fail .step-n { background: var(--red); color: #fff; }
+.step-t { flex: 1; font-size: 11px; font-weight: 600; font-family: var(--mono); }
+.step-v { font-size: 10px; font-weight: 700; letter-spacing: .05em; padding: 2px 6px; border-radius: 3px; }
+.step-card.pass .step-v { background: rgba(62,207,142,.15); color: var(--green); }
+.step-card.fail .step-v { background: rgba(247,87,79,.15); color: var(--red); }
+.step-body { padding: 10px; display: none; font-size: 11px; }
+.step-body.open { display: block; }
+.kv { display: flex; gap: 6px; margin-bottom: 4px; }
+.kv-k { color: var(--muted); font-family: var(--mono); min-width: 110px; }
+.kv-v { font-family: var(--mono); }
+.ok { color: var(--green); } .bad { color: var(--red); } .warn { color: var(--yellow); }
+
+.bar-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+.bar-k { color: var(--muted); font-family: var(--mono); font-size: 11px; min-width: 110px; }
+.bar-track { flex: 1; height: 5px; background: var(--border); border-radius: 3px; position: relative; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 3px; transition: width .3s; }
+.bar-fill.ok { background: var(--green); }
+.bar-fill.bad { background: var(--red); }
+.bar-thresh { position: absolute; top: -1px; bottom: -1px; width: 2px; background: var(--yellow); border-radius: 1px; }
+.bar-v { font-family: var(--mono); font-size: 11px; min-width: 38px; text-align: right; }
+
+/* ── Sweep ── */
+table.heatmap { border-collapse: collapse; font-family: var(--mono); font-size: 10px; width: 100%; }
+table.heatmap th { color: var(--muted); font-weight: 500; padding: 2px 5px; text-align: center; }
+table.heatmap td { padding: 3px 5px; text-align: center; border-radius: 3px; cursor: default; }
+table.heatmap .rh { color: var(--muted); text-align: right; padding-right: 8px; white-space: nowrap; }
+
+/* ── Tooltip ── */
+#tooltip {
+  position: fixed; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 8px; padding: 8px 12px; font-size: 12px; pointer-events: none;
+  display: none; z-index: 100; max-width: 220px; line-height: 1.6;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4);
+}
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" stroke-width="2">
+    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+  </svg>
+  <h1>Vision Pipeline Debugger</h1>
+  <span class="badge">002-vision-debug</span>
+  <div class="api-status">
+    <div class="dot" id="api-dot"></div>
+    <span id="api-label" style="font-size:11px;color:var(--muted)">API</span>
+    <input type="text" id="api-url" value="http://127.0.0.1:8000" onchange="checkApi()" />
+  </div>
+</header>
+
+<div class="body">
+
+  <!-- ── Left panel: image + template selection ── -->
+  <div class="panel" id="left-panel">
+    <div>
+      <div class="section-title">1 · Upload Image</div>
+      <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()"
+           ondragover="e=>e.preventDefault()" ondrop="handleDrop(event)">
+        <input type="file" id="file-input" accept="image/*" onchange="handleFile(this.files[0])" />
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 6px">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><path d="m3 9 4-4 4 4M7 5v14M17 15l4 4-4 4M21 17H7"/>
+        </svg>
+        <div>Drop image or click to upload</div>
+        <div id="file-name" style="font-family:var(--mono);font-size:10px;margin-top:4px;color:var(--accent)"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">2 · Find Template</div>
+      <div class="field" style="margin-bottom:6px">
+        <label>Brand</label>
+        <input type="text" id="filter-brand" placeholder="e.g. Panasonic" />
+      </div>
+      <div class="field" style="margin-bottom:8px">
+        <label>Appliance type</label>
+        <select id="filter-type">
+          <option value="">— any —</option>
+          <option value="washing_machine">Washing machine</option>
+          <option value="microwave">Microwave</option>
+          <option value="air_conditioner">Air conditioner</option>
+          <option value="refrigerator">Refrigerator</option>
+        </select>
+      </div>
+      <button class="btn" onclick="findCandidates()">Search Templates</button>
+    </div>
+
+    <div>
+      <div class="section-title">3 · Candidates</div>
+      <div id="candidates-list">
+        <div style="font-size:11px;color:var(--muted)">Search to load candidates from API</div>
+      </div>
+    </div>
+
+    <div id="template-detail-section" style="display:none">
+      <div class="section-title">Selected template</div>
+      <div id="template-detail"></div>
+    </div>
+
+    <div id="button-list-section" style="display:none">
+      <div class="section-title">Buttons <span id="btn-count" style="color:var(--muted)"></span></div>
+      <div id="button-list"></div>
+    </div>
+
+    <div id="ref-section" style="display:none">
+      <div class="section-title">Reference — bboxes in DB</div>
+      <canvas id="ref-canvas" style="width:100%;border-radius:6px;border:1px solid var(--border);background:#0a0b11;display:block;cursor:crosshair"
+              onmousemove="handleRefHover(event)" onmouseleave="hideTooltip()"></canvas>
+      <p style="font-size:10px;color:var(--muted);margin-top:4px">Gold = panel_bbox · Red = logo · Colored = buttons · Hover for details</p>
+    </div>
+  </div>
+
+  <!-- ── Center: canvas + controls ── -->
+  <div class="main">
+    <div class="canvas-wrap" id="canvas-wrap">
+      <div class="canvas-placeholder" id="placeholder">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <path d="m21 15-5-5L5 21"/>
+        </svg>
+        <div>Upload an image to begin</div>
+      </div>
+      <canvas id="main-canvas" style="display:none" onmousemove="handleHover(event)" onmouseleave="hideTooltip()"></canvas>
+    </div>
+
+    <div class="controls-bar">
+      <div class="ctrl-group">
+        <h3>Projection Transform</h3>
+        <div class="slider-row">
+          <label>scaleX</label>
+          <input type="range" id="sX" min="0.1" max="5" step="0.01" value="1"
+            oninput="setSliderLabel('sX','lsX',v=>v.toFixed(2));redraw()" />
+          <span id="lsX">1.00</span>
+        </div>
+        <div class="slider-row">
+          <label>scaleY</label>
+          <input type="range" id="sY" min="0.1" max="5" step="0.01" value="1"
+            oninput="setSliderLabel('sY','lsY',v=>v.toFixed(2));redraw()" />
+          <span id="lsY">1.00</span>
+        </div>
+        <div class="slider-row">
+          <label>offsetX</label>
+          <input type="range" id="oX" min="-400" max="400" value="0"
+            oninput="setSliderLabel('oX','loX',v=>Math.round(v)+'px');redraw()" />
+          <span id="loX">0px</span>
+        </div>
+        <div class="slider-row">
+          <label>offsetY</label>
+          <input type="range" id="oY" min="-400" max="400" value="0"
+            oninput="setSliderLabel('oY','loY',v=>Math.round(v)+'px');redraw()" />
+          <span id="loY">0px</span>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:4px">
+          <button class="btn ghost sm" onclick="autoFit()">Auto-fit</button>
+          <button class="btn ghost sm" id="mode-btn" onclick="toggleMode()" title="Panel crop: uploaded image shows only the panel region. Full template: uploaded image is the original full-res template file. Logo anchor: drag a box over the brand logo; buttons are placed from logo-relative offsets.">Mode: Panel crop</button>
+          <button class="btn ghost sm" id="auto-detect-btn" onclick="autoDetectLogo()" title="Send the uploaded photo to POST /api/vision/logo-anchor: server detects the logo (multi-scale matchTemplate) and refines with ORB homography.">Auto detect (API)</button>
+          <span id="tier-badge" style="display:none;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:10px;border:1px solid var(--border)"></span>
+        </div>
+      </div>
+
+      <div class="ctrl-group">
+        <h3>Confidence Inputs</h3>
+        <div class="slider-row">
+          <label>inliers</label>
+          <input type="range" id="ci" min="0" max="20" value="8"
+            oninput="setSliderLabel('ci','lci',v=>Math.round(v));runPipeline()" />
+          <span id="lci">8</span>
+        </div>
+        <div class="slider-row">
+          <label>keypoints</label>
+          <input type="range" id="ck" min="1" max="30" value="12"
+            oninput="setSliderLabel('ck','lck',v=>Math.round(v));runPipeline()" />
+          <span id="lck">12</span>
+        </div>
+        <div class="slider-row">
+          <label>reproj (px)</label>
+          <input type="range" id="cr" min="0" max="15" step="0.1" value="2.3"
+            oninput="setSliderLabel('cr','lcr',v=>parseFloat(v).toFixed(1)+'px');runPipeline()" />
+          <span id="lcr">2.3px</span>
+        </div>
+        <div class="toggle-row" style="margin-top:4px">
+          <label class="toggle">
+            <input type="checkbox" id="stable" checked onchange="runPipeline()" />
+            <span class="slider-t"></span>
+          </label>
+          <span style="font-size:11px;color:var(--muted)">Optical flow stable</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Right: pipeline + sweep ── -->
+  <div class="panel">
+    <div>
+      <div class="section-title">Pipeline Steps</div>
+
+      <div class="step-card active" id="step1">
+        <div class="step-head" onclick="toggleStep('sb1')">
+          <div class="step-n">1</div>
+          <div class="step-t">BrandMatcher</div>
+          <div class="step-v" id="sv1">—</div>
+        </div>
+        <div class="step-body open" id="sb1"></div>
+      </div>
+
+      <div class="step-card active" id="step2">
+        <div class="step-head" onclick="toggleStep('sb2')">
+          <div class="step-n">2</div>
+          <div class="step-t">MatchConfidence</div>
+          <div class="step-v" id="sv2">—</div>
+        </div>
+        <div class="step-body open" id="sb2"></div>
+      </div>
+
+      <div class="step-card active" id="step3">
+        <div class="step-head" onclick="toggleStep('sb3')">
+          <div class="step-n">3</div>
+          <div class="step-t">HomographyProjector</div>
+          <div class="step-v" id="sv3">—</div>
+        </div>
+        <div class="step-body open" id="sb3"></div>
+      </div>
+
+      <div class="step-card active" id="step4">
+        <div class="step-head" onclick="toggleStep('sb4')">
+          <div class="step-n">4</div>
+          <div class="step-t">OpticalFlowTracker</div>
+          <div class="step-v" id="sv4">—</div>
+        </div>
+        <div class="step-body open" id="sb4"></div>
+      </div>
+
+      <div class="step-card active" id="step5">
+        <div class="step-head" onclick="toggleStep('sb5')">
+          <div class="step-n">5</div>
+          <div class="step-t">ConfidenceMonitor</div>
+          <div class="step-v" id="sv5">—</div>
+        </div>
+        <div class="step-body open" id="sb5"></div>
+      </div>
+
+      <div class="step-card active" id="step6">
+        <div class="step-head" onclick="toggleStep('sb6')">
+          <div class="step-n">6</div>
+          <div class="step-t">ResetController</div>
+          <div class="step-v" id="sv6">—</div>
+        </div>
+        <div class="step-body open" id="sb6"></div>
+      </div>
+
+      <div class="step-card active" id="step7">
+        <div class="step-head" onclick="toggleStep('sb7')">
+          <div class="step-n">7</div>
+          <div class="step-t">OverlayRenderer</div>
+          <div class="step-v" id="sv7">—</div>
+        </div>
+        <div class="step-body open" id="sb7"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Confidence Sweep <span style="color:var(--muted)">(16 kp total)</span></div>
+      <div id="sweep" style="overflow-x:auto"></div>
+    </div>
+  </div>
+
+</div>
+
+<div id="tooltip"></div>
+
+<script>
+// ── Seeded fallback data (used when API is offline) ───────────────────────────
+const SEED_CANDIDATES = [
+  { id:'template_toshiba_washer_panel_v1', brand:'Toshiba', appliance_type:'washing_machine', template_code:'toshiba_washer_panel_v1', version:1, status:'official', template_image_url:'', logo_bbox:{x:20,y:10,width:120,height:40}, panel_bbox:{x:0,y:0,width:640,height:240} },
+  { id:'template_panasonic_washer_panel_v1', brand:'Panasonic', appliance_type:'washing_machine', template_code:'panasonic_washer_panel_v1', version:1, status:'official', template_image_url:'', logo_bbox:{x:25,y:12,width:150,height:38}, panel_bbox:{x:0,y:0,width:640,height:240} },
+  { id:'template_panasonic_microwave_nn_gt35hm_v1', brand:'Panasonic', appliance_type:'microwave', template_code:'panasonic_microwave_nn_gt35hm_v1', version:1, status:'official', template_image_url:'data/templates/panasonic_microwave_nn_gt35hm.png', logo_bbox:{x:476,y:3862,width:857,height:226}, panel_bbox:{x:238,y:428,width:5301,height:3701}, image_width:5712, image_height:4284 },
+  { id:'template_daikin_ac_remote_v1', brand:'Daikin', appliance_type:'air_conditioner', template_code:'daikin_ac_remote_v1', version:1, status:'official', template_image_url:'', logo_bbox:{x:50,y:8,width:100,height:30}, panel_bbox:{x:0,y:0,width:320,height:720} },
+];
+const SEED_BUTTONS = {
+  template_toshiba_washer_panel_v1: [
+    { button_id:'start_pause', label:'Start/Pause', vietnamese_name:'Bat dau / Tam dung', function_description:'Bat dau hoac tam dung chu trinh giat', bbox_template_coordinates:{x:500,y:150,width:90,height:55}, button_type:'physical' },
+    { button_id:'quick_wash', label:'Quick', vietnamese_name:'Giat nhanh', function_description:'Chon che do giat nhanh', bbox_template_coordinates:{x:210,y:145,width:85,height:50}, button_type:'touch' },
+    { button_id:'dry_mode', label:'Dry', vietnamese_name:'Say', function_description:'Chon che do say', bbox_template_coordinates:{x:315,y:145,width:80,height:50}, button_type:'touch' },
+  ],
+  template_panasonic_washer_panel_v1: [
+    { button_id:'start_pause', label:'Start', vietnamese_name:'Bat dau', function_description:'Bat dau chu trinh', bbox_template_coordinates:{x:505,y:140,width:88,height:58}, button_type:'physical' },
+    { button_id:'quick_wash', label:'Speedy', vietnamese_name:'Giat nhanh', function_description:'Chon che do giat nhanh', bbox_template_coordinates:{x:230,y:132,width:92,height:52}, button_type:'touch' },
+  ],
+  // Coords are in full-image space; projectButtons() subtracts panel_bbox.x/y before scaling
+  template_panasonic_microwave_nn_gt35hm_v1: [
+    { button_id:'micro_power',  label:'Vi sóng',           vietnamese_name:'Vi sóng',           function_description:'Chọn mức công suất lò vi sóng',    bbox_template_coordinates:{x:4284,y:1214,width:583,height:345}, button_type:'touch' },
+    { button_id:'time_10_min',  label:'10 phút',           vietnamese_name:'10 phút',            function_description:'Tăng thời gian lên 10 phút',        bbox_template_coordinates:{x:4873,y:1238,width:553,height:345}, button_type:'touch' },
+    { button_id:'grill',        label:'Nướng',             vietnamese_name:'nướng',              function_description:'Chọn chế độ nướng',                 bbox_template_coordinates:{x:4278,y:1583,width:583,height:315}, button_type:'touch' },
+    { button_id:'time_1_min',   label:'1 phút',            vietnamese_name:'1 phút',             function_description:'Tăng thời gian lên 1 phút',         bbox_template_coordinates:{x:4855,y:1577,width:577,height:298}, button_type:'touch' },
+    { button_id:'combination',  label:'Nấu kết hợp',       vietnamese_name:'Nấu kết hợp',        function_description:'Chế độ vi sóng + nướng kết hợp',    bbox_template_coordinates:{x:4266,y:1880,width:577,height:339}, button_type:'touch' },
+    { button_id:'time_10_sec',  label:'10 giây',           vietnamese_name:'10 giây',            function_description:'Tăng thời gian lên 10 giây',        bbox_template_coordinates:{x:4831,y:1874,width:607,height:333}, button_type:'touch' },
+    { button_id:'turbo_defrost',label:'Rã đông',           vietnamese_name:'rã đông',            function_description:'Rã đông theo khối lượng',           bbox_template_coordinates:{x:4278,y:2207,width:559,height:333}, button_type:'touch' },
+    { button_id:'up',           label:'Tăng ▲',            vietnamese_name:'tăng',               function_description:'Tăng khối lượng / mức',             bbox_template_coordinates:{x:4837,y:2184,width:595,height:333}, button_type:'touch' },
+    { button_id:'auto_reheat',  label:'Hâm nóng',          vietnamese_name:'hâm nóng',           function_description:'Hâm nóng tự động theo trọng lượng', bbox_template_coordinates:{x:4248,y:2535,width:595,height:315}, button_type:'touch' },
+    { button_id:'down',         label:'Giảm ▼',            vietnamese_name:'giảm',               function_description:'Giảm khối lượng / mức',             bbox_template_coordinates:{x:4843,y:2523,width:589,height:298}, button_type:'touch' },
+    { button_id:'auto_menu',    label:'Nấu tự động',       vietnamese_name:'nấu tự động',        function_description:'Chọn thực đơn nấu tự động',         bbox_template_coordinates:{x:4260,y:2826,width:571,height:321}, button_type:'touch' },
+    { button_id:'time_clock',   label:'Hẹn giờ',           vietnamese_name:'hẹn giờ/đồng hồ',   function_description:'Cài đồng hồ hoặc hẹn giờ',          bbox_template_coordinates:{x:4831,y:2838,width:589,height:286}, button_type:'touch' },
+    { button_id:'add_time',     label:'Thêm giờ',          vietnamese_name:'thêm thời gian',     function_description:'Thêm thời gian nấu',                bbox_template_coordinates:{x:4296,y:3350,width:547,height:309}, button_type:'touch' },
+    { button_id:'quick_30',     label:'Chọn nhanh 30',     vietnamese_name:'chọn nhanh 30',      function_description:'Nấu nhanh 30 giây',                 bbox_template_coordinates:{x:4849,y:3320,width:547,height:327}, button_type:'touch' },
+    { button_id:'stop_reset',   label:'Dừng/Cài lại',      vietnamese_name:'dừng/cài đặt lại',   function_description:'Dừng hoặc cài đặt lại lò',          bbox_template_coordinates:{x:4260,y:3653,width:565,height:321}, button_type:'touch' },
+    { button_id:'start',        label:'Khởi động',         vietnamese_name:'khởi động',          function_description:'Bắt đầu nấu',                       bbox_template_coordinates:{x:4825,y:3647,width:583,height:333}, button_type:'physical' },
+  ],
+  template_daikin_ac_remote_v1: [
+    { button_id:'temp_up', label:'Temp +', vietnamese_name:'Tang nhiet do', function_description:'Tang nhiet do dieu hoa', bbox_template_coordinates:{x:180,y:235,width:70,height:55}, button_type:'physical' },
+  ],
+};
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let currentImage = null;        // HTMLImageElement
+let currentFile = null;         // original File for API upload
+let apiAnchorResult = null;     // response of POST /api/vision/logo-anchor
+let currentTemplate = null;     // TemplateSummary
+let currentButtons = [];        // ButtonSchema[]
+let activeButtonId = null;
+let apiOnline = false;
+
+const BUTTON_COLORS = ['#4f8ef7','#3ecf8e','#f7c948','#a78bfa','#f7574f','#38bdf8','#fb923c'];
+
+function apiBase() { return document.getElementById('api-url').value.replace(/\/$/, ''); }
+
+// ── API check ─────────────────────────────────────────────────────────────────
+async function checkApi() {
+  try {
+    const r = await fetch(apiBase() + '/docs', { mode: 'no-cors' });
+    apiOnline = true;
+  } catch {
+    apiOnline = false;
+  }
+  document.getElementById('api-dot').className = 'dot ' + (apiOnline ? 'ok' : 'err');
+  document.getElementById('api-label').textContent = apiOnline ? 'API online' : 'API offline (seed)';
+}
+
+// ── Template search ───────────────────────────────────────────────────────────
+async function findCandidates() {
+  const brand = document.getElementById('filter-brand').value.trim() || null;
+  const type  = document.getElementById('filter-type').value || null;
+
+  let candidates = [];
+  try {
+    const body = { brand_confidence: brand ? 0.9 : 0 };
+    if (brand) body.brand = brand;
+    if (type)  body.appliance_type = type;
+
+    const r = await fetch(apiBase() + '/api/vision/candidates', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    candidates = data.candidates;
+    apiOnline = true;
+  } catch {
+    apiOnline = false;
+    candidates = SEED_CANDIDATES.filter(c =>
+      (!brand || c.brand.toLowerCase().includes(brand.toLowerCase())) &&
+      (!type  || c.appliance_type === type)
+    );
+  }
+  document.getElementById('api-dot').className = 'dot ' + (apiOnline ? 'ok' : 'err');
+  document.getElementById('api-label').textContent = apiOnline ? 'API online' : 'API offline (seed)';
+
+  renderCandidates(candidates);
+}
+
+function renderCandidates(list) {
+  const el = document.getElementById('candidates-list');
+  if (!list.length) {
+    el.innerHTML = '<div style="font-size:11px;color:var(--muted)">No candidates found</div>';
+    return;
+  }
+  el.innerHTML = list.map(c => `
+    <div class="candidate-card" onclick="selectTemplate('${c.id}', this)">
+      <div class="card-brand">${c.brand}</div>
+      <div class="card-sub">${c.appliance_type.replace('_',' ')} · v${c.version} · ${c.status}</div>
+      <div class="card-id">${c.id}</div>
+    </div>
+  `).join('');
+}
+
+// Select a template when only the id is known (e.g. server auto-detected it).
+async function selectTemplateById(id) {
+  const card = [...document.querySelectorAll('.candidate-card')]
+    .find(c => c.querySelector('.card-id')?.textContent === id) || null;
+  await selectTemplate(id, card);
+}
+
+async function selectTemplate(id, el) {
+  document.querySelectorAll('.candidate-card').forEach(c => c.classList.remove('selected'));
+  el?.classList.add('selected');
+
+  let template = null, buttons = [];
+  try {
+    const r = await fetch(apiBase() + '/api/templates/' + id);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    template = data;
+    buttons = data.buttons || [];
+  } catch {
+    template = SEED_CANDIDATES.find(c => c.id === id);
+    buttons = SEED_BUTTONS[id] || [];
+  }
+
+  currentTemplate = template;
+  currentButtons = buttons;
+  activeButtonId = buttons[0]?.button_id || null;
+
+  renderTemplateDetail(template);
+  renderButtonList(buttons);
+  renderReference(template, buttons);
+  autoFit();
+  runPipeline();
+}
+
+function renderTemplateDetail(t) {
+  const sec = document.getElementById('template-detail-section');
+  sec.style.display = '';
+  const pb = t.panel_bbox;
+  document.getElementById('template-detail').innerHTML = `
+    <div class="kv"><span class="kv-k">brand</span><span class="kv-v">${t.brand}</span></div>
+    <div class="kv"><span class="kv-k">type</span><span class="kv-v">${t.appliance_type}</span></div>
+    <div class="kv"><span class="kv-k">panel_bbox</span><span class="kv-v">${pb ? pb.width+'×'+pb.height : '—'}</span></div>
+    <div class="kv"><span class="kv-k">id</span><span class="kv-v" style="font-size:10px">${t.id}</span></div>
+  `;
+}
+
+function renderButtonList(buttons) {
+  const sec = document.getElementById('button-list-section');
+  sec.style.display = '';
+  document.getElementById('btn-count').textContent = `(${buttons.length})`;
+  document.getElementById('button-list').innerHTML = buttons.map((b, i) => `
+    <div class="btn-item ${b.button_id === activeButtonId ? 'active' : ''}"
+         onclick="setActiveButton('${b.button_id}')">
+      <div class="btn-dot" style="background:${BUTTON_COLORS[i % BUTTON_COLORS.length]}"></div>
+      <span class="btn-item-id">${b.button_id}</span>
+      <span class="btn-item-label">${b.label}</span>
+    </div>
+  `).join('');
+}
+
+// ── Reference image view ──────────────────────────────────────────────────────
+let _refProjected = [];
+
+function renderReference(template, buttons) {
+  const sec = document.getElementById('ref-section');
+  if (!template.template_image_url) { sec.style.display = 'none'; return; }
+  sec.style.display = '';
+  const canvas = document.getElementById('ref-canvas');
+
+  const imgPath = '../../../' + template.template_image_url;
+  const img = new Image();
+  img.onload = () => {
+    const displayW = canvas.offsetWidth || 236;
+    const scale = displayW / img.naturalWidth;
+    canvas.width  = displayW;
+    canvas.height = Math.round(img.naturalHeight * scale);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    // Panel bbox — gold outline
+    const pb = template.panel_bbox;
+    if (pb) {
+      ctx.strokeStyle = '#f7c948'; ctx.lineWidth = 2; ctx.setLineDash([6,4]);
+      ctx.strokeRect(pb.x*scale, pb.y*scale, pb.width*scale, pb.height*scale);
+      ctx.setLineDash([]);
+      ctx.fillStyle = 'rgba(247,201,72,0.08)';
+      ctx.fillRect(pb.x*scale, pb.y*scale, pb.width*scale, pb.height*scale);
+      ctx.fillStyle = '#f7c948'; ctx.font = `bold ${Math.max(8, 10*scale)}px monospace`;
+      ctx.fillText('panel_bbox', (pb.x+4)*scale, (pb.y+14)*scale);
+    }
+
+    // Logo bbox — red outline (anchor for logo-relative offsets)
+    const lb = template.logo_bbox;
+    if (lb) {
+      ctx.strokeStyle = '#ff4d4d'; ctx.lineWidth = 2;
+      ctx.strokeRect(lb.x*scale, lb.y*scale, lb.width*scale, lb.height*scale);
+      ctx.fillStyle = '#ff4d4d'; ctx.font = `bold ${Math.max(8, 10*scale)}px monospace`;
+      ctx.fillText('logo', (lb.x+4)*scale, (lb.y-4)*scale);
+    }
+
+    // Buttons — absolute coords
+    _refProjected = buttons.map((b, i) => {
+      const bb = b.bbox_template_coordinates;
+      const px = bb.x*scale, py = bb.y*scale, pw = bb.width*scale, ph = bb.height*scale;
+      const color = BUTTON_COLORS[i % BUTTON_COLORS.length];
+      ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+      ctx.strokeRect(px, py, pw, ph);
+      ctx.fillStyle = color.replace(')', ',0.15)').replace('rgb(','rgba(').replace('#', 'rgba(') || 'rgba(79,142,247,0.15)';
+      ctx.globalAlpha = 0.2; ctx.fillRect(px, py, pw, ph); ctx.globalAlpha = 1;
+      const fontSize = Math.max(7, Math.min(ph * 0.28, 11));
+      ctx.font = `bold ${fontSize}px monospace`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = color;
+      ctx.fillText(b.label, px + pw/2, py + ph/2);
+      return { ...b, px, py, pw, ph, color };
+    });
+  };
+  img.onerror = () => { sec.style.display = 'none'; };
+  img.src = imgPath;
+}
+
+function handleRefHover(e) {
+  const canvas = document.getElementById('ref-canvas');
+  const rect = canvas.getBoundingClientRect();
+  const scX = canvas.width / rect.width;
+  const scY = canvas.height / rect.height;
+  const mx = (e.clientX - rect.left) * scX;
+  const my = (e.clientY - rect.top)  * scY;
+  for (const b of _refProjected) {
+    if (mx >= b.px && mx <= b.px+b.pw && my >= b.py && my <= b.py+b.ph) {
+      const tip = document.getElementById('tooltip');
+      tip.style.display = 'block';
+      tip.style.left = (e.clientX + 14) + 'px';
+      tip.style.top  = (e.clientY - 10) + 'px';
+      const bb = b.bbox_template_coordinates;
+      tip.innerHTML = `
+        <div style="font-weight:700;color:${b.color};font-family:var(--mono);margin-bottom:4px">${b.button_id}</div>
+        <div><b>Label:</b> ${b.label}</div>
+        <div><b>VI:</b> ${b.vietnamese_name}</div>
+        <div style="margin-top:4px;color:var(--muted);font-family:var(--mono);font-size:10px">
+          abs: (${bb.x}, ${bb.y}) &nbsp; size: ${bb.width}×${bb.height}
+        </div>`;
+      return;
+    }
+  }
+  hideTooltip();
+}
+
+function setActiveButton(id) {
+  activeButtonId = id;
+  renderButtonList(currentButtons);
+  redraw();
+  runPipeline();
+}
+
+// ── Image upload ──────────────────────────────────────────────────────────────
+function handleFile(file) {
+  if (!file) return;
+  currentFile = file;
+  apiAnchorResult = null;
+  setTierBadge(null);
+  document.getElementById('file-name').textContent = file.name;
+  const img = new Image();
+  img.onload = () => {
+    currentImage = img;
+    document.getElementById('placeholder').style.display = 'none';
+    const canvas = document.getElementById('main-canvas');
+    canvas.style.display = 'block';
+    autoFit();
+    redraw();
+  };
+  img.src = URL.createObjectURL(file);
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) handleFile(file);
+}
+
+document.getElementById('drop-zone').addEventListener('dragover', e => {
+  e.preventDefault();
+  e.currentTarget.classList.add('drag');
+});
+document.getElementById('drop-zone').addEventListener('dragleave', e => {
+  e.currentTarget.classList.remove('drag');
+});
+document.getElementById('drop-zone').addEventListener('drop', e => {
+  e.currentTarget.classList.remove('drag');
+  handleDrop(e);
+});
+
+// ── Mode toggle ───────────────────────────────────────────────────────────────
+// Panel crop: uploaded image shows only the panel region → subtract panel_bbox origin before scaling
+// Full template: uploaded image is the original full-res file → use absolute coords directly (scale=1)
+// Logo anchor: drag a box over the logo in the frame → buttons placed from
+//   logo-relative offsets (mirrors scripts/logo_anchor.py similarity projection)
+let modeIndex = 0; // 0 = panel crop, 1 = full template, 2 = logo anchor
+let fullTemplateMode = false;
+let logoAnchorMode = false;
+let logoRect = null; // {x, y, w, h} in image pixels, user-drawn
+
+const MODE_LABELS = ['Mode: Panel crop', 'Mode: Full template', 'Mode: Logo anchor'];
+
+function toggleMode() {
+  modeIndex = (modeIndex + 1) % 3;
+  fullTemplateMode = modeIndex === 1;
+  logoAnchorMode = modeIndex === 2;
+  document.getElementById('mode-btn').textContent = MODE_LABELS[modeIndex];
+  if (!logoAnchorMode) logoRect = null;
+  autoFit();
+}
+
+// ── Logo anchor drag ──────────────────────────────────────────────────────────
+let _dragStart = null;
+
+function canvasImageCoords(e) {
+  const canvas = document.getElementById('main-canvas');
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: (e.clientX - rect.left) * (canvas.width / rect.width),
+    y: (e.clientY - rect.top) * (canvas.height / rect.height),
+  };
+}
+
+document.getElementById('main-canvas').addEventListener('mousedown', e => {
+  if (!logoAnchorMode || !currentImage) return;
+  apiAnchorResult = null; // manual drag overrides API result
+  setTierBadge(null);
+  _dragStart = canvasImageCoords(e);
+});
+document.getElementById('main-canvas').addEventListener('mousemove', e => {
+  if (!logoAnchorMode || !_dragStart) return;
+  const p = canvasImageCoords(e);
+  logoRect = {
+    x: Math.min(_dragStart.x, p.x),
+    y: Math.min(_dragStart.y, p.y),
+    w: Math.abs(p.x - _dragStart.x),
+    h: Math.abs(p.y - _dragStart.y),
+  };
+  redraw();
+});
+document.getElementById('main-canvas').addEventListener('mouseup', () => { _dragStart = null; });
+
+// ── Auto detect via API (real pipeline: matchTemplate + ORB homography) ──────
+function setTierBadge(tier) {
+  const badge = document.getElementById('tier-badge');
+  if (!tier) { badge.style.display = 'none'; return; }
+  const colors = {
+    HOMOGRAPHY_REFINED: '#3ecf8e',
+    LOGO_SIMILARITY: '#f7c948',
+    REJECTED: '#f7574f',
+  };
+  badge.style.display = 'inline-block';
+  badge.style.color = colors[tier] || 'var(--muted)';
+  badge.style.borderColor = colors[tier] || 'var(--border)';
+  badge.textContent = tier;
+}
+
+async function autoDetectLogo() {
+  if (!currentFile) { alert('Upload a photo first'); return; }
+  if (!logoAnchorMode) {
+    modeIndex = 2; fullTemplateMode = false; logoAnchorMode = true;
+    document.getElementById('mode-btn').textContent = MODE_LABELS[2];
+  }
+  const btn = document.getElementById('auto-detect-btn');
+  btn.disabled = true; btn.textContent = 'Detecting…';
+  try {
+    // No template_id: the server tries every template's logo and picks the
+    // best match, so the user never has to pre-select brand/model.
+    const form = new FormData();
+    form.append('frame', currentFile);
+    let res;
+    try {
+      res = await fetch(apiBase() + '/api/vision/logo-anchor', { method: 'POST', body: form });
+    } catch (netErr) {
+      throw new Error('cannot reach the API — is it running? (make run-api)');
+    }
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || ('HTTP ' + res.status));
+    }
+    apiAnchorResult = await res.json();
+    logoRect = null; // API result replaces the manual anchor
+    setTierBadge(apiAnchorResult.tier);
+    if (apiAnchorResult.brand) {
+      const badge = document.getElementById('tier-badge');
+      badge.textContent += ` · ${apiAnchorResult.brand} (${apiAnchorResult.brand_inliers} inl)`;
+    }
+    if (apiAnchorResult.template_id && apiAnchorResult.template_id !== currentTemplate?.id) {
+      await selectTemplateById(apiAnchorResult.template_id);
+    }
+    redraw();
+  } catch (e) {
+    alert('Logo anchor failed: ' + e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Auto detect (API)';
+  }
+}
+
+function drawApiAnchorResult(ctx, canvas) {
+  const r = apiAnchorResult;
+  // detected logo box from pose + template logo size
+  if (r.logo_pose && r.logo_bbox_template) {
+    const p = r.logo_pose;
+    const lw = r.logo_bbox_template.width * p.scale;
+    const lh = r.logo_bbox_template.height * p.scale;
+    ctx.strokeStyle = '#ff4d4d'; ctx.lineWidth = 3;
+    ctx.strokeRect(p.center_x - lw / 2, p.center_y - lh / 2, lw, lh);
+    ctx.fillStyle = '#ff4d4d';
+    ctx.font = `bold ${Math.max(12, canvas.width * 0.012)}px 'Segoe UI', system-ui, sans-serif`;
+    ctx.textAlign = 'left'; ctx.textBaseline = 'bottom';
+    ctx.fillText(`logo ${(p.score * 100).toFixed(1)}% ×${p.scale.toFixed(3)}`,
+      p.center_x - lw / 2, p.center_y - lh / 2 - 4);
+  }
+  const drawQuads = (quads, color, dashed) => {
+    ctx.strokeStyle = color; ctx.lineWidth = 2;
+    if (dashed) ctx.setLineDash([8, 6]);
+    for (const [id, corners] of Object.entries(quads)) {
+      ctx.beginPath();
+      corners.forEach((c, i) => i ? ctx.lineTo(c.x, c.y) : ctx.moveTo(c.x, c.y));
+      ctx.closePath();
+      ctx.stroke();
+      ctx.fillStyle = color;
+      ctx.font = `bold ${Math.max(9, canvas.width * 0.008)}px monospace`;
+      ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+      ctx.fillText(id, corners[0].x + 2, corners[0].y + 2);
+    }
+    ctx.setLineDash([]);
+  };
+  const refined = r.tier === 'HOMOGRAPHY_REFINED';
+  // dashed yellow = raw coarse projection (before local snap), solid = final
+  if (r.coarse_buttons && Object.keys(r.coarse_buttons).length)
+    drawQuads(r.coarse_buttons, '#f7c948', true);
+  if (r.projected_buttons && Object.keys(r.projected_buttons).length)
+    drawQuads(r.projected_buttons, refined ? '#3ecf8e' : '#fb923c', false);
+}
+
+// Mirrors scripts/logo_anchor.py: offsets in logo-width units, similarity projection
+function projectFromLogoAnchor() {
+  const lb = currentTemplate?.logo_bbox;
+  if (!lb || !logoRect || logoRect.w < 4) return [];
+  const scale = logoRect.w / lb.width;
+  const anchorX = logoRect.x + logoRect.w / 2;
+  const anchorY = logoRect.y + logoRect.h / 2;
+  const logoCx = lb.x + lb.width / 2;
+  const logoCy = lb.y + lb.height / 2;
+  return currentButtons.map((b, i) => {
+    const bb = b.bbox_template_coordinates;
+    const w = (bb.w || bb.width), h = (bb.h || bb.height);
+    const cx = anchorX + (bb.x + w / 2 - logoCx) * scale;
+    const cy = anchorY + (bb.y + h / 2 - logoCy) * scale;
+    return {
+      button_id: b.button_id,
+      label: b.label,
+      vietnamese_name: b.vietnamese_name,
+      function_description: b.function_description,
+      button_type: b.button_type,
+      color: BUTTON_COLORS[i % BUTTON_COLORS.length],
+      x: cx - w * scale / 2,
+      y: cy - h * scale / 2,
+      w: w * scale,
+      h: h * scale,
+    };
+  });
+}
+
+// ── Canvas ────────────────────────────────────────────────────────────────────
+function autoFit() {
+  if (!currentImage || !currentTemplate?.panel_bbox) return;
+  const pb = currentTemplate.panel_bbox;
+  if (fullTemplateMode) {
+    // Image IS the full template file — project absolute coords at 1:1, no scaling needed
+    // (canvas is sized to image naturalWidth/Height; CSS handles display scale)
+    document.getElementById('sX').value = 1;
+    document.getElementById('sY').value = 1;
+    document.getElementById('oX').value = 0;
+    document.getElementById('oY').value = 0;
+    document.getElementById('lsX').textContent = '1.00';
+    document.getElementById('lsY').textContent = '1.00';
+    document.getElementById('loX').textContent = '0px';
+    document.getElementById('loY').textContent = '0px';
+  } else {
+    // Image is a cropped photo of just the panel region
+    const sX = currentImage.width  / pb.width;
+    const sY = currentImage.height / pb.height;
+    document.getElementById('sX').value = sX.toFixed(2);
+    document.getElementById('sY').value = sY.toFixed(2);
+    document.getElementById('oX').value = 0;
+    document.getElementById('oY').value = 0;
+    document.getElementById('lsX').textContent = sX.toFixed(2);
+    document.getElementById('lsY').textContent = sY.toFixed(2);
+    document.getElementById('loX').textContent = '0px';
+    document.getElementById('loY').textContent = '0px';
+  }
+  redraw();
+}
+
+function setSliderLabel(inputId, labelId, fmt) {
+  document.getElementById(labelId).textContent = fmt(document.getElementById(inputId).value);
+}
+
+function projectButtons() {
+  if (logoAnchorMode) return projectFromLogoAnchor();
+  const sX = +document.getElementById('sX').value;
+  const sY = +document.getElementById('sY').value;
+  const oX = +document.getElementById('oX').value;
+  const oY = +document.getElementById('oY').value;
+  // Full template mode: uploaded image IS the original file → use absolute coords (scale=1, no origin sub)
+  // Panel crop mode: uploaded image is a cropped panel photo → subtract panel_bbox origin before scaling
+  const panelOriginX = fullTemplateMode ? 0 : (currentTemplate?.panel_bbox?.x ?? 0);
+  const panelOriginY = fullTemplateMode ? 0 : (currentTemplate?.panel_bbox?.y ?? 0);
+  const effectiveSX  = fullTemplateMode ? 1 : sX;
+  const effectiveSY  = fullTemplateMode ? 1 : sY;
+  return currentButtons.map((b, i) => {
+    const bb = b.bbox_template_coordinates;
+    const relX = bb.x - panelOriginX;
+    const relY = bb.y - panelOriginY;
+    return {
+      button_id: b.button_id,
+      label: b.label,
+      vietnamese_name: b.vietnamese_name,
+      function_description: b.function_description,
+      button_type: b.button_type,
+      color: BUTTON_COLORS[i % BUTTON_COLORS.length],
+      x: oX + relX * effectiveSX,
+      y: oY + relY * effectiveSY,
+      w: (bb.w || bb.width) * effectiveSX,
+      h: (bb.h || bb.height) * effectiveSY,
+    };
+  });
+}
+
+function redraw() {
+  if (!currentImage) return;
+  const canvas = document.getElementById('main-canvas');
+  const wrap   = document.getElementById('canvas-wrap');
+  const maxW = wrap.clientWidth - 8;
+  const maxH = wrap.clientHeight - 8;
+  const scale = Math.min(maxW / currentImage.width, maxH / currentImage.height, 1);
+  canvas.width  = currentImage.width;
+  canvas.height = currentImage.height;
+  canvas.style.width  = Math.round(currentImage.width  * scale) + 'px';
+  canvas.style.height = Math.round(currentImage.height * scale) + 'px';
+
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(currentImage, 0, 0);
+
+  const projected = projectButtons();
+  const confAccepted = getConfidence().accepted;
+
+  for (const pb of projected) {
+    const isActive = pb.button_id === activeButtonId;
+    const alpha = confAccepted ? (isActive ? 1 : 0.65) : 0.3;
+
+    // Fill
+    ctx.globalAlpha = 0.15 * alpha;
+    ctx.fillStyle = pb.color;
+    ctx.fillRect(pb.x, pb.y, pb.w, pb.h);
+
+    // Border
+    ctx.globalAlpha = alpha;
+    ctx.strokeStyle = pb.color;
+    ctx.lineWidth = isActive ? 3 : 1.5;
+    if (!confAccepted) { ctx.setLineDash([6, 4]); }
+    ctx.strokeRect(pb.x, pb.y, pb.w, pb.h);
+    ctx.setLineDash([]);
+
+    // Label
+    const fontSize = Math.max(10, Math.min(pb.h * 0.28, 18));
+    ctx.font = `bold ${fontSize}px 'Segoe UI', system-ui, sans-serif`;
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#000';
+    ctx.globalAlpha = 0.45 * alpha;
+    ctx.fillText(pb.label, pb.x + pb.w/2 + 1, pb.y + pb.h/2 + 1);
+    ctx.fillStyle = pb.color;
+    ctx.globalAlpha = alpha;
+    ctx.fillText(pb.label, pb.x + pb.w/2, pb.y + pb.h/2);
+
+    ctx.globalAlpha = 1;
+  }
+
+  // Logo anchor overlay
+  if (logoAnchorMode) {
+    if (apiAnchorResult) {
+      drawApiAnchorResult(ctx, canvas);
+    } else if (logoRect) {
+      ctx.strokeStyle = '#ff4d4d';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(logoRect.x, logoRect.y, logoRect.w, logoRect.h);
+      ctx.fillStyle = '#ff4d4d';
+      ctx.font = `bold ${Math.max(12, canvas.width * 0.012)}px 'Segoe UI', system-ui, sans-serif`;
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'bottom';
+      ctx.fillText('LOGO ANCHOR', logoRect.x, logoRect.y - 4);
+    } else {
+      ctx.fillStyle = 'rgba(255,77,77,0.9)';
+      ctx.font = `bold ${Math.max(14, canvas.width * 0.02)}px 'Segoe UI', system-ui, sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      ctx.fillText('Drag a box over the brand logo to anchor projection', canvas.width / 2, 12);
+    }
+  }
+
+  // Panel bbox overlay
+  if (!logoAnchorMode && currentTemplate?.panel_bbox) {
+    const pb = currentTemplate.panel_bbox;
+    const sX = +document.getElementById('sX').value;
+    const sY = +document.getElementById('sY').value;
+    const oX = +document.getElementById('oX').value;
+    const oY = +document.getElementById('oY').value;
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([8, 6]);
+    ctx.strokeRect(oX, oY, pb.width * sX, pb.height * sY);
+    ctx.setLineDash([]);
+  }
+
+  _projectedForHover = projected;
+}
+
+let _projectedForHover = [];
+
+// ── Hover tooltip ─────────────────────────────────────────────────────────────
+function handleHover(e) {
+  const canvas = document.getElementById('main-canvas');
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width  / rect.width;
+  const scaleY = canvas.height / rect.height;
+  const mx = (e.clientX - rect.left) * scaleX;
+  const my = (e.clientY - rect.top)  * scaleY;
+
+  for (const pb of _projectedForHover) {
+    if (mx >= pb.x && mx <= pb.x + pb.w && my >= pb.y && my <= pb.y + pb.h) {
+      const tip = document.getElementById('tooltip');
+      tip.style.display = 'block';
+      tip.style.left = (e.clientX + 14) + 'px';
+      tip.style.top  = (e.clientY - 10) + 'px';
+      tip.innerHTML = `
+        <div style="font-weight:700;font-family:var(--mono);color:${pb.color};margin-bottom:4px">${pb.button_id}</div>
+        <div><b>Label:</b> ${pb.label}</div>
+        <div><b>VI:</b> ${pb.vietnamese_name}</div>
+        <div><b>Type:</b> ${pb.button_type}</div>
+        <div><b>Desc:</b> ${pb.function_description}</div>
+        <div style="margin-top:4px;color:var(--muted);font-family:var(--mono);font-size:10px">
+          pos: (${Math.round(pb.x)}, ${Math.round(pb.y)}) &nbsp; size: ${Math.round(pb.w)}×${Math.round(pb.h)}
+        </div>
+      `;
+      return;
+    }
+  }
+  hideTooltip();
+}
+
+function hideTooltip() {
+  document.getElementById('tooltip').style.display = 'none';
+}
+
+// ── Pipeline logic ─────────────────────────────────────────────────────────────
+const MIN_INL = 4, MIN_RATIO = 0.5, MAX_REPROJ = 5.0;
+
+function getConfidence() {
+  const inliers  = +document.getElementById('ci').value;
+  const keypoints= +document.getElementById('ck').value;
+  const reproj   = +document.getElementById('cr').value;
+  const ratio = keypoints <= 0 ? 0 : inliers / keypoints;
+  const score = Math.min(Math.max(ratio * (1 - Math.min(reproj / 50, 1)), 0), 1);
+  const failures = [];
+  if (inliers < MIN_INL)   failures.push(`inliers<${MIN_INL}`);
+  if (ratio   < MIN_RATIO) failures.push(`ratio<${MIN_RATIO}`);
+  if (reproj  > MAX_REPROJ)failures.push(`reproj>${MAX_REPROJ}px`);
+  return { accepted: !failures.length, matchScore: score, inlierCount: inliers, inlierRatio: ratio, reprojectionError: reproj, failureReason: failures.length ? 'low_confidence' : null, failures };
+}
+
+function runPipeline() {
+  const inliers  = +document.getElementById('ci').value;
+  const keypoints= +document.getElementById('ck').value;
+  const reproj   = +document.getElementById('cr').value;
+  const stable   = document.getElementById('stable').checked;
+  const conf     = getConfidence();
+  const tracked  = stable ? conf : { ...conf, accepted: false, matchScore: 0, inlierCount: 0, inlierRatio: 0, reprojectionError: Infinity, failureReason: 'low_confidence', failures: ['unstable motion'] };
+  const shouldStop = !tracked.accepted;
+  const hasBrand   = !!currentTemplate;
+  const hasButtons = currentButtons.length > 0;
+  const visCount   = (tracked.accepted && activeButtonId) ? currentButtons.filter(b => b.button_id === activeButtonId).length : 0;
+
+  // Step 1
+  setStep(1, hasBrand, 'sv1', hasBrand
+    ? kv('brand', currentTemplate?.brand || '—') + kv('appliance', currentTemplate?.appliance_type || '—') + kv('confidence', '1.00', 'ok')
+    : '<div class="kv"><span class="kv-k" style="color:var(--red)">No template selected</span></div>');
+
+  // Step 2
+  const ratio = conf.inlierRatio;
+  setStep(2, conf.accepted, 'sv2',
+    bar('inliers', inliers, 20, MIN_INL, 'above') +
+    bar('inlierRatio', ratio, 1, MIN_RATIO, 'above') +
+    bar('reproj (px)', reproj, 15, MAX_REPROJ, 'below') +
+    kv('matchScore', conf.matchScore.toFixed(4)) +
+    kv('accepted', conf.accepted ? '✓ true' : '✗ false', conf.accepted ? 'ok' : 'bad') +
+    (conf.failures.length ? `<div style="color:var(--red);margin-top:4px;font-size:10px">↳ ${conf.failures.join(', ')}</div>` : '')
+  );
+
+  // Step 3
+  const pb = currentTemplate?.panel_bbox;
+  const sX = +document.getElementById('sX').value;
+  const sY = +document.getElementById('sY').value;
+  setStep(3, hasButtons, 'sv3',
+    kv('panel_bbox', pb ? `${pb.width}×${pb.height}` : '—') +
+    kv('scaleX', sX.toFixed(3)) + kv('scaleY', sY.toFixed(3)) +
+    kv('buttons projected', String(currentButtons.length), currentButtons.length ? 'ok' : 'bad')
+  );
+
+  // Step 4
+  setStep(4, tracked.accepted, 'sv4',
+    kv('stable', stable ? '✓ true' : '✗ false', stable ? 'ok' : 'bad') +
+    kv('output.accepted', tracked.accepted ? '✓ true' : '✗ false', tracked.accepted ? 'ok' : 'bad') +
+    (!stable ? '<div style="color:var(--red);font-size:10px;margin-top:4px">↳ motion → confidence zeroed</div>' : '')
+  );
+
+  // Step 5
+  setStep(5, !shouldStop, 'sv5',
+    kv('shouldStopHighlight', shouldStop ? '✗ true' : '✓ false', shouldStop ? 'bad' : 'ok') +
+    (shouldStop ? '<div style="color:var(--red);font-size:10px;margin-top:4px">↳ highlight suppressed</div>' : '')
+  );
+
+  // Step 6
+  setStep(6, true, 'sv6', kv('resetRequested', '✓ false', 'ok'));
+
+  // Step 7
+  setStep(7, visCount > 0, 'sv7',
+    kv('activeButtonId', activeButtonId ? `"${activeButtonId}"` : 'none') +
+    kv('canShowHighlight', tracked.accepted ? '✓ true' : '✗ false', tracked.accepted ? 'ok' : 'bad') +
+    kv('visibleHighlights', visCount ? `[${activeButtonId}]` : '[] (empty)', visCount ? 'ok' : 'bad') +
+    (!visCount ? '<div style="color:var(--red);font-size:10px;margin-top:4px">↳ nothing rendered on frame</div>' : '')
+  );
+
+  buildSweep(inliers, reproj);
+  redraw();
+}
+
+function setStep(n, pass, verdictId, body) {
+  const card = document.getElementById(`step${n}`);
+  card.className = `step-card active ${pass ? 'pass' : 'fail'}`;
+  document.getElementById(verdictId).textContent = pass ? 'PASS' : 'FAIL';
+  document.getElementById(`sb${n}`).innerHTML = body;
+}
+
+function toggleStep(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
+function kv(k, v, cls='') {
+  return `<div class="kv"><span class="kv-k">${k}</span><span class="kv-v ${cls}">${v}</span></div>`;
+}
+
+function bar(label, value, max, threshold, dir) {
+  const pct = Math.min(value / max * 100, 100);
+  const thPct = Math.min(threshold / max * 100, 100);
+  const ok = dir === 'above' ? value >= threshold : value <= threshold;
+  return `<div class="bar-row">
+    <span class="bar-k">${label}</span>
+    <div class="bar-track">
+      <div class="bar-fill ${ok ? 'ok' : 'bad'}" style="width:${pct}%"></div>
+      <div class="bar-thresh" style="left:${thPct}%"></div>
+    </div>
+    <span class="bar-v ${ok ? 'ok' : 'bad'}">${typeof value === 'number' ? value.toFixed(2) : value}</span>
+  </div>`;
+}
+
+// ── Sweep ──────────────────────────────────────────────────────────────────────
+const SW_INL   = [2,3,4,6,8,10,12,14,16];
+const SW_REPR  = [0.5,1,2,3,4,5,6,8,12];
+const SW_TOTAL = 16;
+
+function buildSweep(curInl, curRepr) {
+  let h = '<table class="heatmap"><thead><tr><th></th>';
+  for (const r of SW_REPR) h += `<th>${r}</th>`;
+  h += '</tr></thead><tbody>';
+  for (const inl of SW_INL) {
+    const ratio = (inl / SW_TOTAL).toFixed(2);
+    h += `<tr><td class="rh">${inl}<br><span style="color:var(--muted)">${ratio}</span></td>`;
+    for (const r of SW_REPR) {
+      const rt = inl / SW_TOTAL;
+      const sc = Math.min(Math.max(rt * (1 - Math.min(r/50,1)),0),1);
+      const fails = inl < MIN_INL || rt < MIN_RATIO || r > MAX_REPROJ;
+      const isCur = inl === Math.round(curInl) && Math.abs(r - curRepr) < 0.6;
+      const bg = fails
+        ? `rgba(247,87,79,${0.12 + (1-sc)*0.2})`
+        : `rgba(62,207,142,${0.12 + sc*0.55})`;
+      const outline = isCur ? 'outline:2px solid var(--yellow);' : '';
+      h += `<td style="background:${bg};${outline}" title="${inl} inliers, ${r}px → ${fails?'REJECT':'ACCEPT'} score=${sc.toFixed(2)}">${sc.toFixed(2)}</td>`;
+    }
+    h += '</tr>';
+  }
+  h += '</tbody></table><p style="font-size:10px;color:var(--muted);margin-top:5px">Yellow = current · hover for details</p>';
+  document.getElementById('sweep').innerHTML = h;
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+window.addEventListener('load', () => {
+  checkApi();
+  runPipeline();
+  buildSweep(8, 2.3);
+  window.addEventListener('resize', redraw);
+});
+</script>
+</body>
+</html>
