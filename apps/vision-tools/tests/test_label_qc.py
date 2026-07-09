@@ -103,7 +103,8 @@ def test_bbox_degenerate_is_flagged_below_the_area_ratio():
     # 0.1% of 1000x1000 is 1000 px. A 30x30 box is 900.
     tiny = button(bbox_template_coordinates={"x": 10, "y": 10, "width": 30, "height": 30})
     assert "bbox_degenerate" in issues_for([tiny])[0]
-    just_big_enough = button(bbox_template_coordinates={"x": 10, "y": 10, "width": 32, "height": 32})
+    bbox_ok = {"x": 10, "y": 10, "width": 32, "height": 32}
+    just_big_enough = button(bbox_template_coordinates=bbox_ok)
     assert "bbox_degenerate" not in issues_for([just_big_enough])[0]
 
 
@@ -121,21 +122,28 @@ def test_bbox_outside_panel_is_skipped_when_there_is_no_panel():
 
 
 def test_duplicate_id_flags_both_buttons_and_the_template():
-    twins = [button(), button(bbox_template_coordinates={"x": 500, "y": 500, "width": 100, "height": 100})]
+    bbox = {"x": 500, "y": 500, "width": 100, "height": 100}
+    twins = [button(), button(bbox_template_coordinates=bbox)]
     checked, report = run_qc(twins, manual_text=MANUAL, image=IMAGE, panel_bbox=PANEL)
     assert all("duplicate_id" in b["qc"]["issues"] for b in checked)
     assert any(i["id"] == "duplicate_id" for i in report["template_issues"])
 
 
 def test_two_null_ids_are_not_duplicates_of_each_other():
-    nulls = [button(button_id=None), button(button_id=None, bbox_template_coordinates={"x": 500, "y": 500, "width": 100, "height": 100})]
+    bbox = {"x": 500, "y": 500, "width": 100, "height": 100}
+    nulls = [
+        button(button_id=None),
+        button(button_id=None, bbox_template_coordinates=bbox),
+    ]
     checked, _ = run_qc(nulls, manual_text=MANUAL, image=IMAGE, panel_bbox=PANEL)
     assert all("duplicate_id" not in b["qc"]["issues"] for b in checked)
 
 
 def test_bbox_overlap_flags_both_buttons_above_the_threshold():
-    a = button(button_id="a", bbox_template_coordinates={"x": 100, "y": 100, "width": 100, "height": 100})
-    b = button(button_id="b", bbox_template_coordinates={"x": 150, "y": 100, "width": 100, "height": 100})
+    bbox_a = {"x": 100, "y": 100, "width": 100, "height": 100}
+    bbox_b = {"x": 150, "y": 100, "width": 100, "height": 100}
+    a = button(button_id="a", bbox_template_coordinates=bbox_a)
+    b = button(button_id="b", bbox_template_coordinates=bbox_b)
     checked, report = run_qc([a, b], manual_text=MANUAL, image=IMAGE, panel_bbox=PANEL)
     assert all("bbox_overlap" in x["qc"]["issues"] for x in checked)
     overlap = next(i for i in report["template_issues"] if i["id"] == "bbox_overlap")
@@ -143,8 +151,10 @@ def test_bbox_overlap_flags_both_buttons_above_the_threshold():
 
 
 def test_boxes_below_the_overlap_threshold_are_not_flagged():
-    a = button(button_id="a", bbox_template_coordinates={"x": 100, "y": 100, "width": 100, "height": 100})
-    b = button(button_id="b", bbox_template_coordinates={"x": 190, "y": 100, "width": 100, "height": 100})
+    bbox_a = {"x": 100, "y": 100, "width": 100, "height": 100}
+    bbox_b = {"x": 190, "y": 100, "width": 100, "height": 100}
+    a = button(button_id="a", bbox_template_coordinates=bbox_a)
+    b = button(button_id="b", bbox_template_coordinates=bbox_b)
     checked, _ = run_qc([a, b], manual_text=MANUAL, image=IMAGE, panel_bbox=PANEL)
     assert all("bbox_overlap" not in x["qc"]["issues"] for x in checked)
 
@@ -161,15 +171,20 @@ def test_detected_not_in_manual_is_a_template_issue():
     extra = button(button_id="grill", label_text="Grill", vietnamese_name="Nướng",
                    manual_evidence=None)
     _checked, report = run_qc([button(), extra], manual_text=MANUAL, image=IMAGE, panel_bbox=PANEL)
-    not_in_manual = next(i for i in report["template_issues"] if i["id"] == "detected_not_in_manual")
+    not_in_manual = next(
+        i for i in report["template_issues"]
+        if i["id"] == "detected_not_in_manual"
+    )
     assert not_in_manual["button_ids"] == ["grill"]
 
 
 def test_the_report_counts_passes_and_flags():
+    bbox = {"x": 500, "y": 500, "width": 100, "height": 100}
+    evidence = {"page": 1, "quote": "Nhấn Stop để dừng."}
     _checked, report = run_qc(
         [button(), button(button_id="stop", vietnamese_name="",
-                          bbox_template_coordinates={"x": 500, "y": 500, "width": 100, "height": 100},
-                          manual_evidence={"page": 1, "quote": "Nhấn Stop để dừng."})],
+                          bbox_template_coordinates=bbox,
+                          manual_evidence=evidence)],
         manual_text=MANUAL, image=IMAGE, panel_bbox=PANEL,
     )
     assert report["counts"] == {"total": 2, "pass": 1, "flag": 1}
