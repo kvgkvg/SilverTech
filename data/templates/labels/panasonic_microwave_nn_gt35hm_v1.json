@@ -34,12 +34,12 @@
   },
   "buttons": [
     {
-      "id": "btn_panasonic_microwave_nn_gt35hm_v1_29b98b05",
+      "id": "btn_panasonic_microwave_nn_gt35hm_micro_power",
       "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
-      "button_id": "",
-      "label": "",
-      "vietnamese_name": "",
-      "function_description": "",
+      "button_id": "micro_power",
+      "label": "micro_power",
+      "vietnamese_name": "Vi sóng",
+      "function_description": "Nút Micro Power là nút dùng để chọn mức công suất của lò vi sóng trước khi nấu.\n\nCách hoạt động:\n\nBấm Micro Power 1 lần: High\nDùng để đun nước, nấu rau củ, cơm, mì, trái cây tươi, món tráng miệng.\n\nBấm Micro Power 2 lần: Med-high\nDùng để nấu thịt, gia cầm, bánh, hoặc hâm nóng sữa.\n\nBấm Micro Power 3 lần: Medium\nDùng để nấu cá, hải sản, trứng, phô mai.\n\nBấm Micro Power 4 lần: Defrost\nDùng để rã đông thực phẩm, làm mềm kem hoặc cream cheese.\n\nBấm Micro Power 5 lần: Low\nDùng để giữ ấm thức ăn đã nấu, hoặc nấu chậm/liu riu.\n\nCách sử dụng:\n\nĐầu tiên, bấm Micro Power để chọn mức công suất mong muốn.\n\nSau đó, cài thời gian nấu bằng các nút như 10 min, 1 min, 10 sec.\n\nCuối cùng, bấm Start để bắt đầu nấu.\n\nVí dụ:\n\nMuốn rã đông thực phẩm thì bấm Micro Power 4 lần để chọn Defrost, sau đó chọn thời gian và bấm Start.\n\nLưu ý: khay thủy tinh phải luôn được đặt đúng vị trí khi sử dụng lò.",
       "bbox_template_coordinates": {
         "x": 4284,
         "y": 1214,
@@ -47,9 +47,9 @@
         "height": 345
       },
       "polygon_template_coordinates": null,
-      "button_type": "physical",
+      "button_type": "touch",
       "created_at": "2026-07-06T03:07:50.697Z",
-      "updated_at": "2026-07-06T03:07:50.697Z"
+      "updated_at": "2026-07-09T17:28:00.844Z"
     },
     {
       "id": "btn_panasonic_microwave_nn_gt35hm_v1_time_10_min",

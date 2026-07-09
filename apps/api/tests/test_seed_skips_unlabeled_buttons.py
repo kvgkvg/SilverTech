@@ -27,9 +27,12 @@ def test_a_button_id_without_a_vietnamese_name_is_skipped():
     assert not is_labeled_button(button)
 
 
-def test_the_shipped_microwave_labels_carry_exactly_one_unlabeled_box():
+def test_every_shipped_microwave_label_is_named():
+    # The box at (4284, 1214) was drawn but left blank; it is micro_power, named
+    # only in a local DB until it was backfilled here. Guidance that references a
+    # button missing from a freshly seeded DB is rejected with 409.
     path = ROOT / "data" / "templates" / "labels" / "panasonic_microwave_nn_gt35hm_v1.json"
     buttons = json.loads(path.read_text(encoding="utf-8"))["buttons"]
-    skipped = [b for b in buttons if not is_labeled_button(b)]
-    assert len(skipped) == 1
-    assert len(buttons) - len(skipped) == 15
+    assert [b["button_id"] for b in buttons if not is_labeled_button(b)] == []
+    assert len(buttons) == 16
+    assert any(b["button_id"] == "micro_power" for b in buttons)
