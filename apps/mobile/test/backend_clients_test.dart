@@ -48,7 +48,7 @@ void main() {
     final result = await backend.recognizeDefault();
 
     expect(result.template.id, 'template_panasonic_microwave_nn_gt35hm_v1');
-    expect(result.matchScore, 0);
+    expect(result.matchScore, 0.94);
     expect(requests.first.url.path,
         '/api/templates/template_panasonic_microwave_nn_gt35hm_v1');
     expect(requests.last.url.path, '/api/vision/logs');

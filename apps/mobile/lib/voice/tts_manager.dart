@@ -22,10 +22,10 @@ String? resolveAudioUrl(String baseUrl, String? audioUrl) {
 /// Plays the Vietnamese audio the backend synthesised for a guidance step.
 ///
 /// Playback uses server-side audio rather than an on-device engine because
-/// `flutter_tts` has no Linux implementation, and the desktop/web demo targets
-/// need one path that works on both.
-class TTSManager {
-  TTSManager({AudioPlayer? player, String? baseUrl})
+/// `flutter_tts` has no Linux implementation, and the desktop, Chrome and
+/// Android demo targets need one path that works on all three.
+class TtsManager {
+  TtsManager({AudioPlayer? player, String? baseUrl})
       : _player = player ?? AudioPlayer(),
         _baseUrl = baseUrl ?? defaultSilverTechApiBaseUrl;
 

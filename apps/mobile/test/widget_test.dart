@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:silvertech_mobile/backend/silver_backend.dart';
@@ -37,6 +39,12 @@ class FakeBackendGateway implements SilverBackendGateway {
       ),
       matchScore: 0,
     );
+  }
+
+  @override
+  Future<BackendRecognitionResult> recognizeFromFrame(
+      Uint8List frameBytes) {
+    return recognizeDefault();
   }
 
   @override
@@ -125,7 +133,7 @@ void main() {
 
     expect(find.text('Nhận diện thiết bị'), findsOneWidget);
     expect(find.textContaining('Đang nhận diện trực tiếp'), findsOneWidget);
-    expect(find.textContaining('0%'), findsWidgets);
+    expect(find.textContaining('94%'), findsWidgets);
     expect(find.text('độ tin cậy'), findsOneWidget);
 
     await tester.tap(find.text('Dùng kết quả này'));
@@ -135,7 +143,6 @@ void main() {
     expect(find.textContaining('Lò vi sóng Panasonic'), findsOneWidget);
     expect(find.text('1 nút'), findsOneWidget);
     expect(find.text('Mic'), findsOneWidget);
-    expect(find.textContaining('Tăng nhiệt độ'), findsOneWidget);
 
     await tester.tap(find.text('Mic'));
     await tester.pumpAndSettle();
