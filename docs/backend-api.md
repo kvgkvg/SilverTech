@@ -13,3 +13,7 @@ Implemented MVP endpoints:
 - `POST /api/admin/submissions/{submission_id}/review`
 
 Errors return Vietnamese recovery guidance with a `recovery_action`.
+
+Successful `/api/query` guidance steps include `audio_url` when backend
+Vietnamese MP3 synthesis succeeds. Audio files are generated with Python gTTS
+and served from `/data/tts/`.

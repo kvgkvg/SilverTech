@@ -24,6 +24,7 @@ coverage/
 *.sqlite3
 data/descriptors/*.npz
 data/test-images/output/
+data/tts/*.mp3
 
 # Editors and OS
 .DS_Store

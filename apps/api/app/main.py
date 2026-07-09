@@ -42,6 +42,11 @@ app.mount(
     StaticFiles(directory=ROOT / "data" / "templates"),
     name="template-images",
 )
+app.mount(
+    "/data/tts",
+    StaticFiles(directory=ROOT / "data" / "tts"),
+    name="tts-audio",
+)
 
 
 @app.get("/health")

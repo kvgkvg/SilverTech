@@ -9,6 +9,7 @@ from app.services.llm_prompt_builder import build_prompt_summary
 from app.services.llm_response_parser import parse_guidance
 from app.services.llm_service import LLMProviderError, LLMService
 from app.services.template_repository import get_template
+from app.services.tts_service import TTSService, TTSServiceError
 
 
 class GuidanceError(Exception):
@@ -56,6 +57,7 @@ def create_guidance(template_id: str, user_query: str) -> dict:
         raise GuidanceError("invalid_button") from exc
     latency_ms = int((time.perf_counter() - started) * 1000)
     payload = guidance.model_dump()
+    _attach_audio_urls(payload)
     write_llm_log(
         template_id=template_id,
         user_query=user_query,
@@ -67,3 +69,12 @@ def create_guidance(template_id: str, user_query: str) -> dict:
         latency_ms=latency_ms,
     )
     return payload
+
+
+def _attach_audio_urls(payload: dict) -> None:
+    tts = TTSService()
+    for step in payload.get("steps", []):
+        try:
+            step["audio_url"] = tts.synthesize(step["instruction_vi"])
+        except TTSServiceError:
+            step["audio_url"] = None

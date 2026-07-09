@@ -80,6 +80,7 @@ class GuidanceStep(BaseModel):
     instruction_vi: str
     button_id: str
     expected_result: str
+    audio_url: str | None = None
 
 
 class GuidanceOutput(BaseModel):

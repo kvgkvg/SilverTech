@@ -10,7 +10,8 @@ The backend accepts only this shape:
       "step_number": 1,
       "instruction_vi": "string",
       "button_id": "string",
-      "expected_result": "string"
+      "expected_result": "string",
+      "audio_url": "string|null"
     }
   ],
   "safety_note": "string|null"
@@ -18,4 +19,5 @@ The backend accepts only this shape:
 ```
 
 Every `button_id` must exist for the selected template. Invalid output is
-rejected and logged.
+rejected and logged. `audio_url` is attached by the backend after validation;
+it is not accepted from the LLM provider.

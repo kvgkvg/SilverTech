@@ -12,6 +12,8 @@ and validated `button_id` guidance.
 - On-device Vietnamese STT in the mobile app (sherpa-onnx zipformer-vi-30M
   int8); mock LLM flow for local development. Backend `/api/stt` mock retained
   but unused by the app.
+- Backend Vietnamese response speech generation with Python gTTS; validated
+  guidance steps can include MP3 `audio_url` values served from `/data/tts/`.
 - `button_id` validation before guidance is returned.
 - Offline vision proof of concept for feature matching, confidence scoring, and
   homography/affine button projection.
@@ -42,7 +44,8 @@ Open API docs at `http://127.0.0.1:8000/docs`.
 2. Request candidate templates with `POST /api/vision/candidates`.
 3. Request template details with `GET /api/templates/{id}`.
 4. Send a Vietnamese query to `POST /api/query`.
-5. Verify returned steps reference only valid `button_id` values.
+5. Verify returned steps reference only valid `button_id` values and include
+   `audio_url` when TTS succeeds.
 6. Run `make test-vision` to validate projection and low-confidence behavior on
    synthetic fixtures.
 

@@ -301,6 +301,9 @@ components:
                 type: string
               expected_result:
                 type: string
+              audio_url:
+                type: string
+                nullable: true
         safety_note:
           type: string
           nullable: true

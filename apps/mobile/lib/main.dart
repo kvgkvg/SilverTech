@@ -94,12 +94,14 @@ class GuideStepData {
     required this.buttonId,
     required this.title,
     required this.hint,
+    this.audioUrl,
   });
 
   final String kind;
   final String buttonId;
   final String title;
   final String hint;
+  final String? audioUrl;
 }
 
 class RouteState {
@@ -446,6 +448,7 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
           buttonId: s.buttonId,
           title: s.instructionVi,
           hint: s.expectedResult,
+          audioUrl: s.audioUrl,
         ),
     ];
     final String? note = guidance.safetyNote;

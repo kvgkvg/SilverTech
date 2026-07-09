@@ -71,6 +71,7 @@ class GuidanceStepDto {
     required this.instructionVi,
     required this.buttonId,
     required this.expectedResult,
+    this.audioUrl,
   });
 
   factory GuidanceStepDto.fromJson(Map<String, Object?> json) {
@@ -79,6 +80,7 @@ class GuidanceStepDto {
       instructionVi: json['instruction_vi'] as String,
       buttonId: json['button_id'] as String,
       expectedResult: json['expected_result'] as String,
+      audioUrl: json['audio_url'] as String?,
     );
   }
 
@@ -86,4 +88,5 @@ class GuidanceStepDto {
   final String instructionVi;
   final String buttonId;
   final String expectedResult;
+  final String? audioUrl;
 }

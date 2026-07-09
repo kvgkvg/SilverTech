@@ -160,6 +160,7 @@ void main() {
                 'instruction_vi': 'Nhan nut Tang nhiet do.',
                 'button_id': 'temp_up',
                 'expected_result': 'Nhiet do tang len.',
+                'audio_url': '/data/tts/temp-up.mp3',
               },
             ],
             'safety_note': null,
@@ -185,5 +186,6 @@ void main() {
     );
     expect(guidance.steps.single.buttonId, 'temp_up');
     expect(guidance.steps.single.instructionVi, 'Nhan nut Tang nhiet do.');
+    expect(guidance.steps.single.audioUrl, '/data/tts/temp-up.mp3');
   });
 }
