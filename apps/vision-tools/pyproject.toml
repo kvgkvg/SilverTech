@@ -7,6 +7,7 @@ dependencies = ["numpy>=1.26"]
 [project.optional-dependencies]
 opencv = ["opencv-python>=4.9"]
 dev = ["pytest>=8.0"]
+label = ["httpx>=0.27", "pypdf>=5.1", "pillow>=10.0"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

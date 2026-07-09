@@ -25,6 +25,9 @@ coverage/
 data/descriptors/*.npz
 data/test-images/output/
 data/tts/*.mp3
+.cache/
+data/manuals/*.pdf
+data/templates/labels/*.draft.json
 
 # Editors and OS
 .DS_Store
