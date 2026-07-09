@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:silvertech_mobile/backend/silver_backend.dart';
@@ -37,6 +39,12 @@ class FakeBackendGateway implements SilverBackendGateway {
       ),
       matchScore: 0,
     );
+  }
+
+  @override
+  Future<BackendRecognitionResult> recognizeFromFrame(
+      Uint8List frameBytes) {
+    return recognizeDefault();
   }
 
   @override

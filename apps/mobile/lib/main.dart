@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -303,13 +304,18 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
     });
   }
 
-  Future<void> _acceptBackendRecognition() async {
+  Future<void> _acceptBackendRecognition(Uint8List? frame) async {
     setState(() {
       _toast = null;
       _recognitionBusy = true;
     });
     try {
-      final result = await widget.backend.recognizeDefault();
+      // Real path: the captured frame goes to /api/vision/logo-anchor
+      // (brand-first matching). No frame (camera unavailable, e.g. desktop
+      // dev) keeps the scripted demo recognition.
+      final result = frame != null
+          ? await widget.backend.recognizeFromFrame(frame)
+          : await widget.backend.recognizeDefault();
       final device = _deviceFromTemplate(result.template);
       if (!mounted) return;
       setState(() {
@@ -627,7 +633,7 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class RecognizeScreen extends StatelessWidget {
+class RecognizeScreen extends StatefulWidget {
   const RecognizeScreen({
     required this.onNavigate,
     required this.onUseResult,
@@ -637,9 +643,27 @@ class RecognizeScreen extends StatelessWidget {
   });
 
   final void Function(String target, {DemoDevice? device}) onNavigate;
-  final Future<void> Function() onUseResult;
+  final Future<void> Function(Uint8List? frame) onUseResult;
   final bool busy;
   final double matchScore;
+
+  @override
+  State<RecognizeScreen> createState() => _RecognizeScreenState();
+}
+
+class _RecognizeScreenState extends State<RecognizeScreen> {
+  final GlobalKey<_CameraCardState> _cameraKey = GlobalKey<_CameraCardState>();
+
+  void Function(String target, {DemoDevice? device}) get onNavigate =>
+      widget.onNavigate;
+  bool get busy => widget.busy;
+  double get matchScore => widget.matchScore;
+
+  Future<void> _captureAndUse() async {
+    final Uint8List? frame =
+        await _cameraKey.currentState?.captureFrame();
+    await widget.onUseResult(frame);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -651,7 +675,7 @@ class RecognizeScreen extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 0, 20, 10),
             children: <Widget>[
-              const CameraCard(scanning: true),
+              CameraCard(key: _cameraKey, scanning: true),
               const SizedBox(height: 16),
               Center(
                 child: StatusPill(
@@ -716,10 +740,10 @@ class RecognizeScreen extends StatelessWidget {
             Expanded(
               flex: 6,
               child: GreenButton(
-                label: busy ? 'Đang lấy mẫu...' : 'Dùng kết quả này',
+                label: busy ? 'Đang nhận diện...' : 'Dùng kết quả này',
                 icon: Icons.check,
                 enabled: !busy,
-                onTap: onUseResult,
+                onTap: _captureAndUse,
               ),
             ),
           ],
@@ -1966,6 +1990,22 @@ class _CameraCardState extends State<CameraCard> {
   void dispose() {
     unawaited(_cameraController?.dispose());
     super.dispose();
+  }
+
+  /// Grab one still frame for recognition; null when the camera never
+  /// initialized (desktop dev, denied permission) so callers can fall back.
+  Future<Uint8List?> captureFrame() async {
+    final controller = _cameraController;
+    if (controller == null || !controller.value.isInitialized) {
+      return null;
+    }
+    try {
+      final XFile shot = await controller.takePicture();
+      return await shot.readAsBytes();
+    } catch (e) {
+      debugPrint('[CAMERA] capture failed: $e');
+      return null;
+    }
   }
 
   @override

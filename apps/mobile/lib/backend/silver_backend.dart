@@ -1,7 +1,8 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show Uint8List, kIsWeb;
 
 import '../guidance/guidance_client.dart';
 import '../templates/template_repository_client.dart';
+import '../vision/logo_anchor_client.dart';
 import '../vision/vision_log_client.dart';
 
 const String _apiBaseUrlOverride =
@@ -20,6 +21,10 @@ const String demoTemplateId = 'template_panasonic_microwave_nn_gt35hm_v1';
 abstract class SilverBackendGateway {
   Future<BackendRecognitionResult> recognizeDefault();
 
+  /// Real recognition: the frame goes to `/api/vision/logo-anchor`, which
+  /// names the brand, picks the template, and projects button quads.
+  Future<BackendRecognitionResult> recognizeFromFrame(Uint8List frameBytes);
+
   Future<GuidanceOutputDto> createGuidance({
     required String templateId,
     required String userQueryText,
@@ -30,10 +35,20 @@ class BackendRecognitionResult {
   const BackendRecognitionResult({
     required this.template,
     required this.matchScore,
+    this.tier,
+    this.brand,
+    this.projectedButtons = const {},
   });
 
   final TemplateDetailDto template;
   final double matchScore;
+
+  /// HOMOGRAPHY_REFINED | LOGO_SIMILARITY | null (scripted demo path).
+  final String? tier;
+  final String? brand;
+
+  /// button_id -> 4 corners in frame pixel coordinates.
+  final Map<String, List<ProjectedPoint>> projectedButtons;
 }
 
 class HttpSilverBackendGateway implements SilverBackendGateway {
@@ -41,16 +56,44 @@ class HttpSilverBackendGateway implements SilverBackendGateway {
     TemplateRepositoryClient? templates,
     GuidanceClient? guidance,
     VisionLogClient? visionLogs,
+    LogoAnchorClient? logoAnchor,
   })  : _templates = templates ??
             TemplateRepositoryClient(baseUrl: defaultSilverTechApiBaseUrl),
         _guidance =
             guidance ?? GuidanceClient(baseUrl: defaultSilverTechApiBaseUrl),
         _visionLogs =
-            visionLogs ?? VisionLogClient(baseUrl: defaultSilverTechApiBaseUrl);
+            visionLogs ?? VisionLogClient(baseUrl: defaultSilverTechApiBaseUrl),
+        _logoAnchor = logoAnchor ??
+            LogoAnchorClient(baseUrl: defaultSilverTechApiBaseUrl);
 
   final TemplateRepositoryClient _templates;
   final GuidanceClient _guidance;
   final VisionLogClient _visionLogs;
+  final LogoAnchorClient _logoAnchor;
+
+  @override
+  Future<BackendRecognitionResult> recognizeFromFrame(
+      Uint8List frameBytes) async {
+    final result = await _logoAnchor.match(frameBytes: frameBytes);
+    final template = await _templates.fetchTemplate(result.templateId);
+    try {
+      await _visionLogs.write(
+        templateId: template.id,
+        brandCandidate: result.brand ?? template.brand,
+        matchScore: result.matchScore,
+        accepted: result.accepted,
+      );
+    } catch (_) {
+      // Recognition should not fail just because telemetry is unavailable.
+    }
+    return BackendRecognitionResult(
+      template: template,
+      matchScore: result.matchScore,
+      tier: result.tier,
+      brand: result.brand,
+      projectedButtons: result.projectedButtons,
+    );
+  }
 
   @override
   Future<BackendRecognitionResult> recognizeDefault() async {
