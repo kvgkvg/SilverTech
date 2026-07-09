@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "silvertech-api"
 version = "0.1.0"
@@ -12,6 +16,11 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=8.0", "httpx>=0.27"]
 prod = ["sqlalchemy>=2.0", "alembic>=1.13", "psycopg[binary]>=3.0"]
+
+# `alembic/` sits next to `app/`, so setuptools' flat-layout autodiscovery sees
+# two top-level packages and refuses to guess. Only `app` and its subpackages ship.
+[tool.setuptools.packages.find]
+include = ["app*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
