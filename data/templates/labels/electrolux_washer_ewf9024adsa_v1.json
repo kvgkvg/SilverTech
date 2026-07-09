@@ -1,0 +1,235 @@
+{
+  "device": {
+    "id": "device_electrolux_w_01",
+    "brand": "Electrolux",
+    "appliance_type": "washer",
+    "model_name": "ewf9024adsa",
+    "display_name": "Máy giặt Electrolux",
+    "status": "active",
+    "created_at": "2026-07-09T10:08:54.952Z",
+    "updated_at": "2026-07-09T10:08:54.952Z"
+  },
+  "template": {
+    "id": "template_electrolux_washer_ewf9024adsa",
+    "device_id": "device_electrolux_w_01",
+    "template_code": "electrolux_washer_ewf9024adsa_v1",
+    "template_image_url": "data/templates/electrolux_washer_ewf9024adsa.jpg",
+    "logo_bbox": {
+      "x": 3,
+      "y": 337,
+      "width": 227,
+      "height": 88
+    },
+    "panel_bbox": {
+      "x": 3,
+      "y": 95,
+      "width": 2555,
+      "height": 688
+    },
+    "feature_descriptor_path": "data/descriptors/electrolux_washer_ewf9024adsa_v1.npz",
+    "version": 1,
+    "status": "official",
+    "created_at": "2026-07-09T10:08:54.952Z",
+    "updated_at": "2026-07-09T10:08:54.952Z"
+  },
+  "buttons": [
+    {
+      "id": "btn_electrolux_washer_ewf9024adsa_1",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "button_id": "1",
+      "label": "program_selector_knob",
+      "vietnamese_name": "Núm chọn chương trình",
+      "function_description": "Đây là núm xoay dùng để lựa chọn chương trình giặt phù hợp với từng loại quần áo hoặc nhu cầu sử dụng.\n\nKhi xoay núm, máy sẽ chuyển sang chương trình tương ứng. Mỗi chương trình đã được Electrolux cài đặt sẵn các thông số như:\n\nThời gian giặt.\nNhiệt độ nước.\nTốc độ vắt.\nTrình tự các giai đoạn giặt (giặt, xả, vắt, hơi nước nếu có).\nCác tùy chọn được phép sử dụng (Vapour, Prewash, Extra Rinse, Time Manager,...).\n\nSau khi chọn chương trình, màn hình sẽ hiển thị:\n\nThời gian giặt mặc định.\nNhiệt độ mặc định.\nTốc độ vắt mặc định.\n\nCác giá trị này có thể được thay đổi bằng các nút chức năng nếu chương trình hỗ trợ.\n\nCác chương trình giặt\n1. Cottons\n\nDùng để giặt:\n\nQuần áo cotton.\nVải lanh.\nQuần áo mặc hằng ngày bằng vải cotton.\n\nĐây là chương trình tiêu chuẩn dành cho các loại vải chịu được quá trình giặt mạnh.\n\nTải trọng tối đa:\n\n9 kg (EWF9024ADSA / EWF9024BDWB)\n8 kg (EWF8024ADSA)\n2. Mixed\n\nDùng để giặt cùng lúc nhiều loại vải khác nhau như:\n\nCotton\nSợi tổng hợp (Synthetic)\n\nPhù hợp với lượng quần áo sử dụng hằng ngày.\n\nTải trọng tối đa:\n\n4 kg.\n\n3. Bedding\n\nDùng để giặt:\n\nChăn mỏng\nMền\nGa trải giường\nÁo chăn\n\nGiúp xử lý các đồ có kích thước lớn.\n\nTải trọng tối đa:\n\n3 kg.\n\n4. Energy Saver\n\nChương trình tiết kiệm điện và nước.\n\nĐược thiết kế để giặt quần áo cotton bẩn thông thường với mức tiêu thụ năng lượng thấp hơn.\n\nĐây cũng là chương trình được dùng để đánh giá hiệu suất năng lượng của máy.\n\nTải trọng tối đa:\n\n9 kg\n8 kg (tùy model).\n5. Baby Care\n\nDùng để giặt:\n\nQuần áo trẻ em\nKhăn trẻ em\nĐồ dùng của em bé\n\nĐược thiết kế nhằm tăng hiệu quả làm sạch và hỗ trợ loại bỏ cặn chất giặt.\n\nTải trọng tối đa:\n\n4 kg.\n\n6. Vapour Refresh\n\nDùng để:\n\nLàm mới quần áo.\nGiảm mùi.\nGiảm nhăn.\n\nChương trình này sử dụng hơi nước để làm mới quần áo và không phải là một chu trình giặt đầy đủ.\n\nTải trọng tối đa:\n\n1.5 kg.\n\n7. Tub Clean\n\nChương trình vệ sinh lồng giặt.\n\nManual yêu cầu:\n\nKhông cho quần áo vào máy.\nChạy định kỳ để loại bỏ cặn bẩn và cặn chất giặt tích tụ trong lồng giặt.\n8. Spin\n\nChỉ thực hiện:\n\nVắt quần áo.\n\nKhông thực hiện giặt hay xả.\n\nTải trọng tối đa:\n\n9 kg\n8 kg (tùy model).\n9. Rinse + Spin\n\nChương trình gồm:\n\nXả nước.\nSau đó vắt.\n\nPhù hợp khi chỉ cần xả lại quần áo sau khi đã giặt.\n\nTải trọng tối đa:\n\n9 kg\n8 kg (tùy model).\n10. Sports\n\nDùng để giặt:\n\nQuần áo thể thao.\nVải tổng hợp dùng trong hoạt động thể thao.\n\nTải trọng tối đa:\n\n4 kg.\n\n11. Quick 15\n\nChương trình giặt nhanh khoảng 15 phút.\n\nDùng cho:\n\nQuần áo ít bẩn.\nCần giặt nhanh.\n\nTải trọng tối đa:\n\n1.5 kg.\n\n12. Daily 60\n\nChương trình giặt hằng ngày hoàn thành trong khoảng 60 phút.\n\nDùng cho:\n\nQuần áo mặc hằng ngày.\nĐộ bẩn thông thường.\n\nTải trọng tối đa:\n\n5.5 kg.\n\n13. Wool\n\nDùng cho:\n\nĐồ len.\nCác sản phẩm có nhãn Machine Washable Wool.\n\nTải trọng tối đa:\n\n2 kg.\n\n14. Delicates\n\nDùng cho:\n\nVải mỏng.\nLụa.\nVải dễ hư hỏng.\n\nTải trọng tối đa:\n\n4 kg.\n\n15. Favourite\n\nCho phép gọi lại chương trình giặt đã lưu trước đó.\n\nTheo manual:\n\nNgười dùng có thể lưu một chương trình yêu thích cùng các tùy chọn đi kèm.\nSau đó chỉ cần xoay núm đến Favourite để sử dụng lại mà không cần cài đặt lại từ đầu.",
+      "bbox_template_coordinates": {
+        "x": 883,
+        "y": 188,
+        "width": 320,
+        "height": 347
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "dial",
+      "created_at": "2026-07-09T10:08:54.952Z",
+      "updated_at": "2026-07-09T10:08:54.952Z"
+    },
+    {
+      "id": "btn_electrolux_washer_ewf9024adsa_2",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "button_id": "2",
+      "label": "temperature_selection_touchpad",
+      "vietnamese_name": "Bảng cảm ứng chọn nhiệt độ",
+      "function_description": "Nút Temperature Selection Touchpad dùng để thay đổi nhiệt độ nước giặt của chương trình đang chọn.\n\nSau khi chọn chương trình giặt bằng Program Selector Knob, người dùng có thể nhấn nút này để thay đổi nhiệt độ nếu chương trình đó cho phép.\n\nCác mức nhiệt độ\n\nManual quy định các mức nhiệt độ có thể lựa chọn gồm:\n\nCold (Nước lạnh)\n30°C\n40°C\n50°C\n60°C\n90°C\n\nTuy nhiên, không phải tất cả các chương trình đều hỗ trợ mọi mức nhiệt độ. Một số chương trình sẽ giới hạn mức nhiệt hoặc chỉ cho phép giặt bằng nước lạnh. Mức nhiệt nào có thể chọn sẽ phụ thuộc vào chương trình đang sử dụng.\n\nCách sử dụng\nBật máy.\nChọn chương trình giặt bằng Program Selector Knob.\nNhấn Temperature Selection Touchpad.\nMỗi lần nhấn, máy sẽ chuyển sang mức nhiệt độ kế tiếp trong danh sách các mức nhiệt mà chương trình hiện tại hỗ trợ.\nMức nhiệt được chọn sẽ hiển thị trên màn hình (Display).\nGiá trị mặc định\n\nMỗi chương trình giặt đều có một nhiệt độ mặc định do nhà sản xuất cài đặt.\n\nKhi chọn chương trình:\n\nMàn hình sẽ hiển thị nhiệt độ mặc định.\nNgười dùng có thể thay đổi bằng nút Temperature, nếu chương trình cho phép.\nMối liên hệ với từng chương trình\n\nTheo bảng Program Options Compatibility trong manual, khả năng thay đổi nhiệt độ sẽ khác nhau giữa các chương trình:\n\nMột số chương trình cho phép chọn nhiều mức nhiệt.\nMột số chương trình chỉ cho phép một vài mức.\nMột số chương trình không cho phép thay đổi nhiệt độ.\nKhuyến nghị về nhiệt độ giặt\n\nTrong phần Washing Hints, manual đưa ra hướng dẫn lựa chọn nhiệt độ theo loại quần áo:\n\nNhiệt độ\tKhuyến nghị của manual\n90°C\tĐồ cotton trắng và vải lanh bẩn nhiều (ví dụ: khăn lau, khăn tắm, khăn trải bàn, ga giường).\n60°C\tQuần áo màu bền màu, đồ cotton, vải lanh hoặc sợi tổng hợp bẩn thông thường; đồ cotton trắng bẩn nhẹ (ví dụ: đồ lót).\n50°C\tDùng cho quần áo bẩn thông thường nếu chương trình hỗ trợ.\n40°C\tDùng cho nhiều loại quần áo mặc hằng ngày và các loại vải phù hợp với mức nhiệt trung bình.\n30°C\tĐồ mỏng, đồ dễ hỏng và các loại vải cần giặt nhẹ.\nCold\tVải mỏng, đồ hỗn hợp và đồ len có nhãn Pure New Wool – Machine Washable – Non-Shrink.\nLưu ý\nNhiệt độ có thể điều chỉnh trước khi bắt đầu chương trình giặt.\nNếu chương trình không hỗ trợ thay đổi nhiệt độ, nút Temperature sẽ không cho phép chọn mức khác ngoài giá trị được cài đặt sẵn.\nMức nhiệt đã chọn sẽ luôn được hiển thị trên màn hình để người dùng kiểm tra trước khi nhấn Start/Pause.",
+      "bbox_template_coordinates": {
+        "x": 1574,
+        "y": 526,
+        "width": 136,
+        "height": 77
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-07-09T10:08:54.952Z",
+      "updated_at": "2026-07-09T10:08:54.952Z"
+    },
+    {
+      "id": "btn_electrolux_washer_ewf9024adsa_3",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "button_id": "3",
+      "label": "on/off_button",
+      "vietnamese_name": "Nút Bật/Tắt",
+      "function_description": "Công dụng\n\nNút On/Off dùng để:\n\nBật nguồn máy giặt trước khi lựa chọn chương trình giặt.\nTắt nguồn máy giặt sau khi hoàn thành việc giặt hoặc khi không sử dụng.\n\nĐây là nút điều khiển nguồn chính của thiết bị.\n\nCách sử dụng\nBật máy\n\nĐể bắt đầu sử dụng:\n\nNhấn On/Off.\nMáy sẽ được cấp nguồn.\nBảng điều khiển và màn hình hiển thị sẽ sáng.\nNgười dùng có thể:\nChọn chương trình giặt.\nĐiều chỉnh nhiệt độ.\nĐiều chỉnh tốc độ vắt.\nChọn các tùy chọn khác.\nSau đó nhấn Start/Pause để bắt đầu chương trình.\nTắt máy\n\nSau khi chương trình kết thúc:\n\nNhấn On/Off.\nMáy sẽ tắt nguồn.\nSau đó có thể đóng vòi nước và rút phích cắm nếu cần.\nSau khi chương trình kết thúc\n\nManual hướng dẫn:\n\nKhi chương trình giặt kết thúc:\n\nLấy quần áo ra khỏi lồng giặt.\nKiểm tra lồng giặt đã được lấy hết đồ.\nĐể cửa máy và ngăn chứa chất giặt mở hé để tránh nấm mốc và mùi hôi.\nNhấn nút On/Off để tắt máy.\nChế độ AUTO Off\n\nManual cho biết máy được trang bị AUTO Off nhằm giảm tiêu thụ điện năng.\n\nAUTO Off sẽ tự động tắt nguồn trong các trường hợp sau:\n\nTrường hợp 1\n\nKhoảng 5 phút sau khi chương trình giặt kết thúc, nếu người dùng không thực hiện thao tác nào.\n\nKhi muốn sử dụng lại:\n\nNhấn On/Off để bật máy trở lại.\nTrường hợp 2\n\nKhoảng 5 phút sau khi bật máy nhưng chưa nhấn Start/Pause để bắt đầu chương trình.\n\nMáy sẽ tự động chuyển sang chế độ tiết kiệm điện.\n\nĐể tiếp tục sử dụng:\n\nNhấn On/Off một lần nữa để bật lại máy.\nKhi máy đang ở chế độ AUTO Off\n\nManual hướng dẫn:\n\nĐể kích hoạt lại máy:\n\nNhấn On/Off.\nChọn lại chương trình giặt nếu cần.\nTiếp tục các bước cài đặt.\nMối liên hệ với các nút khác\n\nSau khi bật nguồn bằng On/Off, người dùng mới có thể sử dụng các nút khác trên bảng điều khiển như:\n\nProgram Selector Knob\nTemperature\nSpin\nVapour\nPrewash\nExtra Rinse\nTime Manager\nDelay End\nStart/Pause\nLưu ý trong sách hướng dẫn\n\nManual không mô tả nút On/Off có chức năng lưu chương trình, khôi phục chương trình đang chạy hay tạm dừng chu trình. Chức năng của nút này chỉ được nêu là:\n\nBật máy.\nTắt máy.\nBật lại máy sau khi AUTO Off hoạt động.",
+      "bbox_template_coordinates": {
+        "x": 1542,
+        "y": 662,
+        "width": 181,
+        "height": 37
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "physical",
+      "created_at": "2026-07-09T10:08:54.952Z",
+      "updated_at": "2026-07-09T10:08:54.952Z"
+    },
+    {
+      "id": "btn_electrolux_washer_ewf9024adsa_4",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "button_id": "4",
+      "label": "spin_selection_touchpad",
+      "vietnamese_name": "Bàn di chuột chọn xoay",
+      "function_description": "Nút Spin Selection Touchpad dùng để thay đổi tốc độ vắt của chương trình giặt.\n\nSau khi chọn chương trình giặt, người dùng có thể nhấn nút này để:\n\nThay đổi tốc độ vắt.\nChọn No Spin (Không vắt).\nChọn Rinse Hold (Giữ nước sau lần xả cuối).\n\nTùy chọn nào khả dụng sẽ phụ thuộc vào chương trình giặt đang được chọn.\n\nCác mức tốc độ vắt\n\nManual quy định máy hỗ trợ nhiều mức tốc độ vắt khác nhau.\n\nCác mức tốc độ có thể thay đổi theo từng model và từng chương trình, bao gồm:\n\n1200 vòng/phút (rpm)\n800 vòng/phút\n400 vòng/phút\nNo Spin\nRinse Hold\n\nKhông phải tất cả các chương trình đều cho phép lựa chọn toàn bộ các mức tốc độ trên.\n\nCách sử dụng\nNhấn On/Off để bật máy.\nChọn chương trình giặt.\nNhấn Spin Selection Touchpad.\nMỗi lần nhấn, màn hình sẽ chuyển sang tốc độ vắt kế tiếp hoặc các tùy chọn đặc biệt (No Spin, Rinse Hold) nếu chương trình hỗ trợ.\nTốc độ vắt được chọn sẽ hiển thị trên màn hình (Display).\nGiá trị mặc định\n\nMỗi chương trình giặt đều có một tốc độ vắt mặc định.\n\nSau khi chọn chương trình:\n\nMàn hình sẽ hiển thị tốc độ vắt mặc định.\nNgười dùng có thể thay đổi bằng nút Spin, nếu chương trình cho phép.\nTùy chọn No Spin (Không vắt)\n\nKhi chọn No Spin:\n\nMáy sẽ bỏ qua giai đoạn vắt cuối.\nSau khi hoàn tất các lần xả, chương trình sẽ kết thúc mà không thực hiện quay vắt.\nTùy chọn Rinse Hold (Giữ nước sau lần xả cuối)\n\nKhi chọn Rinse Hold:\n\nMáy sẽ không xả hết nước sau lần xả cuối.\nQuần áo sẽ được giữ trong nước để hạn chế nhăn.\nCửa máy vẫn bị khóa cho đến khi nước được xả hết.\n\nManual hướng dẫn rằng để kết thúc chương trình khi đang ở chế độ Rinse Hold, người dùng có hai lựa chọn:\n\nCách 1\n\nNhấn Start/Pause.\n\nMáy sẽ:\n\nXả nước.\nThực hiện vắt.\nKết thúc chương trình.\nCách 2\n\nDùng nút Spin Selection Touchpad để chọn No Spin.\n\nSau đó nhấn Start/Pause.\n\nMáy sẽ:\n\nXả nước.\nKhông thực hiện vắt.\nKết thúc chương trình.\nQuan hệ với từng chương trình giặt\n\nTheo bảng Program Options Compatibility trong manual:\n\nMột số chương trình cho phép thay đổi tốc độ vắt.\nMột số chương trình giới hạn tốc độ vắt tối đa.\nMột số chương trình không cho phép thay đổi hoặc chỉ hỗ trợ một số mức tốc độ nhất định.\n\nKhả năng lựa chọn sẽ phụ thuộc vào chương trình đang được chọn.\n\nHiển thị trên màn hình\n\nKhi thay đổi tốc độ vắt bằng Spin Selection Touchpad:\n\nGiá trị tốc độ vắt hoặc biểu tượng No Spin/Rinse Hold sẽ hiển thị trên màn hình để người dùng xác nhận trước khi bắt đầu chương trình.\nLưu ý trong User Manual\nKhông phải mọi chương trình đều cho phép thay đổi tốc độ vắt.\nMột số chương trình sẽ tự giới hạn tốc độ vắt nhằm bảo vệ loại vải được giặt.\nNếu chương trình không hỗ trợ mức tốc độ được chọn, máy sẽ chỉ cho phép các mức tốc độ phù hợp với chương trình đó.",
+      "bbox_template_coordinates": {
+        "x": 1736,
+        "y": 529,
+        "width": 131,
+        "height": 59
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-07-09T10:08:54.952Z",
+      "updated_at": "2026-07-09T10:08:54.952Z"
+    },
+    {
+      "id": "btn_electrolux_washer_ewf9024adsa_5",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "button_id": "5",
+      "label": "vapour_touchpad",
+      "vietnamese_name": "Bàn di chuột hơi",
+      "function_description": "Nút Vapour Touchpad dùng để thêm tùy chọn Vapour (hơi nước) vào chương trình giặt.\n\nKhi được kích hoạt, máy sẽ:\n\nthêm khoảng 30 phút đảo quần áo bằng hơi nước (tumbling in vapour) trong chu trình giặt;\nbật đèn báo (indicator) của tùy chọn Vapour.\nMục đích của chức năng Vapour\n\nTheo manual:\n\n\"Vapour helps open fabric fibers up to allow laundry additives to release tough stains.\"\n\nNghĩa là:\n\nHơi nước giúp mở các sợi vải.\nNhờ đó, các chất giặt tẩy có thể tác động hiệu quả hơn lên các vết bẩn cứng đầu.\nMáy tạo hơi nước như thế nào?\n\nManual giải thích:\n\nHơi nước không nhất thiết nhìn thấy bên trong lồng giặt.\nHơi nước được tạo ra ở phía dưới lồng giặt.\nSau đó hơi nước tự nhiên bốc lên xuyên qua quần áo.\nSau khi kết thúc chu trình Vapour\n\nManual cho biết:\n\nKhi chu trình Vapour kết thúc:\n\nQuần áo sẽ ấm hơn.\nQuần áo sẽ mềm hơn.\nQuần áo tách khỏi thành lồng giặt (detached from the drum), giúp dễ lấy ra hơn.\nNhiệt độ xả\n\nNếu bật Vapour:\n\nNhiệt độ của các lần xả sẽ được tăng lên (rinse temperatures will be elevated).\nHơi nước thoát ra ngoài\n\nTrong khi máy hoạt động:\n\nNgười dùng có thể thấy:\n\nhơi nước thoát ra từ ống xả nước.\n\nManual nhấn mạnh:\n\nĐây là hiện tượng bình thường và không phải lỗi của máy.\n\nHơi nước không xuất hiện liên tục\n\nManual lưu ý:\n\nHơi nước không xuất hiện trong toàn bộ chu trình Vapour.\nViệc không nhìn thấy hơi nước ở mọi thời điểm là bình thường.\nHiệu quả hoạt động\n\nManual khuyến nghị:\n\nVapour function is more effective with half load.\n\nTức là:\n\nChức năng Vapour đạt hiệu quả tốt nhất khi khối lượng quần áo khoảng một nửa tải trọng tối đa.\nThời gian chương trình\n\nKhi bật Vapour:\n\nThời gian của chương trình giặt sẽ tăng lên.\nNgăn chứa chất giặt\n\nManual hướng dẫn:\n\nKhi sử dụng Vapour:\n\nCho chất giặt vào ngăn giặt chính (Main Wash) của khay chất giặt.\nĐiều kiện sử dụng\n\nTheo bảng Program Options Compatibility:\n\nVapour không dùng được với mọi chương trình.\nChỉ những chương trình có ký hiệu hỗ trợ Vapour mới cho phép bật chức năng này.\nNgoài ra, Vapour chỉ có thể kết hợp với nhiệt độ từ 40°C đến 90°C.\nHiển thị trên màn hình\n\nKhi Vapour được bật:\n\nĐèn báo của tùy chọn Vapour sẽ sáng.\nTrong quá trình hoạt động, màn hình sẽ hiển thị biểu tượng pha hơi nước (Vapour phase icon) khi máy đang thực hiện giai đoạn này.",
+      "bbox_template_coordinates": {
+        "x": 1894,
+        "y": 524,
+        "width": 136,
+        "height": 64
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-07-09T10:08:54.952Z",
+      "updated_at": "2026-07-09T10:08:54.952Z"
+    },
+    {
+      "id": "btn_electrolux_washer_ewf9024adsa_6",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "button_id": "6",
+      "label": "prewash_touchpad",
+      "vietnamese_name": "Bảng điều khiển cảm ứng giặt sơ bộ",
+      "function_description": "Khi bật Prewash, máy sẽ thêm một giai đoạn giặt sơ trước giặt chính.\n\nTheo manual:\n\n\"Select this option if you wish your laundry to be pre-washed before the main wash. Use this option for heavy soil.\"\n\nNói đơn giản:\n\nGiặt sơ trước\nXả bỏ nước bẩn\nSau đó mới bắt đầu giặt chính\nMáy thực sự làm gì?\n\nNếu không bật Prewash:\n\nGiặt chính\n↓\nXả\n↓\nVắt\n\nNếu bật Prewash:\n\nGiặt sơ\n↓\nXả bỏ nước bẩn\n↓\nGiặt chính\n↓\nXả\n↓\nVắt\n\nMáy thực hiện thêm:\n\n1 lần cấp nước\n1 giai đoạn đảo lồng giặt\n1 lần xả bỏ nước bẩn\n\ntrước khi vào chương trình chính.\n\nChất giặt được lấy ở đâu?\n\nĐây là điểm rất nhiều người dùng sai.\n\nManual ghi rõ:\n\n\"When you set this function, put the detergent into the 'Prewash' compartment.\"\n\nKhay chất giặt có 3 ngăn:\n\nNgăn\tCông dụng\nPREWASH\tChất giặt cho giặt sơ\nMAIN WASH\tChất giặt cho giặt chính\nSOFTENER\tNước xả\n\nNếu bật Prewash:\n\nCho bột/nước giặt vào ngăn PREWASH\nCho bột/nước giặt chính vào ngăn MAIN WASH\n\nMáy sẽ tự lấy đúng thời điểm.\n\nKhi nào nên dùng?\n\nTheo Electrolux:\n\nUse this option for heavy soil.\n\nCác trường hợp phù hợp:\n\n✔ Quần áo dính bùn đất\n\n✔ Đồ làm công trình\n\n✔ Đồ làm vườn\n\n✔ Khăn lau rất bẩn\n\n✔ Quần áo trẻ em dính nhiều đất cát\n\n✔ Đồ thể thao bẩn nặng\n\n✔ Chăn ga lâu ngày chưa giặt\n\nKhi nào không nên dùng?\n\nKhông cần thiết cho:\n\nÁo sơ mi văn phòng\nQuần áo mặc hằng ngày\nQuần áo chỉ có mồ hôi\nĐồ mới mặc 1 lần\n\nLý do:\n\nTăng thời gian giặt\nTăng lượng nước sử dụng\nTăng lượng chất giặt sử dụng\nƯu điểm\n1. Hiệu quả hơn với đồ cực bẩn\n\nLớp bẩn thô được loại bỏ trước.\n\nGiặt chính không phải xử lý toàn bộ lượng bẩn ngay từ đầu.\n\n2. Nước giặt chính sạch hơn\n\nSau giai đoạn giặt sơ:\n\nNước bẩn được xả bỏ\n\nKhi giặt chính:\n\nMáy dùng nước mới hoàn toàn\n3. Giảm nguy cơ bùn đất tái bám\n\nĐặc biệt hữu ích với:\n\nQuần áo lao động\nQuần áo dính đất cát\nNhược điểm\n1. Tăng thời gian chương trình\n\nManual ghi rõ:\n\nThis function increases the program duration.\n\n2. Tốn nước hơn\n\nDo phải:\n\ncấp nước cho giặt sơ\nxả bỏ nước giặt sơ\n3. Tốn chất giặt hơn\n\nCần thêm chất giặt cho ngăn PREWASH.\n\nCó làm sạch hơn không?\n\nCó, nhưng chỉ trong trường hợp đồ bẩn nặng.\n\nNếu đồ chỉ bẩn nhẹ:\n\nhiệu quả tăng không đáng kể\nchi phí nước, điện và thời gian lại tăng\nNhững chương trình hỗ trợ Prewash\n\nTheo bảng tương thích của Electrolux:\n\nCó thể dùng với:\n\nCottons\nMixed\nBedding\nEnergy Saver\nBaby Care\nSports\nDaily 60\nDelicates\nFavourite\n\nKhông hỗ trợ với:\n\nVapour Refresh\nTub Clean\nSpin\nRinse + Spin\nQuick 15\nWool",
+      "bbox_template_coordinates": {
+        "x": 2070,
+        "y": 513,
+        "width": 120,
+        "height": 69
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-07-09T10:08:54.952Z",
+      "updated_at": "2026-07-09T10:08:54.952Z"
+    },
+    {
+      "id": "btn_electrolux_washer_ewf9024adsa_7",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "button_id": "7",
+      "label": "extra_rinse_touchpad",
+      "vietnamese_name": "Bàn phím cảm ứng xả thêm",
+      "function_description": "Khi bật Extra Rinse, máy sẽ thêm các giai đoạn xả vào chương trình giặt.\n\nManual mô tả:\n\n\"Press it to add two rinse phases to a program.\"\n\nNghĩa là:\n\nMáy xả nhiều hơn bình thường\nQuần áo được tráng lại thêm bằng nước sạch\nGiúp loại bỏ chất giặt còn sót\nMáy thực sự làm gì?\n\nVí dụ một chương trình thông thường:\n\nGiặt\n↓\nXả\n↓\nXả\n↓\nVắt\n\nKhi bật Extra Rinse:\n\nGiặt\n↓\nXả\n↓\nXả\n↓\nXả thêm\n↓\nXả thêm\n↓\nVắt\n\nManual xác nhận máy thêm 2 lần xả vào chương trình.\n\nMục đích của việc xả thêm là gì?\n\nSau khi giặt:\n\nvẫn còn một lượng nhỏ nước giặt\nchất hoạt động bề mặt (surfactant)\nchất tạo hương\nphụ gia giặt\n\nbám trên sợi vải.\n\nThông thường lượng này rất nhỏ.\n\nExtra Rinse giúp:\n\npha loãng thêm\ncuốn trôi thêm\ngiảm lượng tồn dư trên quần áo\nKhi nào nên dùng?\n\nElectrolux ghi rõ:\n\n\"This option is recommended for people who are allergic to detergents, and in areas where the water is very soft.\"\n\n1. Người dị ứng với chất giặt\n\nVí dụ:\n\nngứa da\nnổi mẩn\nda nhạy cảm\n\nExtra Rinse giúp giảm khả năng còn cặn chất giặt trên quần áo.\n\n2. Quần áo trẻ em\n\nĐặc biệt:\n\nquần áo sơ sinh\nkhăn của trẻ\n\nNhiều người thường bật Extra Rinse để tăng độ yên tâm.\n\n3. Chăn ga gối\n\nNhững món đồ dày:\n\ngiữ nhiều nước giặt hơn\nkhó xả sạch hơn\n\nXả thêm giúp sạch cặn tốt hơn.\n\n4. Khi lỡ cho quá nhiều bột giặt\n\nNếu:\n\ncho dư nước giặt\nbọt quá nhiều\n\nExtra Rinse giúp loại bỏ phần dư còn lại.\n\nƯu điểm\n1. Giảm cặn chất giặt trên quần áo\n\nĐây là lợi ích lớn nhất.\n\n2. Hạn chế kích ứng da\n\nĐặc biệt với:\n\ntrẻ em\nngười có da nhạy cảm\n3. Quần áo có cảm giác sạch hơn\n\nĐôi khi sau khi giặt:\n\nquần áo còn hơi nhớt\ncòn mùi chất giặt đậm\n\nExtra Rinse giúp giảm hiện tượng này.\n\nNhược điểm\n1. Tốn nước hơn\n\nDo có thêm 2 lần xả.\n\n2. Tăng thời gian giặt\n\nMáy phải:\n\ncấp nước\nđảo lồng\nxả nước\n\nthêm nhiều lần.\n\n3. Có thể làm nhạt mùi nước xả\n\nNếu bạn thích quần áo thơm đậm:\n\nExtra Rinse có thể cuốn trôi bớt hương thơm còn lưu lại trên vải.\nCó làm sạch hơn không?\n\nĐây là điểm nhiều người hiểu nhầm.\n\nExtra Rinse không làm tăng khả năng tẩy vết bẩn.\n\nNó không:\n\ngiặt mạnh hơn\nngâm lâu hơn\ntăng nhiệt độ\n\nNó chỉ:\n\nxả sạch hơn\n\nnên hiệu quả chính là loại bỏ cặn chất giặt, không phải đánh bật vết bẩn.\n\nNhững chương trình hỗ trợ Extra Rinse\n\nTheo bảng tương thích của Electrolux, Extra Rinse dùng được với hầu hết các chương trình giặt thông thường như:\n\nCottons\nMixed\nBedding\nEnergy Saver\nBaby Care\nSports\nDaily 60\nDelicates\nFavourite\n\nvà không khả dụng trên một số chương trình đặc biệt như:\n\nVapour Refresh\nTub Clean\nSpin\nQuick 15Khuyến nghị sử dụng thực tế\nTình huống\tCó nên bật Extra Rinse?\nQuần áo mặc hằng ngày\t⚪ Không bắt buộc\nĐồ trẻ em\t✅ Nên\nNgười da nhạy cảm\t✅ Nên\nChăn ga gối\t✅ Nên\nLỡ cho quá nhiều nước giặt\t✅ Nên\nMuốn giặt sạch vết bẩn hơn\t❌ Không giúp đáng kể",
+      "bbox_template_coordinates": {
+        "x": 2211,
+        "y": 508,
+        "width": 139,
+        "height": 75
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-07-09T10:08:54.952Z",
+      "updated_at": "2026-07-09T10:08:54.952Z"
+    },
+    {
+      "id": "btn_electrolux_washer_ewf9024adsa_8",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "button_id": "8",
+      "label": "start/pause_and_add_clothes_touchpad",
+      "vietnamese_name": "Bắt đầu/Tạm dừng và Thêm quần áo bằng bàn di chuột",
+      "function_description": "### 8. Start/Pause and Add Clothes Touchpad (Bắt đầu / Tạm dừng / Thêm quần áo)\n\nĐây là nút được sử dụng nhiều nhất trên máy vì nó có **2 chức năng chính**:\n\n1. **Start/Pause** (Bắt đầu/Tạm dừng chương trình)\n2. **Add Clothes** (Thêm quần áo giữa chừng)\n\nElectrolux ghi rõ:\n\n> \"This touchpad has 2 functions.\" \n\n---\n\n# 1. Start/Pause (Bắt đầu/Tạm dừng)\n\n## Công dụng\n\nSau khi:\n\n* Chọn chương trình\n* Chọn nhiệt độ\n* Chọn tốc độ vắt\n* Chọn các tùy chọn khác\n\nthì nhấn **Start/Pause** để máy bắt đầu hoạt động. \n\n---\n\n## Máy thực sự làm gì khi nhấn Start?\n\nKhi nhấn Start:\n\nMáy không phải lúc nào cũng giặt ngay lập tức.\n\nNó sẽ thực hiện một số bước chuẩn bị:\n\n```text id=\"sp1\"\nKhóa cửa\n↓\nKiểm tra cảm biến\n↓\nCấp nước\n↓\nCân tải\n↓\nTính toán thời gian\n↓\nBắt đầu giặt\n```\n\n---\n\n## Đèn Start/Pause có ý nghĩa gì?\n\nManual ghi:\n\n* Đèn nhấp nháy → máy đang chờ lệnh Start\n* Đèn sáng liên tục → chương trình đang chạy \n\n---\n\n## Khi dùng Delay End\n\nNếu bạn đã cài:\n\n* Delay End 5 giờ\n* Delay End 10 giờ\n\nthì sau khi nhấn Start:\n\nMáy chưa giặt ngay.\n\nNó sẽ:\n\n```text id=\"sp2\"\nBắt đầu đếm ngược\n↓\nĐến thời điểm phù hợp\n↓\nTự khởi động chương trình\n```\n\n\n\n---\n\n# 2. Pause (Tạm dừng)\n\n## Công dụng\n\nTrong khi máy đang hoạt động:\n\nNhấn Start/Pause một lần để tạm dừng chương trình. \n\n---\n\n## Máy thực sự làm gì?\n\nKhi Pause:\n\n```text id=\"sp3\"\nDừng quay lồng\n↓\nDừng cấp nước\n↓\nGiữ nguyên trạng thái hiện tại\n↓\nChờ lệnh tiếp tục\n```\n\nMáy ghi nhớ toàn bộ tiến trình.\n\n---\n\n## Khi nhấn lần nữa\n\nMáy tiếp tục từ đúng vị trí đang dừng.\n\nVí dụ:\n\n```text id=\"sp4\"\nĐang giặt phút thứ 25\n↓\nPause\n↓\n10 phút sau\n↓\nStart\n↓\nTiếp tục từ phút 25\n```\n\nKhông chạy lại từ đầu. \n\n---\n\n# 3. Add Clothes (Thêm quần áo)\n\nĐây là chức năng rất hữu ích khi:\n\n* Quên một chiếc tất\n* Quên áo thun\n* Quên khăn mặt\n\nsau khi máy đã bắt đầu chạy.\n\n---\n\n## Công dụng\n\nElectrolux cho phép mở cửa giữa chừng để thêm đồ nếu điều kiện an toàn cho phép. \n\n---\n\n## Biểu tượng Add Clothes\n\nTrên màn hình có biểu tượng:\n\n**Add Clothes**\n\nKhi biểu tượng này xuất hiện:\n\n→ Máy cho phép thêm đồ. \n\n---\n\n## Cách sử dụng\n\nTheo manual:\n\n### Bước 1\n\nNhấn Start/Pause.\n\n### Bước 2\n\nChờ máy dừng hoàn toàn.\n\n### Bước 3\n\nChờ biểu tượng khóa cửa biến mất.\n\n### Bước 4\n\nMở cửa.\n\n### Bước 5\n\nCho thêm quần áo.\n\n### Bước 6\n\nĐóng cửa.\n\n### Bước 7\n\nNhấn Start/Pause để tiếp tục.\n\n\n\n---\n\n## Khi nào KHÔNG thể thêm đồ?\n\nManual ghi rõ cửa sẽ không mở nếu:\n\n### 1. Nước quá nóng\n\nVí dụ:\n\n* chương trình 60°C\n* chương trình 90°C\n\nMáy khóa cửa để tránh bỏng. \n\n---\n\n### 2. Mực nước quá cao\n\nNếu mở cửa:\n\nnước có thể tràn ra ngoài.\n\nMáy sẽ từ chối mở cửa. \n\n---\n\n### 3. Lồng giặt còn đang quay\n\nĐể đảm bảo an toàn.\n\nMáy chỉ mở khi lồng đã dừng hoàn toàn. \n\n---\n\n# Những hiểu lầm thường gặp\n\n## \"Pause là mở cửa được ngay\"\n\n❌ Không đúng.\n\nPause chỉ là yêu cầu dừng chương trình.\n\nSau đó máy còn phải:\n\n* dừng lồng\n* kiểm tra nhiệt độ\n* kiểm tra mực nước\n\nrồi mới quyết định có mở khóa cửa hay không. \n\n---\n\n## \"Lúc nào cũng thêm được đồ\"\n\n❌ Không đúng.\n\nChỉ thêm được khi biểu tượng Add Clothes xuất hiện. \n\n---\n\n## \"Pause rồi tắt nguồn bật lại sẽ tiếp tục\"\n\n❌ Không.\n\nTheo manual:\n\nMuốn đổi chương trình đang chạy phải tắt máy bằng On/Off, và việc này sẽ hủy chương trình hiện tại. \n\n---\n\n# Ưu điểm\n\n### 1. Không phải chạy lại cả mẻ giặt\n\nQuên một món đồ vẫn có thể bổ sung.\n\n---\n\n### 2. Kiểm tra quần áo giữa chừng\n\nCó thể:\n\n* kiểm tra đồ\n* chỉnh lại đồ bị cuộn\n\nnếu điều kiện cho phép mở cửa.\n\n---\n\n### 3. Tạm dừng khi cần thiết\n\nVí dụ:\n\n* mất nước\n* cần xử lý sự cố nhỏ\n* cần thêm chất giặt\n\n---\n\n# Tóm tắt\n\n| Chức năng             | Công dụng                                                      |\n| --------------------- | -------------------------------------------------------------- |\n| Start                 | Bắt đầu chương trình giặt                                      |\n| Pause                 | Tạm dừng và giữ nguyên tiến trình                              |\n| Add Clothes           | Cho phép thêm quần áo giữa chừng khi điều kiện an toàn đáp ứng |\n| Điều kiện mở cửa      | Nước không quá nóng, mực nước không quá cao, lồng đã dừng      |\n| Tiếp tục chương trình | Nhấn Start/Pause lần nữa                                       |\n\n**Start/Pause không chỉ là nút khởi động.** Nó là trung tâm điều khiển toàn bộ chu trình giặt, cho phép bắt đầu, tạm dừng và thêm quần áo mà không phải hủy chương trình đang chạy.",
+      "bbox_template_coordinates": {
+        "x": 2360,
+        "y": 194,
+        "width": 155,
+        "height": 253
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-07-09T10:08:54.952Z",
+      "updated_at": "2026-07-09T10:08:54.952Z"
+    },
+    {
+      "id": "btn_electrolux_washer_ewf9024adsa_9",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "button_id": "9",
+      "label": "time_manage_touchpad",
+      "vietnamese_name": "Bảng điều khiển cảm ứng quản lý thời gian",
+      "function_description": "### 9. Time Manager Touchpad (Điều Chỉnh Thời Gian Giặt)\n\nĐây là chức năng cho phép bạn **rút ngắn hoặc kéo dài thời gian giặt** tùy theo mức độ bẩn của quần áo.\n\n---\n\n## Công dụng\n\nTheo manual:\n\n> \"This option allows you to adjust the wash time.\" \n\nKhi nhấn nút Time Manager:\n\n* Máy tăng hoặc giảm thời lượng giặt\n* Phù hợp với mức độ bẩn thực tế của quần áo\n* Không cần đổi sang chương trình khác\n\n---\n\n## Máy thực sự làm gì?\n\nElectrolux mô tả:\n\n> \"Press this touchpad repeatedly to decrease or increase the wash time according to the soil level of your wash.\" \n\nNghĩa là:\n\n### Đồ ít bẩn\n\n```text\nThời gian giặt ↓\nSố lần đảo ↓\nTổng thời gian ↓\n```\n\nMáy hoàn thành nhanh hơn.\n\n---\n\n### Đồ bẩn vừa\n\n```text\nThời gian chuẩn\n```\n\nMáy dùng thời gian mặc định của chương trình.\n\n---\n\n### Đồ rất bẩn\n\n```text\nThời gian giặt ↑\nSố lần đảo ↑\nTổng thời gian ↑\n```\n\nMáy dành nhiều thời gian hơn để làm sạch.\n\n---\n\n## Chức năng này KHÔNG làm gì?\n\nNhiều người hiểu nhầm rằng Time Manager:\n\n❌ Tăng nhiệt độ\n\n❌ Tăng lượng nước\n\n❌ Tăng tốc độ vắt\n\n❌ Tăng lượng chất giặt\n\nManual chỉ nói nó điều chỉnh **wash time** (thời gian giặt). \n\n---\n\n## Lợi ích thực tế\n\n### 1. Đồ ít bẩn → giặt nhanh hơn\n\nVí dụ:\n\n* Áo mặc vài tiếng\n* Quần áo văn phòng\n* Đồ mới mặc 1 lần\n\nKhông cần chu trình dài.\n\n---\n\n### 2. Đồ bẩn hơn → giặt kỹ hơn\n\nVí dụ:\n\n* Quần áo thể thao\n* Quần áo trẻ em\n* Quần jean mặc nhiều ngày\n\nCó thể tăng thời gian để máy xử lý tốt hơn.\n\n---\n\n### 3. Tiết kiệm thời gian\n\nThay vì:\n\n```text\nĐồ hơi bẩn\n↓\nVẫn chạy chu trình dài\n```\n\nBạn có thể giảm thời gian giặt xuống mức phù hợp.\n\n---\n\n## Time Manager khác Quick 15 thế nào?\n\n| Time Manager                                   | Quick 15                     |\n| ---------------------------------------------- | ---------------------------- |\n| Điều chỉnh thời gian của chương trình hiện tại | Là một chương trình riêng    |\n| Vẫn giữ đặc tính của chương trình đang chọn    | Chu trình giặt nhanh cố định |\n| Có thể tăng hoặc giảm thời gian                | Chỉ giặt nhanh               |\n| Linh hoạt hơn                                  | Đơn giản hơn                 |\n\n---\n\n## Chương trình nào hỗ trợ?\n\nTheo bảng tương thích của Electrolux, Time Manager hoạt động trên nhiều chương trình như:\n\n* Cottons\n* Mixed\n* Bedding\n* Sports\n* Delicates\n\nvà một số chương trình khác. \n\nKhông khả dụng trên các chương trình đặc biệt như:\n\n* Vapour Refresh\n* Tub Clean\n* Spin\n* Rinse + Spin\n\n\n\n---\n\n## Khi nào nên giảm thời gian?\n\n✅ Quần áo ít bẩn\n\n✅ Đồ mới mặc một lần\n\n✅ Muốn hoàn thành nhanh hơn\n\n✅ Khối lượng giặt nhỏ\n\n---\n\n## Khi nào nên tăng thời gian?\n\n✅ Đồ bẩn nhiều\n\n✅ Quần áo thể thao\n\n✅ Quần áo trẻ em\n\n✅ Chăn ga bẩn\n\n✅ Đồ có nhiều mồ hôi hoặc bụi đất\n\n---\n\n## So sánh với Prewash\n\n| Chức năng                   | Time Manager               | Prewash                     |\n| --------------------------- | -------------------------- | --------------------------- |\n| Tăng khả năng làm sạch      | ✅ (bằng cách giặt lâu hơn) | ✅ (bằng cách giặt sơ trước) |\n| Tăng thời gian chương trình | ✅                          | ✅                           |\n| Thêm giai đoạn giặt mới     | ❌                          | ✅                           |\n| Cần thêm chất giặt          | ❌                          | ✅                           |\n| Dành cho đồ cực bẩn         | ⚪                          | ✅                           |\n\n---\n\n## Tóm tắt\n\n**Time Manager = Điều chỉnh thời gian giặt theo mức độ bẩn của quần áo.**\n\nMục đích:\n\n* Đồ ít bẩn → giảm thời gian\n* Đồ bẩn nhiều → tăng thời gian\n\nƯu điểm:\n\n* Linh hoạt\n* Tiết kiệm thời gian khi cần\n* Tăng hiệu quả giặt khi đồ bẩn\n\nKhác với Prewash, chức năng này **không thêm giai đoạn giặt mới**, mà chỉ thay đổi lượng thời gian máy dành cho quá trình giặt.",
+      "bbox_template_coordinates": {
+        "x": 2182,
+        "y": 207,
+        "width": 176,
+        "height": 101
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-07-09T10:08:54.952Z",
+      "updated_at": "2026-07-09T10:08:54.952Z"
+    },
+    {
+      "id": "btn_electrolux_washer_ewf9024adsa_10",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "button_id": "10",
+      "label": "delay_end_touchpad",
+      "vietnamese_name": "Trì hoãn kết thúc Touchpad",
+      "function_description": "### 10. Delay End Touchpad (Hẹn Giờ Kết Thúc)\n\nĐây là chức năng cho phép bạn **chỉ định thời điểm chương trình giặt phải hoàn thành**, thay vì chỉ định thời điểm bắt đầu.\n\n---\n\n## Công dụng\n\nTheo manual:\n\n> \"This option makes it possible to define the end of the washing program from minimum of 1 hour to maximum of 20 hours.\" \n\nNghĩa là:\n\nBạn nói với máy:\n\n> \"Tôi muốn quần áo giặt xong sau X giờ nữa.\"\n\nMáy sẽ tự tính toán khi nào cần bắt đầu giặt để kết thúc đúng thời điểm đó.\n\n---\n\n## Delay End KHÁC Delay Start như thế nào?\n\nNhiều máy giặt khác có:\n\n```text id=\"1e87n1\"\nDelay Start\n↓\nSau X giờ mới bắt đầu giặt\n```\n\nNhưng Electrolux dùng:\n\n```text id=\"eyvvrj\"\nDelay End\n↓\nSau X giờ phải giặt xong\n```\n\nĐây là khác biệt rất quan trọng.\n\n---\n\n## Máy thực sự làm gì?\n\nGiả sử:\n\n* Chương trình Cotton\n* Thời gian giặt = 3 giờ 20 phút\n\nBạn chọn:\n\n```text id=\"2jj5pz\"\nDelay End = 6 giờ\n```\n\nManual minh họa:\n\n```text id=\"pfxjdr\"\n0h\n↓\nĐếm ngược 2h40\n↓\nBắt đầu giặt\n↓\nGiặt 3h20\n↓\nHoàn thành đúng sau 6h\n```\n\n\n\n---\n\n## Ví dụ thực tế\n\n### Trường hợp 1\n\nBây giờ:\n\n```text id=\"zujk07\"\n22:00\n```\n\nBạn muốn:\n\n```text id=\"x7x7ko\"\n06:00 sáng mai\nquần áo giặt xong\n```\n\nChọn:\n\n```text id=\"5dkr49\"\nDelay End = 8 giờ\n```\n\nMáy sẽ:\n\n* Chờ một khoảng thời gian\n* Tự khởi động\n* Hoàn thành lúc khoảng 06:00\n\n---\n\n### Trường hợp 2\n\nBạn đi làm lúc:\n\n```text id=\"u96h3n\"\n07:30\n```\n\nMuốn:\n\n```text id=\"hm6l3s\"\n07:00 quần áo vừa giặt xong\n```\n\nCó thể dùng Delay End để máy tự căn thời gian.\n\n---\n\n## Tại sao chức năng này hữu ích?\n\n### 1. Quần áo không nằm quá lâu trong lồng\n\nNếu dùng Delay Start:\n\n```text id=\"wl38l7\"\n22:00 bắt đầu\n↓\n01:00 giặt xong\n↓\n07:00 mới lấy đồ\n```\n\nQuần áo nằm trong lồng:\n\n```text id=\"k67zvq\"\n6 tiếng\n```\n\nDễ:\n\n* có mùi\n* nhăn hơn\n\n---\n\nVới Delay End:\n\n```text id=\"4a0f17\"\n22:00 cài đặt\n↓\nMáy tự tính\n↓\n06:50 giặt xong\n↓\n07:00 lấy đồ\n```\n\nTốt hơn nhiều.\n\n---\n\n## Phạm vi cài đặt\n\nTheo manual:\n\n```text id=\"ymxvxu\"\nTối thiểu: 1 giờ\nTối đa: 20 giờ\n```\n\n\n\n---\n\n## Lưu ý quan trọng\n\nManual ghi:\n\n> \"This option must be selected after choosing the wash program, and before pressing the Start/Pause touchpad.\" \n\nThứ tự đúng:\n\n```text id=\"95w2wk\"\nChọn chương trình\n↓\nChọn Delay End\n↓\nNhấn Start\n```\n\n---\n\n## Nếu muốn hủy Delay End?\n\nManual hướng dẫn:\n\n1. Nhấn Start/Pause\n2. Nhấn Delay End nhiều lần\n3. Cho tới khi màn hình hiện \"--\"\n4. Nhấn Start/Pause lại\n\n\n\n---\n\n## Những hiểu lầm thường gặp\n\n### \"Delay End = bắt đầu sau X giờ\"\n\n❌ Sai.\n\nDelay End là:\n\n```text id=\"6e8jsj\"\nHoàn thành sau X giờ\n```\n\nkhông phải:\n\n```text id=\"xnhxht\"\nBắt đầu sau X giờ\n```\n\n---\n\n### \"Máy sẽ đứng yên rồi mới giặt\"\n\n❌ Không hẳn.\n\nMáy sẽ:\n\n* tính toán thời lượng chương trình\n* tự quyết định thời điểm khởi động\n\nđể kết thúc đúng giờ bạn yêu cầu. \n\n---\n\n## Ưu điểm\n\n### 1. Giặt xong đúng thời điểm mong muốn\n\nVí dụ:\n\n* trước khi đi làm\n* trước khi thức dậy\n* trước khi về nhà\n\n---\n\n### 2. Hạn chế quần áo bị hôi do để lâu trong lồng\n\n---\n\n### 3. Tận dụng giờ điện thấp điểm\n\nCó thể cài để máy tự chạy vào ban đêm.\n\n---\n\n## Nhược điểm\n\n### 1. Không phù hợp với đồ cần giặt ngay\n\nNếu cần giặt lập tức thì không cần dùng.\n\n---\n\n### 2. Không nên để đồ bẩn ẩm quá lâu trong lồng\n\nVí dụ:\n\n* khăn ướt\n* đồ thể thao đẫm mồ hôi\n\nNếu để nhiều giờ trước khi máy khởi động có thể phát sinh mùi.\n\n---\n\n## Tóm tắt\n\n**Delay End = Hẹn giờ hoàn thành chương trình giặt.**\n\nMáy sẽ:\n\n```text id=\"w9b5ee\"\nTính thời gian chương trình\n↓\nTự xác định thời điểm bắt đầu\n↓\nKết thúc đúng giờ bạn yêu cầu\n```\n\nPhạm vi:\n\n* 1 giờ → 20 giờ\n\nĐây là một trong những chức năng hữu ích nhất nếu bạn muốn:\n\n* sáng thức dậy có đồ vừa giặt xong\n* đi làm về có đồ sẵn để phơi\n* tránh để quần áo nằm lâu trong lồng giặt.",
+      "bbox_template_coordinates": {
+        "x": 2203,
+        "y": 324,
+        "width": 136,
+        "height": 80
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-07-09T10:08:54.952Z",
+      "updated_at": "2026-07-09T10:08:54.952Z"
+    },
+    {
+      "id": "btn_electrolux_washer_ewf9024adsa_11",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "button_id": "11",
+      "label": "display",
+      "vietnamese_name": "màn_hình_hiển_thị",
+      "function_description": "### 11. Display (Màn Hình Hiển Thị)\n\nDisplay là màn hình trung tâm của máy giặt, dùng để hiển thị:\n\n* Thời gian chương trình\n* Trạng thái hoạt động\n* Các tùy chọn đã chọn\n* Cảnh báo và mã lỗi\n* Các biểu tượng chức năng\n\nNó không trực tiếp điều khiển máy, mà là nơi bạn theo dõi mọi thông tin trong quá trình giặt.\n\n---\n\n## Công dụng chính\n\n### 1. Hiển thị thời gian chương trình\n\nSau khi chọn chương trình:\n\nVí dụ:\n\n```text\n2:35\n```\n\nNghĩa là:\n\n```text\n2 giờ 35 phút\n```\n\nlà thời gian dự kiến để hoàn thành chương trình. \n\n---\n\n### 2. Hiển thị thời gian còn lại\n\nKhi máy đang chạy:\n\n```text\n1:48\n↓\n1:32\n↓\n0:45\n↓\n0:10\n```\n\nMàn hình sẽ liên tục cập nhật thời gian còn lại.\n\n---\n\n### 3. Hiển thị Delay End\n\nKhi dùng Delay End:\n\nVí dụ:\n\n```text\n8\n```\n\nNghĩa là:\n\n```text\nCòn 8 giờ nữa chương trình sẽ hoàn thành\n```\n\nMáy sẽ đếm ngược từng giờ. \n\n---\n\n### 4. Hiển thị kết thúc chương trình\n\nKhi giặt xong:\n\nManual ghi:\n\n> \"The display will show 'End'.\" \n\nMàn hình sẽ hiện:\n\n```text\nEnd\n```\n\nđể báo chương trình đã hoàn tất.\n\n---\n\n# Các biểu tượng quan trọng trên Display\n\n## 1. Door Lock (Khóa cửa)\n\nBiểu tượng:\n\n```text\n🔒\n```\n\nÝ nghĩa:\n\n* Cửa đang khóa\n* Không thể mở cửa\n\nXuất hiện khi:\n\n* Máy đang giặt\n* Đang cấp nước\n* Đang vắt\n* Nước còn trong lồng\n\n\n\n---\n\n## 2. Add Clothes\n\nBiểu tượng:\n\n```text\n👕+\n```\n\n(Icon thực tế khác tùy model)\n\nÝ nghĩa:\n\n```text\nCó thể thêm quần áo\n```\n\nNếu biểu tượng xuất hiện:\n\n* Nhấn Pause\n* Mở cửa\n* Thêm đồ\n\n\n\n---\n\n## 3. Child Lock\n\nBiểu tượng:\n\n```text\n🔒 trẻ em\n```\n\nÝ nghĩa:\n\n* Các phím cảm ứng bị khóa\n* Tránh trẻ em thay đổi chương trình\n\n\n\n---\n\n## 4. Delay End\n\nBiểu tượng:\n\n```text\n⏰\n```\n\nÝ nghĩa:\n\n```text\nĐang sử dụng hẹn giờ kết thúc\n```\n\n\n\n---\n\n## 5. Prewash\n\nBiểu tượng:\n\n```text\nGiặt sơ\n```\n\nÝ nghĩa:\n\n```text\nĐã bật Prewash\n```\n\n\n\n---\n\n## 6. Vapour\n\nBiểu tượng:\n\n```text\n💨\n```\n\nÝ nghĩa:\n\n```text\nĐã bật chức năng hơi nước\n```\n\n\n\n---\n\n## 7. Extra Rinse\n\nBiểu tượng:\n\n```text\n💧💧\n```\n\nÝ nghĩa:\n\n```text\nĐã bật xả thêm\n```\n\n\n\n---\n\n## 8. Rinse Hold\n\nÝ nghĩa:\n\n```text\nMáy dừng ở nước xả cuối\n```\n\n* Chưa xả nước\n* Chưa vắt\n\nChờ người dùng xử lý tiếp. \n\n---\n\n## 9. No Spin\n\nÝ nghĩa:\n\n```text\nKhông vắt\n```\n\nMáy sẽ:\n\n* Giặt\n* Xả\n\nnhưng bỏ qua công đoạn vắt. \n\n---\n\n## 10. Buzzer Off\n\nÝ nghĩa:\n\n```text\nĐã tắt âm báo kết thúc\n```\n\n\n\n---\n\n# Điều đặc biệt của màn hình thời gian\n\nManual lưu ý:\n\nSau khi bắt đầu giặt khoảng 15 phút:\n\n```text\nMáy cân tải\n↓\nTính toán lại\n↓\nĐiều chỉnh thời gian\n```\n\nnên thời gian hiển thị có thể thay đổi. \n\nVí dụ:\n\n```text\n2:30\n↓\n2:12\n```\n\nhoặc\n\n```text\n2:30\n↓\n2:45\n```\n\nĐây là hành vi bình thường.\n\n---\n\n# Khi có lỗi\n\nDisplay sẽ hiển thị:\n\n```text\nMã lỗi\n```\n\nví dụ:\n\n```text\nE10\nE20\n...\n```\n\nđể hỗ trợ chẩn đoán sự cố (cấp nước, xả nước, khóa cửa, v.v.).\n\n---\n\n## Tóm tắt\n\n**Display = Trung tâm thông tin của máy giặt.**\n\nHiển thị:\n\n* Thời gian giặt\n* Thời gian còn lại\n* Delay End\n* Trạng thái khóa cửa\n* Child Lock\n* Add Clothes\n* Các tùy chọn đang bật\n* Kết thúc chương trình\n* Mã lỗi khi có sự cố\n\nMọi thông tin quan trọng trong quá trình giặt đều được phản ánh qua màn hình Display.",
+      "bbox_template_coordinates": {
+        "x": 1915,
+        "y": 204,
+        "width": 272,
+        "height": 229
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch",
+      "created_at": "2026-07-09T10:08:54.952Z",
+      "updated_at": "2026-07-09T10:08:54.952Z"
+    }
+  ]
+}
