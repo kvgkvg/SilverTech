@@ -66,11 +66,6 @@ def test_a_duplicate_id_in_the_reply_keeps_the_first():
     assert described[0]["vietnamese_name"] == "Một"
 
 
-def test_a_null_id_button_is_not_sent_to_the_model_and_comes_back_blank():
-    described = describe_buttons({"buttons": []}, button_ids=[])
-    assert described == []
-
-
 def test_a_reply_without_a_buttons_key_raises():
     with pytest.raises(ValueError, match="buttons"):
         describe_buttons({"items": []}, button_ids=["start"])
@@ -106,3 +101,11 @@ def test_write_descriptions_skips_null_ids_and_writes_the_file(tmp_path):
     assert json.loads(out.read_text(encoding="utf-8")) == body
     assert [b["button_id"] for b in body["buttons"]] == ["start"]
     assert "Start." in FakeClient.captured_prompt  # the manual text reached the prompt
+
+    # The null-id button must never reach the model: no bullet line for it, and its
+    # button_id (None -> "None") must not appear anywhere in the prompt's button listing.
+    bullet_lines = [
+        line for line in FakeClient.captured_prompt.splitlines() if line.startswith("- ")
+    ]
+    assert bullet_lines == ['- start: chữ in trên nút là "Start"']
+    assert "None" not in FakeClient.captured_prompt

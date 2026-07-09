@@ -6,7 +6,6 @@ describe.py may only fill in words for the ids it is handed.
 
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -87,10 +86,10 @@ def write_descriptions(
     manual = manual_full_text(manual_text)
     prompt = DESCRIBE_PROMPT.format(manual=manual, buttons=listing)
 
-    # The manual is inside the prompt, so the prompt hash already covers it. The salt
-    # covers the id list, which is not otherwise part of the prompt template.
-    salt = hashlib.sha256("|".join(button_ids).encode("utf-8")).digest()
-    reply = client.generate_json(prompt, cache_salt=salt)
+    # The manual text and the id listing are both interpolated into the prompt, so the
+    # prompt hash (computed by GeminiClient from the full prompt text) already keys the
+    # cache on both. No extra salt is needed.
+    reply = client.generate_json(prompt)
 
     body = {
         "model": client.model,
