@@ -524,4 +524,62 @@ els.clearDraft.addEventListener("click", () => {
   refresh();
 });
 
+// ── Import JSON ───────────────────────────────────────────────────────────────
+document.getElementById("importJsonInput").addEventListener("change", (evt) => {
+  const file = evt.target.files?.[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    let data;
+    try {
+      data = JSON.parse(e.target.result);
+    } catch {
+      alert("Invalid JSON file.");
+      return;
+    }
+
+    const device   = data.device   || {};
+    const template = data.template || {};
+    const buttons  = data.buttons  || [];
+
+    // Populate device fields
+    if (device.brand)           fields.brand.value           = device.brand;
+    if (device.appliance_type)  fields.applianceType.value   = device.appliance_type;
+    if (device.model_name)      fields.modelName.value       = device.model_name;
+    if (device.display_name)    fields.displayName.value     = device.display_name;
+    if (device.id)              fields.deviceId.value        = device.id;
+    if (device.status)          fields.deviceStatus.value    = device.status;
+
+    // Populate template fields
+    if (template.template_code)             fields.templateCode.value     = template.template_code;
+    if (template.template_image_url)        fields.templateImageUrl.value = template.template_image_url;
+    if (template.feature_descriptor_path)   fields.descriptorPath.value   = template.feature_descriptor_path;
+    if (template.id)                        fields.templateId.value       = template.id;
+    if (template.version)                   fields.version.value          = template.version;
+    if (template.status)                    fields.templateStatus.value   = template.status;
+
+    // Populate bboxes
+    state.panelBox = template.panel_bbox || null;
+    state.logoBox  = template.logo_bbox  || null;
+
+    // Populate buttons — add localId for internal tracking
+    state.buttons = buttons.map((b) => ({
+      localId: crypto.randomUUID(),
+      button_id: b.button_id || "",
+      label: b.label || "",
+      vietnamese_name: b.vietnamese_name || "",
+      function_description: b.function_description || "",
+      button_type: b.button_type || "physical",
+      bbox_template_coordinates: b.bbox_template_coordinates || null,
+      polygon_template_coordinates: b.polygon_template_coordinates || null,
+    }));
+    state.selectedButtonId = state.buttons[0]?.localId || null;
+
+    evt.target.value = ""; // allow re-importing same file
+    refresh();
+    alert(`Imported ${buttons.length} buttons. panel_bbox ${state.panelBox ? "✓" : "missing"}, logo_bbox ${state.logoBox ? "✓" : "missing"}.\n\nNow load the matching image to see all bboxes drawn.`);
+  };
+  reader.readAsText(file);
+});
+
 refresh();

@@ -64,7 +64,15 @@ def get_template(template_id: str) -> dict[str, Any] | None:
             "SELECT * FROM buttons WHERE template_id = :template_id ORDER BY button_id",
             {"template_id": template_id},
         ).fetchall()
+        offsets = conn.execute(
+            "SELECT button_id, dx, dy, dw, dh FROM button_offsets WHERE template_id = :template_id",
+            {"template_id": template_id},
+        ).fetchall()
     detail = _template_summary(row)
+    detail["logo_offsets"] = {
+        o["button_id"]: {"dx": o["dx"], "dy": o["dy"], "dw": o["dw"], "dh": o["dh"]}
+        for o in offsets
+    }
     detail["buttons"] = [
         {
             "button_id": b["button_id"],

@@ -40,8 +40,18 @@ class TemplateSummary(BaseModel):
     feature_descriptor_url: str | None = None
 
 
+class LogoOffset(BaseModel):
+    """Button placement relative to the logo anchor, in logo-width units."""
+
+    dx: float
+    dy: float
+    dw: float
+    dh: float
+
+
 class TemplateDetail(TemplateSummary):
     buttons: list[ButtonSchema]
+    logo_offsets: dict[str, LogoOffset] = Field(default_factory=dict)
 
 
 class VisionCandidateRequest(BaseModel):
