@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -7,10 +8,16 @@ import '../templates/template_repository_client.dart';
 class GuidanceClient {
   GuidanceClient({
     required this.baseUrl,
+    this.timeout = const Duration(seconds: 60),
     http.Client? httpClient,
   }) : _httpClient = httpClient ?? http.Client();
 
   final String baseUrl;
+
+  /// A real LLM answer takes 6-27s, and `package:http` has no default timeout,
+  /// so without this the voice screen can spin forever on a stalled network.
+  final Duration timeout;
+
   final http.Client _httpClient;
 
   Uri get queryUri => Uri.parse('$baseUrl/api/query');
@@ -19,14 +26,25 @@ class GuidanceClient {
     required String templateId,
     required String userQueryText,
   }) async {
-    final response = await _httpClient.post(
-      queryUri,
-      headers: const <String, String>{'Content-Type': 'application/json'},
-      body: jsonEncode(<String, Object?>{
-        'template_id': templateId,
-        'user_query_text': userQueryText,
-      }),
-    );
+    final http.Response response;
+    try {
+      response = await _httpClient
+          .post(
+            queryUri,
+            headers: const <String, String>{'Content-Type': 'application/json'},
+            body: jsonEncode(<String, Object?>{
+              'template_id': templateId,
+              'user_query_text': userQueryText,
+            }),
+          )
+          .timeout(timeout);
+    } on TimeoutException {
+      throw const FriendlyBackendException(
+        messageVi: 'Mạng chậm quá. Vui lòng thử lại.',
+        recoveryAction: 'try_again',
+        statusCode: 504,
+      );
+    }
     if (response.statusCode < 200 || response.statusCode >= 300) {
       final body = jsonDecode(response.body) as Map<String, Object?>;
       throw FriendlyBackendException(

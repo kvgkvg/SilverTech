@@ -188,4 +188,28 @@ void main() {
     expect(guidance.steps.single.instructionVi, 'Nhan nut Tang nhiet do.');
     expect(guidance.steps.single.audioUrl, '/data/tts/temp-up.mp3');
   });
+
+  test('guidance gives up instead of hanging when the backend never answers',
+      () async {
+    // A real LLM call takes 6-27s; package:http has no default timeout, so a
+    // stalled network would leave the voice screen spinning forever.
+    final client = GuidanceClient(
+      baseUrl: 'http://api.test',
+      timeout: const Duration(milliseconds: 20),
+      httpClient: MockClient((http.Request request) async {
+        await Future<void>.delayed(const Duration(seconds: 5));
+        return http.Response('{}', 200);
+      }),
+    );
+
+    await expectLater(
+      client.createGuidance(
+        templateId: 'template_daikin_ac_remote_v1',
+        userQueryText: 'Toi muon chinh nhiet do dieu hoa',
+      ),
+      throwsA(isA<FriendlyBackendException>()
+          .having((e) => e.recoveryAction, 'recoveryAction', 'try_again')
+          .having((e) => e.messageVi, 'messageVi', contains('Mạng chậm'))),
+    );
+  });
 }
