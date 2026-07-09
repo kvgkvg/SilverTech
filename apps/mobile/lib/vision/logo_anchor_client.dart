@@ -64,6 +64,7 @@ class LogoAnchorResultDto {
     required this.matchScore,
     required this.brand,
     required this.projectedButtons,
+    this.logoFrameBox,
   });
 
   factory LogoAnchorResultDto.fromJson(Map<String, Object?> json) {
@@ -72,7 +73,7 @@ class LogoAnchorResultDto {
     final buttons = <String, List<ProjectedPoint>>{};
     rawButtons.forEach((buttonId, quad) {
       buttons[buttonId] = (quad as List<Object?>)
-          .map((p) => ProjectedPoint.fromJson(p as List<Object?>))
+          .map((p) => ProjectedPoint.fromJson(p as Map<String, Object?>))
           .toList();
     });
     return LogoAnchorResultDto(
@@ -82,6 +83,38 @@ class LogoAnchorResultDto {
       matchScore: (json['match_score'] as num?)?.toDouble() ?? 0.0,
       brand: json['brand'] as String?,
       projectedButtons: buttons,
+      logoFrameBox: _logoFrameBox(
+        json['logo_pose'] as Map<String, Object?>?,
+        json['logo_bbox_template'] as Map<String, Object?>?,
+      ),
+    );
+  }
+
+  /// Brand logo's location in frame pixel coordinates, reconstructed from the
+  /// detected pose (center + scale) and the template-space logo size.
+  /// Null when the logo pose is unavailable (e.g. SIFT-only fallback).
+  static LogoFrameBox? _logoFrameBox(
+    Map<String, Object?>? pose,
+    Map<String, Object?>? bbox,
+  ) {
+    if (pose == null || bbox == null) return null;
+    final centerX = (pose['center_x'] as num?)?.toDouble();
+    final centerY = (pose['center_y'] as num?)?.toDouble();
+    final scale = (pose['scale'] as num?)?.toDouble();
+    final width = (bbox['width'] as num?)?.toDouble();
+    final height = (bbox['height'] as num?)?.toDouble();
+    if (centerX == null ||
+        centerY == null ||
+        scale == null ||
+        width == null ||
+        height == null) {
+      return null;
+    }
+    return LogoFrameBox(
+      centerX: centerX,
+      centerY: centerY,
+      width: width * scale,
+      height: height * scale,
     );
   }
 
@@ -93,14 +126,37 @@ class LogoAnchorResultDto {
 
   /// button_id -> 4 corner points in frame pixel coordinates.
   final Map<String, List<ProjectedPoint>> projectedButtons;
+
+  final LogoFrameBox? logoFrameBox;
+}
+
+/// Axis-aligned box in frame pixel coordinates where the brand logo sits.
+class LogoFrameBox {
+  const LogoFrameBox({
+    required this.centerX,
+    required this.centerY,
+    required this.width,
+    required this.height,
+  });
+
+  final double centerX;
+  final double centerY;
+  final double width;
+  final double height;
+
+  double get left => centerX - width / 2;
+  double get top => centerY - height / 2;
+  double get right => centerX + width / 2;
+  double get bottom => centerY + height / 2;
 }
 
 class ProjectedPoint {
   const ProjectedPoint(this.x, this.y);
 
-  factory ProjectedPoint.fromJson(List<Object?> json) => ProjectedPoint(
-        (json[0] as num).toDouble(),
-        (json[1] as num).toDouble(),
+  /// Server encodes points as `{"x": .., "y": ..}` objects.
+  factory ProjectedPoint.fromJson(Map<String, Object?> json) => ProjectedPoint(
+        (json['x'] as num).toDouble(),
+        (json['y'] as num).toDouble(),
       );
 
   final double x;

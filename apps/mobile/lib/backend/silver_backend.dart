@@ -38,6 +38,7 @@ class BackendRecognitionResult {
     this.tier,
     this.brand,
     this.projectedButtons = const {},
+    this.logoFrameBox,
   });
 
   final TemplateDetailDto template;
@@ -49,6 +50,9 @@ class BackendRecognitionResult {
 
   /// button_id -> 4 corners in frame pixel coordinates.
   final Map<String, List<ProjectedPoint>> projectedButtons;
+
+  /// Brand logo's box in frame pixel coordinates, when the pose was detected.
+  final LogoFrameBox? logoFrameBox;
 }
 
 class HttpSilverBackendGateway implements SilverBackendGateway {
@@ -92,6 +96,7 @@ class HttpSilverBackendGateway implements SilverBackendGateway {
       tier: result.tier,
       brand: result.brand,
       projectedButtons: result.projectedButtons,
+      logoFrameBox: result.logoFrameBox,
     );
   }
 

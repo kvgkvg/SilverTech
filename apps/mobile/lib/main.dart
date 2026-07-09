@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'backend/silver_backend.dart';
 import 'guidance/guidance_client.dart';
 import 'templates/template_repository_client.dart';
+import 'vision/logo_anchor_client.dart';
 import 'voice/stt_client.dart';
 import 'voice/stt_factory.dart';
 import 'voice/tts_manager.dart';
@@ -247,6 +250,14 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   bool _voiceBusy = false;
   double _recognitionMatchScore = 0.94;
   TemplateDetailDto? _selectedTemplate;
+
+  /// Frame the user captured/uploaded for the last accepted recognition, plus
+  /// the button quads the server projected onto it (frame pixel coordinates).
+  /// Null/empty on the scripted demo path.
+  Uint8List? _recognitionFrame;
+  Map<String, List<ProjectedPoint>> _recognitionButtons =
+      const <String, List<ProjectedPoint>>{};
+  LogoFrameBox? _recognitionLogoBox;
   List<GuideStepData> _currentGuideSteps = guideSteps;
   late final SpeechToTextClient _stt;
   Future<bool>? _startFuture;
@@ -321,6 +332,10 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
       setState(() {
         _selectedTemplate = result.template;
         _recognitionMatchScore = result.matchScore;
+        _recognitionFrame =
+            result.projectedButtons.isEmpty ? null : frame;
+        _recognitionButtons = result.projectedButtons;
+        _recognitionLogoBox = result.logoFrameBox;
         _recognitionBusy = false;
         _stack = <RouteState>[..._stack, RouteState('voice', device: device)];
       });
@@ -330,7 +345,17 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
         _recognitionBusy = false;
         _toast = error.messageVi;
       });
-    } catch (_) {
+    } on LogoAnchorException catch (error) {
+      debugPrint('[RECOGNIZE] logo-anchor rejected: $error');
+      if (!mounted) return;
+      setState(() {
+        _recognitionBusy = false;
+        _toast = error.statusCode == 404
+            ? 'Chưa nhận ra thiết bị trong ảnh. Thử ảnh rõ hơn.'
+            : 'Không nhận diện được thiết bị. Vui lòng thử lại.';
+      });
+    } catch (error, stack) {
+      debugPrint('[RECOGNIZE] failed: $error\n$stack');
       if (!mounted) return;
       setState(() {
         _recognitionBusy = false;
@@ -488,6 +513,9 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
       'voice' => VoiceScreen(
           device: _current.device ?? acDevice,
           template: _selectedTemplate,
+          recognitionFrame: _recognitionFrame,
+          projectedButtons: _recognitionButtons,
+          logoFrameBox: _recognitionLogoBox,
           buttonCount: _selectedTemplate?.buttons.length ?? 6,
           busy: _voiceBusy,
           sttBusy: _sttBusy,
@@ -501,6 +529,9 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
       'guide' => GuideScreen(
           device: _current.device ?? acDevice,
           template: _selectedTemplate,
+          recognitionFrame: _recognitionFrame,
+          projectedButtons: _recognitionButtons,
+          logoFrameBox: _recognitionLogoBox,
           steps: _currentGuideSteps,
           onNavigate: _nav,
         ),
@@ -665,6 +696,16 @@ class _RecognizeScreenState extends State<RecognizeScreen> {
     await widget.onUseResult(frame);
   }
 
+  /// Alternative to the live camera: pick a photo of the appliance panel
+  /// from the device gallery / file system and run recognition on it.
+  Future<void> _pickAndUse() async {
+    final XFile? file =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (file == null) return;
+    final Uint8List bytes = await file.readAsBytes();
+    await widget.onUseResult(bytes);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -723,6 +764,13 @@ class _RecognizeScreenState extends State<RecognizeScreen> {
                   ),
                 ],
               ),
+              const SizedBox(height: 12),
+              NeutralButton(
+                label: busy ? 'Đang nhận diện...' : 'Tải ảnh thiết bị lên',
+                icon: Icons.photo_library,
+                enabled: !busy,
+                onTap: _pickAndUse,
+              ),
             ],
           ),
         ),
@@ -757,6 +805,9 @@ class VoiceScreen extends StatefulWidget {
   const VoiceScreen({
     required this.device,
     required this.template,
+    this.recognitionFrame,
+    this.projectedButtons = const <String, List<ProjectedPoint>>{},
+    this.logoFrameBox,
     required this.buttonCount,
     required this.busy,
     required this.sttBusy,
@@ -770,6 +821,9 @@ class VoiceScreen extends StatefulWidget {
 
   final DemoDevice device;
   final TemplateDetailDto? template;
+  final Uint8List? recognitionFrame;
+  final Map<String, List<ProjectedPoint>> projectedButtons;
+  final LogoFrameBox? logoFrameBox;
   final int buttonCount;
   final bool busy;
   final bool sttBusy;
@@ -813,9 +867,19 @@ class _VoiceScreenState extends State<VoiceScreen> {
                         padding: const EdgeInsets.fromLTRB(16, 6, 16, 0),
                         child: widget.template == null
                             ? const RemotePanel(display: '26°C', height: 300)
-                            : TemplateDataPanel(
-                                template: widget.template!,
-                              ),
+                            : widget.recognitionFrame != null &&
+                                    widget.projectedButtons.isNotEmpty
+                                // Real recognition: show the user's own photo
+                                // with the projected button quads.
+                                ? FrameOverlayPanel(
+                                    frameBytes: widget.recognitionFrame!,
+                                    projectedButtons: widget.projectedButtons,
+                                    logoFrameBox: widget.logoFrameBox,
+                                    template: widget.template!,
+                                  )
+                                : TemplateDataPanel(
+                                    template: widget.template!,
+                                  ),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20, 20, 20, 48),
@@ -945,6 +1009,9 @@ class GuideScreen extends StatefulWidget {
   const GuideScreen({
     required this.device,
     required this.template,
+    this.recognitionFrame,
+    this.projectedButtons = const <String, List<ProjectedPoint>>{},
+    this.logoFrameBox,
     required this.steps,
     required this.onNavigate,
     super.key,
@@ -952,6 +1019,9 @@ class GuideScreen extends StatefulWidget {
 
   final DemoDevice device;
   final TemplateDetailDto? template;
+  final Uint8List? recognitionFrame;
+  final Map<String, List<ProjectedPoint>> projectedButtons;
+  final LogoFrameBox? logoFrameBox;
   final List<GuideStepData> steps;
   final void Function(String target, {DemoDevice? device}) onNavigate;
 
@@ -1013,10 +1083,21 @@ class _GuideScreenState extends State<GuideScreen> {
                     showArrow: !done,
                     height: 300,
                   )
-                : TemplateDataPanel(
-                    template: widget.template!,
-                    activeButtonId: current.buttonId,
-                  ),
+                : widget.recognitionFrame != null &&
+                        widget.projectedButtons.isNotEmpty
+                    // Real recognition: highlight the current step's button
+                    // directly on the user's photo.
+                    ? FrameOverlayPanel(
+                        frameBytes: widget.recognitionFrame!,
+                        projectedButtons: widget.projectedButtons,
+                        logoFrameBox: widget.logoFrameBox,
+                        template: widget.template!,
+                        activeButtonId: current.buttonId,
+                      )
+                    : TemplateDataPanel(
+                        template: widget.template!,
+                        activeButtonId: current.buttonId,
+                      ),
           ),
         ),
         Container(
@@ -2188,7 +2269,7 @@ class RemotePanel extends StatelessWidget {
   }
 }
 
-class TemplateDataPanel extends StatelessWidget {
+class TemplateDataPanel extends StatefulWidget {
   const TemplateDataPanel({
     required this.template,
     this.activeButtonId,
@@ -2199,9 +2280,77 @@ class TemplateDataPanel extends StatelessWidget {
   final String? activeButtonId;
 
   @override
+  State<TemplateDataPanel> createState() => _TemplateDataPanelState();
+}
+
+class _TemplateDataPanelState extends State<TemplateDataPanel> {
+  /// Button bboxes are in template-image pixel coordinates, so scaling needs
+  /// the image's true size. Resolved from the downloaded image; until then a
+  /// max-bbox-extent estimate keeps the layout from jumping too far.
+  Size? _resolvedImageSize;
+  ImageStream? _imageStream;
+  ImageStreamListener? _imageListener;
+
+  @override
+  void initState() {
+    super.initState();
+    _resolveImageSize();
+  }
+
+  @override
+  void didUpdateWidget(TemplateDataPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.template.templateImageUrl !=
+        widget.template.templateImageUrl) {
+      _resolvedImageSize = null;
+      _resolveImageSize();
+    }
+  }
+
+  void _resolveImageSize() {
+    _detachImageListener();
+    final ImageStream stream = NetworkImage(
+      '$defaultSilverTechApiBaseUrl/${widget.template.templateImageUrl}',
+    ).resolve(ImageConfiguration.empty);
+    final ImageStreamListener listener = ImageStreamListener(
+      (ImageInfo info, bool _) {
+        if (!mounted) return;
+        setState(() {
+          _resolvedImageSize = Size(
+            info.image.width.toDouble(),
+            info.image.height.toDouble(),
+          );
+        });
+      },
+      onError: (Object _, StackTrace? __) {},
+    );
+    _imageStream = stream;
+    _imageListener = listener;
+    stream.addListener(listener);
+  }
+
+  void _detachImageListener() {
+    final ImageStream? stream = _imageStream;
+    final ImageStreamListener? listener = _imageListener;
+    if (stream != null && listener != null) {
+      stream.removeListener(listener);
+    }
+    _imageStream = null;
+    _imageListener = null;
+  }
+
+  @override
+  void dispose() {
+    _detachImageListener();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final TemplateDetailDto template = widget.template;
+    final String? activeButtonId = widget.activeButtonId;
     final List<TemplateButtonDto> buttons = template.buttons;
-    final Size imageSize = _templateImageSize(template);
+    final Size imageSize = _resolvedImageSize ?? _templateImageSize(template);
     final double sourceWidth = imageSize.width;
     final double sourceHeight = imageSize.height;
 
@@ -2274,6 +2423,243 @@ class TemplateDataPanel extends StatelessWidget {
       },
     );
   }
+}
+
+/// Shows the user's own captured/uploaded frame with the button quads the
+/// vision service projected onto it — same view as the vision debugger.
+class FrameOverlayPanel extends StatefulWidget {
+  const FrameOverlayPanel({
+    required this.frameBytes,
+    required this.projectedButtons,
+    this.logoFrameBox,
+    required this.template,
+    this.activeButtonId,
+    super.key,
+  });
+
+  final Uint8List frameBytes;
+
+  /// button_id -> 4 corners in frame pixel coordinates.
+  final Map<String, List<ProjectedPoint>> projectedButtons;
+
+  /// Detected brand logo box in frame pixel coordinates; widens the crop so
+  /// the logo end of the panel stays visible.
+  final LogoFrameBox? logoFrameBox;
+  final TemplateDetailDto template;
+  final String? activeButtonId;
+
+  @override
+  State<FrameOverlayPanel> createState() => _FrameOverlayPanelState();
+}
+
+class _FrameOverlayPanelState extends State<FrameOverlayPanel> {
+  /// Quads are in frame pixel coordinates, so drawing needs the frame's
+  /// true pixel size.
+  Size? _frameSize;
+
+  @override
+  void initState() {
+    super.initState();
+    _resolveFrameSize();
+  }
+
+  @override
+  void didUpdateWidget(FrameOverlayPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!identical(oldWidget.frameBytes, widget.frameBytes)) {
+      _frameSize = null;
+      _resolveFrameSize();
+    }
+  }
+
+  Future<void> _resolveFrameSize() async {
+    final Uint8List bytes = widget.frameBytes;
+    final ui.Image image = await decodeImageFromList(bytes);
+    if (!mounted || !identical(bytes, widget.frameBytes)) return;
+    setState(() {
+      _frameSize = Size(image.width.toDouble(), image.height.toDouble());
+    });
+  }
+
+  String _labelFor(String buttonId) {
+    for (final TemplateButtonDto button in widget.template.buttons) {
+      if (button.buttonId == buttonId) {
+        return button.vietnameseName.isNotEmpty
+            ? button.vietnameseName
+            : button.label;
+      }
+    }
+    return buttonId;
+  }
+
+  /// Region of the frame to show: bounding rect of every projected button
+  /// quad plus the detected logo box, plus a margin, clamped to the frame.
+  /// Approximates the appliance panel so the user isn't shown the whole room
+  /// around it.
+  Rect _panelCrop(Size frameSize) {
+    double minX = double.infinity, minY = double.infinity;
+    double maxX = double.negativeInfinity, maxY = double.negativeInfinity;
+    for (final List<ProjectedPoint> quad in widget.projectedButtons.values) {
+      for (final ProjectedPoint p in quad) {
+        if (p.x < minX) minX = p.x;
+        if (p.y < minY) minY = p.y;
+        if (p.x > maxX) maxX = p.x;
+        if (p.y > maxY) maxY = p.y;
+      }
+    }
+    final LogoFrameBox? logo = widget.logoFrameBox;
+    if (logo != null) {
+      if (logo.left < minX) minX = logo.left;
+      if (logo.top < minY) minY = logo.top;
+      if (logo.right > maxX) maxX = logo.right;
+      if (logo.bottom > maxY) maxY = logo.bottom;
+    }
+    if (minX >= maxX || minY >= maxY) {
+      return Rect.fromLTWH(0, 0, frameSize.width, frameSize.height);
+    }
+    final double marginX = (maxX - minX) * 0.10;
+    final double marginY = (maxY - minY) * 0.10;
+    final double left = (minX - marginX).clamp(0.0, frameSize.width);
+    final double top = (minY - marginY).clamp(0.0, frameSize.height);
+    final double right = (maxX + marginX).clamp(0.0, frameSize.width);
+    final double bottom = (maxY + marginY).clamp(0.0, frameSize.height);
+    return Rect.fromLTRB(left, top, right, bottom);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Size? frameSize = _frameSize;
+    if (frameSize == null) {
+      return const SizedBox(
+        height: 220,
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+    final Rect crop = _panelCrop(frameSize);
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final double width = constraints.maxWidth;
+        final double height = width * crop.height / crop.width;
+        final double scale = width / crop.width;
+
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(18),
+          child: SizedBox(
+            width: width,
+            height: height,
+            child: Stack(
+              clipBehavior: Clip.hardEdge,
+              children: <Widget>[
+                // Full frame scaled so the crop region fills the viewport;
+                // everything outside is clipped away.
+                Positioned(
+                  left: -crop.left * scale,
+                  top: -crop.top * scale,
+                  width: frameSize.width * scale,
+                  height: frameSize.height * scale,
+                  child: Image.memory(widget.frameBytes, fit: BoxFit.fill),
+                ),
+                Positioned.fill(
+                  child: CustomPaint(
+                    painter: _ButtonQuadPainter(
+                      projectedButtons: widget.projectedButtons,
+                      scale: scale,
+                      origin: crop.topLeft,
+                      activeButtonId: widget.activeButtonId,
+                      labelFor: _labelFor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _ButtonQuadPainter extends CustomPainter {
+  _ButtonQuadPainter({
+    required this.projectedButtons,
+    required this.scale,
+    this.origin = Offset.zero,
+    required this.activeButtonId,
+    required this.labelFor,
+  });
+
+  final Map<String, List<ProjectedPoint>> projectedButtons;
+  final double scale;
+
+  /// Top-left of the visible crop in frame pixel coordinates.
+  final Offset origin;
+  final String? activeButtonId;
+  final String Function(String buttonId) labelFor;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    projectedButtons.forEach((String buttonId, List<ProjectedPoint> quad) {
+      if (quad.length < 3) return;
+      final bool active = buttonId == activeButtonId;
+      final Color color = active ? SilverTokens.green : SilverTokens.red;
+
+      Offset map(ProjectedPoint p) =>
+          Offset((p.x - origin.dx) * scale, (p.y - origin.dy) * scale);
+
+      final Path path = Path()
+        ..moveTo(map(quad.first).dx, map(quad.first).dy);
+      for (final ProjectedPoint point in quad.skip(1)) {
+        path.lineTo(map(point).dx, map(point).dy);
+      }
+      path.close();
+
+      canvas.drawPath(
+        path,
+        Paint()
+          ..style = PaintingStyle.fill
+          ..color = color.withValues(alpha: active ? 0.30 : 0.12),
+      );
+      canvas.drawPath(
+        path,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = active ? 3 : 1.6
+          ..color = color,
+      );
+
+      // Only the active button gets a label so the overlay stays readable
+      // for elderly users; idle quads are outlines only.
+      if (active) {
+        final TextPainter text = TextPainter(
+          text: TextSpan(
+            text: labelFor(buttonId),
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 13,
+              fontWeight: FontWeight.w900,
+              backgroundColor: Color(0xCC0C1116),
+            ),
+          ),
+          textDirection: TextDirection.ltr,
+          maxLines: 1,
+          ellipsis: '…',
+        )..layout(maxWidth: size.width);
+        final Rect bounds = path.getBounds();
+        final double dx =
+            (bounds.center.dx - text.width / 2).clamp(0, size.width - text.width);
+        final double dy = (bounds.top - text.height - 2)
+            .clamp(0, size.height - text.height);
+        text.paint(canvas, Offset(dx, dy));
+      }
+    });
+  }
+
+  @override
+  bool shouldRepaint(_ButtonQuadPainter oldDelegate) =>
+      oldDelegate.projectedButtons != projectedButtons ||
+      oldDelegate.scale != scale ||
+      oldDelegate.origin != origin ||
+      oldDelegate.activeButtonId != activeButtonId;
 }
 
 Size _templateImageSize(TemplateDetailDto template) {
