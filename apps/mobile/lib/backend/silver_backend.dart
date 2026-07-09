@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart' show Uint8List, kIsWeb;
 
 import '../guidance/guidance_client.dart';
+import '../submissions/submission_client.dart';
 import '../templates/template_repository_client.dart';
 import '../vision/logo_anchor_client.dart';
 import '../vision/vision_log_client.dart';
@@ -28,6 +29,15 @@ abstract class SilverBackendGateway {
   Future<GuidanceOutputDto> createGuidance({
     required String templateId,
     required String userQueryText,
+  });
+
+  /// Upload the panel photo, then file the proposed labels for admin review.
+  /// Returns the submission id.
+  Future<String> submitTemplate({
+    required Uint8List imageBytes,
+    required String brand,
+    required String applianceType,
+    required Map<String, Object?> Function(String imageUrl) buildLabels,
   });
 }
 
@@ -61,6 +71,7 @@ class HttpSilverBackendGateway implements SilverBackendGateway {
     GuidanceClient? guidance,
     VisionLogClient? visionLogs,
     LogoAnchorClient? logoAnchor,
+    SubmissionClient? submissions,
   })  : _templates = templates ??
             TemplateRepositoryClient(baseUrl: defaultSilverTechApiBaseUrl),
         _guidance =
@@ -68,12 +79,32 @@ class HttpSilverBackendGateway implements SilverBackendGateway {
         _visionLogs =
             visionLogs ?? VisionLogClient(baseUrl: defaultSilverTechApiBaseUrl),
         _logoAnchor = logoAnchor ??
-            LogoAnchorClient(baseUrl: defaultSilverTechApiBaseUrl);
+            LogoAnchorClient(baseUrl: defaultSilverTechApiBaseUrl),
+        _submissions = submissions ??
+            SubmissionClient(baseUrl: defaultSilverTechApiBaseUrl);
 
   final TemplateRepositoryClient _templates;
   final GuidanceClient _guidance;
   final VisionLogClient _visionLogs;
   final LogoAnchorClient _logoAnchor;
+  final SubmissionClient _submissions;
+
+  @override
+  Future<String> submitTemplate({
+    required Uint8List imageBytes,
+    required String brand,
+    required String applianceType,
+    required Map<String, Object?> Function(String imageUrl) buildLabels,
+  }) async {
+    final String imageUrl =
+        await _submissions.uploadImage(imageBytes: imageBytes);
+    return _submissions.createSubmission(
+      brand: brand,
+      applianceType: applianceType,
+      imageUrl: imageUrl,
+      proposedLabels: buildLabels(imageUrl),
+    );
+  }
 
   @override
   Future<BackendRecognitionResult> recognizeFromFrame(

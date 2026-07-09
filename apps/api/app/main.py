@@ -42,10 +42,18 @@ app.mount(
     StaticFiles(directory=ROOT / "data" / "templates"),
     name="template-images",
 )
+# Both are written at runtime, so a fresh clone has neither; StaticFiles refuses
+# to mount a directory that does not exist yet.
+_tts_dir = ROOT / "data" / "tts"
+_tts_dir.mkdir(parents=True, exist_ok=True)
+app.mount("/data/tts", StaticFiles(directory=_tts_dir), name="tts-audio")
+
+_submissions_dir = ROOT / "data" / "submissions"
+_submissions_dir.mkdir(parents=True, exist_ok=True)
 app.mount(
-    "/data/tts",
-    StaticFiles(directory=ROOT / "data" / "tts"),
-    name="tts-audio",
+    "/data/submissions",
+    StaticFiles(directory=_submissions_dir),
+    name="submission-images",
 )
 
 
