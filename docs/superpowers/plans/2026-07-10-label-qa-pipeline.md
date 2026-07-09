@@ -1835,7 +1835,10 @@ def _check_button(
             issues.append("raw_id_in_text")
 
     evidence = button.get("manual_evidence")
-    quote = (evidence or {}).get("quote", "").strip() if isinstance(evidence, dict) else ""
+    raw_quote = evidence.get("quote") if isinstance(evidence, dict) else None
+    # A non-string quote (Gemini can null the field inside an otherwise-present object)
+    # counts as no quote. qc is the last gate before the draft: it flags, never crashes.
+    quote = raw_quote.strip() if isinstance(raw_quote, str) else ""
     if not quote or _fold(quote) not in _fold(manual_text):
         issues.append("no_evidence")
 
@@ -1943,7 +1946,7 @@ def run_qc(
     # manual_button_missing / detected_not_in_manual — why the pipeline needs both inputs.
     detected_ids = {(b.get("button_id") or "").strip() for b in buttons} - {""}
     named_in_manual = _manual_names(manual_text)
-    missing = sorted(named_in_manual - detected_ids - {"", "the", "a"})
+    missing = sorted(named_in_manual - detected_ids - {"", "the"})
     unseen = sorted(
         button_id for button_id in detected_ids if button_id not in named_in_manual
     )
@@ -1980,7 +1983,7 @@ def run_qc(
 PYTHONPATH=apps/vision-tools pytest -q apps/vision-tools/tests/test_label_qc.py
 ```
 
-Expected: `24 passed`.
+Expected: `27 passed`.
 
 `_manual_names` is crude by design. If `test_manual_button_missing_is_a_template_issue` or `test_detected_not_in_manual_is_a_template_issue` fails, print `_manual_names(MANUAL)` and adjust the regex until `{"start", "stop", "nhan"}`-ish comes out. Do not tighten it beyond what makes the two tests pass — it feeds a warning, not a gate.
 
@@ -2894,7 +2897,7 @@ manual PDF plus a panel photo into a draft label file with per-button QC flags �
 make test-label
 ```
 
-Expected: `106 passed` (12 + 24 + 8 + 11 + 7 + 24 + 8 + 13).
+Expected: `109 passed` (12 + 24 + 8 + 11 + 7 + 27 + 8 + 13).
 
 - [ ] **Step 5: Commit**
 
