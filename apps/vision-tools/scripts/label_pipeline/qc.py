@@ -52,7 +52,8 @@ def _check_button(
             issues.append("raw_id_in_text")
 
     evidence = button.get("manual_evidence")
-    quote = (evidence or {}).get("quote", "").strip() if isinstance(evidence, dict) else ""
+    raw_quote = evidence.get("quote") if isinstance(evidence, dict) else ""
+    quote = raw_quote.strip() if isinstance(raw_quote, str) else ""
     if not quote or _fold(quote) not in _fold(manual_text):
         issues.append("no_evidence")
 
@@ -160,7 +161,7 @@ def run_qc(
     # manual_button_missing / detected_not_in_manual — why the pipeline needs both inputs.
     detected_ids = {(b.get("button_id") or "").strip() for b in buttons} - {""}
     named_in_manual = _manual_names(manual_text)
-    missing = sorted(named_in_manual - detected_ids - {"", "the", "a"})
+    missing = sorted(named_in_manual - detected_ids - {"", "the"})
     unseen = sorted(
         button_id for button_id in detected_ids if button_id not in named_in_manual
     )

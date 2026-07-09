@@ -81,6 +81,21 @@ def test_evidence_matching_ignores_surrounding_whitespace():
     assert "no_evidence" not in issues_for([ok])[0]
 
 
+def test_no_evidence_is_flagged_when_the_quote_is_null_and_does_not_raise():
+    bad = button(manual_evidence={"page": 1, "quote": None})
+    assert "no_evidence" in issues_for([bad])[0]
+
+
+def test_no_evidence_is_flagged_when_the_quote_is_not_a_string_and_does_not_raise():
+    bad = button(manual_evidence={"page": 1, "quote": 123})
+    assert "no_evidence" in issues_for([bad])[0]
+
+
+def test_no_evidence_is_flagged_when_the_quote_is_whitespace_only():
+    bad = button(manual_evidence={"page": 1, "quote": "   "})
+    assert "no_evidence" in issues_for([bad])[0]
+
+
 def test_low_confidence_is_flagged_against_the_threshold():
     assert "low_confidence" in issues_for([button(confidence=0.4)])[0]
     assert "low_confidence" not in issues_for([button(confidence=0.5)])[0]
