@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
@@ -19,7 +20,8 @@ from pathlib import Path
 from scripts.logo_anchor import compute_button_offsets
 
 ROOT = Path(__file__).resolve().parents[3]
-DEFAULT_DB = ROOT / "apps" / "api" / "silvertech.sqlite3"
+# Match app.storage.database, so seeding and offsets always land in the same file.
+DEFAULT_DB = Path(os.getenv("SILVERTECH_DB_PATH", str(ROOT / "apps" / "api" / "silvertech.sqlite3")))
 
 OFFSETS_TABLE_SQL = """
 CREATE TABLE IF NOT EXISTS button_offsets (
