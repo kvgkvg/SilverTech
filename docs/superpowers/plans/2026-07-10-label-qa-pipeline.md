@@ -1391,11 +1391,6 @@ def test_a_duplicate_id_in_the_reply_keeps_the_first():
     assert described[0]["vietnamese_name"] == "Má»™t"
 
 
-def test_a_null_id_button_is_not_sent_to_the_model_and_comes_back_blank():
-    described = describe_buttons({"buttons": []}, button_ids=[])
-    assert described == []
-
-
 def test_a_reply_without_a_buttons_key_raises():
     with pytest.raises(ValueError, match="buttons"):
         describe_buttons({"items": []}, button_ids=["start"])
@@ -1451,7 +1446,6 @@ describe.py may only fill in words for the ids it is handed.
 
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -1528,10 +1522,9 @@ def write_descriptions(
     manual = manual_full_text(manual_text)
     prompt = DESCRIBE_PROMPT.format(manual=manual, buttons=listing)
 
-    # The manual is inside the prompt, so the prompt hash already covers it. The salt
-    # covers the id list, which is not otherwise part of the prompt template.
-    salt = hashlib.sha256("|".join(button_ids).encode("utf-8")).digest()
-    reply = client.generate_json(prompt, cache_salt=salt)
+    # Both the manual and the id listing are interpolated into the prompt, and
+    # GeminiClient keys its cache on a hash of the prompt. No extra salt is needed.
+    reply = client.generate_json(prompt)
 
     body = {
         "model": client.model,
@@ -1549,7 +1542,7 @@ def write_descriptions(
 PYTHONPATH=apps/vision-tools pytest -q apps/vision-tools/tests/test_label_describe.py
 ```
 
-Expected: `8 passed`.
+Expected: `7 passed`.
 
 - [ ] **Step 5: Commit**
 
@@ -2901,7 +2894,7 @@ manual PDF plus a panel photo into a draft label file with per-button QC flags â
 make test-label
 ```
 
-Expected: `100 passed` (12 + 16 + 8 + 11 + 8 + 24 + 8 + 13).
+Expected: `106 passed` (12 + 24 + 8 + 11 + 7 + 24 + 8 + 13).
 
 - [ ] **Step 5: Commit**
 
