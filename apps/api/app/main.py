@@ -42,6 +42,13 @@ app.mount(
     StaticFiles(directory=ROOT / "data" / "templates"),
     name="template-images",
 )
+_submissions_dir = ROOT / "data" / "submissions"
+_submissions_dir.mkdir(parents=True, exist_ok=True)
+app.mount(
+    "/data/submissions",
+    StaticFiles(directory=_submissions_dir),
+    name="submission-images",
+)
 
 
 @app.get("/health")

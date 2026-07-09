@@ -48,6 +48,16 @@ class FakeBackendGateway implements SilverBackendGateway {
   }
 
   @override
+  Future<String> submitTemplate({
+    required Uint8List imageBytes,
+    required String brand,
+    required String applianceType,
+    required Map<String, Object?> Function(String imageUrl) buildLabels,
+  }) async {
+    return 'submission-fake';
+  }
+
+  @override
   Future<GuidanceOutputDto> createGuidance({
     required String templateId,
     required String userQueryText,
@@ -177,7 +187,7 @@ void main() {
     expect(find.textContaining('Đang nhận diện trực tiếp'), findsOneWidget);
   });
 
-  testWidgets('adds a device through four-step wizard',
+  testWidgets('opens add-device wizard and requires a photo first',
       (WidgetTester tester) async {
     await pumpApp(tester);
 
@@ -186,29 +196,13 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Thêm thiết bị mới'), findsOneWidget);
-    expect(find.text('Chụp ảnh'), findsOneWidget);
-    expect(find.text('Chạm để chụp ảnh'), findsOneWidget);
-
-    await tester.tap(find.text('Chạm để chụp ảnh'));
-    await tester.pumpAndSettle();
+    expect(find.text('Chụp ảnh mặt trước thiết bị'), findsOneWidget);
+    expect(find.text('Chọn từ thư viện'), findsOneWidget);
+    // No photo picked yet, so the wizard must not advance.
     await tester.tap(find.text('Tiếp theo'));
     await tester.pumpAndSettle();
-
-    expect(find.text('Hệ thống đang nhận diện'), findsOneWidget);
-    await tester.tap(find.text('Tiếp theo'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Kiểm tra tên các nút'), findsOneWidget);
-    await tester.tap(find.text('Tiếp theo'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Xác nhận và lưu'), findsOneWidget);
-    await tester.tap(find.text('Lưu thiết bị'));
-    await tester.pumpAndSettle();
-
-    expect(find.text('Thiết bị của tôi'), findsOneWidget);
-    expect(find.text('Điều hòa phòng khách'), findsOneWidget);
-    expect(find.textContaining('Đã lưu'), findsOneWidget);
+    expect(find.text('Chụp ảnh mặt trước thiết bị'), findsOneWidget);
+    expect(find.text('Thông tin thiết bị'), findsNothing);
   });
 
   testWidgets('opens settings with accessibility controls',

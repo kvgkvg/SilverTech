@@ -536,6 +536,7 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
           onNavigate: _nav,
         ),
       'add' => AddDeviceScreen(
+          backend: widget.backend,
           onNavigate: _nav,
           onSave: _saveDevice,
         ),
@@ -1210,13 +1211,35 @@ class _GuideScreenState extends State<GuideScreen> {
   }
 }
 
+/// One labeled button box drawn by the user (rect in image pixel coords).
+class LabeledButtonBox {
+  LabeledButtonBox({required this.rect, required this.name, this.usage = ''});
+
+  Rect rect;
+  String name;
+
+  /// What the button does (function_description); falls back to [name].
+  String usage;
+}
+
+/// Appliance type choices; value = backend appliance_type, label = Vietnamese.
+const List<(String, String)> kApplianceTypes = <(String, String)>[
+  ('washer', 'Máy giặt'),
+  ('microwave', 'Lò vi sóng'),
+  ('air_conditioner', 'Điều hòa'),
+  ('tv', 'TV'),
+  ('other', 'Khác'),
+];
+
 class AddDeviceScreen extends StatefulWidget {
   const AddDeviceScreen({
+    required this.backend,
     required this.onNavigate,
     required this.onSave,
     super.key,
   });
 
+  final SilverBackendGateway backend;
   final void Function(String target, {DemoDevice? device}) onNavigate;
   final void Function(String name) onSave;
 
@@ -1226,19 +1249,212 @@ class AddDeviceScreen extends StatefulWidget {
 
 class _AddDeviceScreenState extends State<AddDeviceScreen> {
   int step = 0;
-  bool captured = false;
-  String name = 'Điều hòa phòng khách';
-  List<String> labels = <String>[
-    'Nguồn',
-    'Nhiệt độ +',
-    'Nhiệt độ -',
-    'Chế độ',
-    'Quạt',
-    'Hẹn giờ'
-  ];
+  bool submitting = false;
+
+  // Step 0 - photo.
+  Uint8List? photo;
+  Size? photoSize;
+
+  // Step 1 - the only fields the user has to type; everything else is
+  // derived (ids, template_code, display name, panel bbox, button ids).
+  final TextEditingController brandController = TextEditingController();
+  final TextEditingController modelController = TextEditingController();
+  final TextEditingController customTypeController = TextEditingController();
+  String applianceType = 'washer';
+
+  // Step 2 - labeling: first drawn box is the brand logo, the rest are
+  // buttons.
+  Rect? logoBox;
+  List<LabeledButtonBox> buttons = <LabeledButtonBox>[];
+
+  @override
+  void dispose() {
+    brandController.dispose();
+    modelController.dispose();
+    customTypeController.dispose();
+    super.dispose();
+  }
+
+  // ---- auto-assigned fields -------------------------------------------
+
+  String _slug(String value) {
+    final String lowered = value.trim().toLowerCase();
+    final String replaced = lowered.replaceAll(RegExp(r'[^a-z0-9]+'), '_');
+    return replaced.replaceAll(RegExp(r'^_+|_+$'), '');
+  }
+
+  /// "Khác" lets the user type their own appliance type; the slug of that
+  /// text becomes the backend appliance_type.
+  String get effectiveApplianceType {
+    if (applianceType != 'other') return applianceType;
+    final String custom = _slug(customTypeController.text);
+    return custom.isEmpty ? 'other' : custom;
+  }
+
+  String get _baseSlug {
+    final List<String> parts = <String>[
+      _slug(brandController.text),
+      _slug(effectiveApplianceType),
+      if (_slug(modelController.text).isNotEmpty) _slug(modelController.text),
+    ];
+    return parts.where((String p) => p.isNotEmpty).join('_');
+  }
+
+  String get autoDeviceId =>
+      'device_${_slug(brandController.text)}_${_slug(effectiveApplianceType)}_01';
+  String get autoTemplateId => 'template_$_baseSlug';
+  String get autoTemplateCode => '${_baseSlug}_v1';
+
+  String get autoDisplayName {
+    final String typeVi = applianceType == 'other'
+        ? (customTypeController.text.trim().isEmpty
+            ? 'Thiết bị'
+            : customTypeController.text.trim())
+        : kApplianceTypes
+            .firstWhere((t) => t.$1 == applianceType,
+                orElse: () => ('other', 'Thiết bị'))
+            .$2;
+    final String brand = brandController.text.trim();
+    final String model = modelController.text.trim();
+    return <String>[typeVi, brand, model]
+        .where((String p) => p.isNotEmpty)
+        .join(' ');
+  }
+
+  /// Panel bbox auto-assigned: union of logo + button boxes + 5% margin.
+  Rect? get autoPanelBox {
+    final List<Rect> rects = <Rect>[
+      if (logoBox != null) logoBox!,
+      ...buttons.map((b) => b.rect),
+    ];
+    if (rects.isEmpty || photoSize == null) return null;
+    Rect union = rects.first;
+    for (final Rect r in rects.skip(1)) {
+      union = union.expandToInclude(r);
+    }
+    final double mx = union.width * 0.05;
+    final double my = union.height * 0.05;
+    return Rect.fromLTRB(
+      (union.left - mx).clamp(0.0, photoSize!.width),
+      (union.top - my).clamp(0.0, photoSize!.height),
+      (union.right + mx).clamp(0.0, photoSize!.width),
+      (union.bottom + my).clamp(0.0, photoSize!.height),
+    );
+  }
+
+  Map<String, Object?> _bboxJson(Rect r) => <String, Object?>{
+        'x': r.left.round(),
+        'y': r.top.round(),
+        'width': r.width.round(),
+        'height': r.height.round(),
+      };
+
+  Map<String, Object?> _buildLabels(String imageUrl) {
+    final String now = DateTime.now().toUtc().toIso8601String();
+    return <String, Object?>{
+      'device': <String, Object?>{
+        'id': autoDeviceId,
+        'brand': brandController.text.trim(),
+        'appliance_type': effectiveApplianceType,
+        'model_name': modelController.text.trim(),
+        'display_name': autoDisplayName,
+        'status': 'submitted',
+        'created_at': now,
+        'updated_at': now,
+      },
+      'template': <String, Object?>{
+        'id': autoTemplateId,
+        'device_id': autoDeviceId,
+        'template_code': autoTemplateCode,
+        'template_image_url': imageUrl,
+        'logo_bbox': logoBox == null ? null : _bboxJson(logoBox!),
+        'panel_bbox': autoPanelBox == null ? null : _bboxJson(autoPanelBox!),
+        'feature_descriptor_path': null,
+        'version': 1,
+        'status': 'submitted',
+        'created_at': now,
+        'updated_at': now,
+      },
+      'buttons': <Object?>[
+        for (final (int i, LabeledButtonBox b) in buttons.indexed)
+          <String, Object?>{
+            'id': 'btn_${autoTemplateCode}_${i + 1}',
+            'template_id': autoTemplateId,
+            'button_id': '${i + 1}',
+            'label': b.name,
+            'vietnamese_name': b.name,
+            'function_description':
+                b.usage.trim().isEmpty ? b.name : b.usage.trim(),
+            'bbox_template_coordinates': _bboxJson(b.rect),
+            'polygon_template_coordinates': null,
+            'button_type': 'physical',
+            'created_at': now,
+            'updated_at': now,
+          },
+      ],
+    };
+  }
+
+  // ---- actions ---------------------------------------------------------
+
+  Future<void> _pickPhoto(ImageSource source) async {
+    final XFile? file = await ImagePicker().pickImage(source: source);
+    if (file == null) return;
+    final Uint8List bytes = await file.readAsBytes();
+    final ui.Image decoded = await decodeImageFromList(bytes);
+    if (!mounted) return;
+    setState(() {
+      photo = bytes;
+      photoSize =
+          Size(decoded.width.toDouble(), decoded.height.toDouble());
+      // New photo invalidates any boxes drawn on the previous one.
+      logoBox = null;
+      buttons = <LabeledButtonBox>[];
+    });
+  }
+
+  Future<void> _submit() async {
+    final Uint8List? bytes = photo;
+    if (bytes == null || submitting) return;
+    setState(() => submitting = true);
+    try {
+      await widget.backend.submitTemplate(
+        imageBytes: bytes,
+        brand: brandController.text.trim(),
+        applianceType: effectiveApplianceType,
+        buildLabels: _buildLabels,
+      );
+      if (!mounted) return;
+      widget.onSave(autoDisplayName);
+    } on FriendlyBackendException catch (error) {
+      if (!mounted) return;
+      setState(() => submitting = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error.messageVi)),
+      );
+    } catch (error) {
+      debugPrint('[SUBMIT] failed: $error');
+      if (!mounted) return;
+      setState(() => submitting = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Không gửi được. Vui lòng thử lại.')),
+      );
+    }
+  }
+
+  bool get _canGoNext => switch (step) {
+        0 => photo != null,
+        1 => brandController.text.trim().isNotEmpty &&
+            (applianceType != 'other' ||
+                customTypeController.text.trim().isNotEmpty),
+        2 => logoBox != null && buttons.isNotEmpty,
+        _ => true,
+      };
 
   void _next() => setState(() => step += 1);
   void _prev() => setState(() => step -= 1);
+
+  // ---- UI ---------------------------------------------------------------
 
   @override
   Widget build(BuildContext context) {
@@ -1254,58 +1470,41 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
             children: <Widget>[
-              if (step == 0)
-                PhotoStep(
-                    captured: captured,
-                    onCapture: () => setState(() => captured = true)),
-              if (step == 1) const DetectStep(),
-              if (step == 2)
-                LabelStep(
-                    labels: labels,
-                    onChanged: (List<String> next) =>
-                        setState(() => labels = next)),
-              if (step == 3)
-                ConfirmStep(
-                    name: name,
-                    count: labels.length,
-                    onChanged: (String next) => setState(() => name = next)),
+              if (step == 0) _photoStep(),
+              if (step == 1) _infoStep(),
+              if (step == 2) _labelStep(),
+              if (step == 3) _confirmStep(),
             ],
           ),
         ),
         FooterActions(
-          column: step == 0 || step == 3,
+          column: step == 3,
           children: <Widget>[
-            if (step == 0) ...<Widget>[
-              NeutralButton(
-                  label: 'Ảnh chưa rõ? Chụp lại',
-                  onTap: () => setState(() => captured = false)),
-              const SizedBox(height: 10),
-              PrimaryButton(
-                  label: 'Tiếp theo',
-                  iconAfter: Icons.arrow_forward,
-                  enabled: captured,
-                  onTap: _next),
-            ],
-            if (step == 1 || step == 2) ...<Widget>[
-              Expanded(
-                flex: 5,
-                child: NeutralButton(
-                    label: 'Bước trước', icon: Icons.arrow_back, onTap: _prev),
-              ),
-              const SizedBox(width: 10),
+            if (step < 3) ...<Widget>[
+              if (step > 0)
+                Expanded(
+                  flex: 5,
+                  child: NeutralButton(
+                      label: 'Bước trước',
+                      icon: Icons.arrow_back,
+                      onTap: _prev),
+                ),
+              if (step > 0) const SizedBox(width: 10),
               Expanded(
                 flex: 6,
                 child: PrimaryButton(
                     label: 'Tiếp theo',
                     iconAfter: Icons.arrow_forward,
+                    enabled: _canGoNext,
                     onTap: _next),
               ),
             ],
             if (step == 3) ...<Widget>[
               GreenButton(
-                  label: 'Lưu thiết bị',
+                  label: submitting ? 'Đang gửi...' : 'Lưu thiết bị',
                   icon: Icons.check,
-                  onTap: () => widget.onSave(name)),
+                  enabled: !submitting,
+                  onTap: _submit),
               const SizedBox(height: 10),
               NeutralButton(label: 'Quay lại chỉnh sửa', onTap: _prev),
             ],
@@ -1314,6 +1513,480 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
       ],
     );
   }
+
+  Widget _photoStep() {
+    return Column(
+      children: <Widget>[
+        const InfoCard(
+            index: '1',
+            title: 'Chụp ảnh mặt trước thiết bị',
+            subtitle: 'Đảm bảo đủ ánh sáng, thấy rõ toàn bộ nút bấm'),
+        const SizedBox(height: 16),
+        if (photo != null) ...<Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(14),
+            child: Image.memory(photo!, fit: BoxFit.contain),
+          ),
+          const SizedBox(height: 12),
+        ],
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: NeutralButton(
+                label: 'Chụp ảnh',
+                icon: Icons.photo_camera,
+                onTap: () => _pickPhoto(ImageSource.camera),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: NeutralButton(
+                label: 'Chọn từ thư viện',
+                icon: Icons.photo_library,
+                onTap: () => _pickPhoto(ImageSource.gallery),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 16),
+        const TipBox(),
+      ],
+    );
+  }
+
+  Widget _infoStep() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        const InfoCard(
+            index: '2',
+            title: 'Thông tin thiết bị',
+            subtitle: 'Chỉ cần 3 thông tin, phần còn lại tự điền'),
+        const SizedBox(height: 16),
+        _fieldCard('HÃNG (bắt buộc)', brandController, 'VD: Electrolux'),
+        const SizedBox(height: 12),
+        const Text('LOẠI THIẾT BỊ',
+            style: TextStyle(
+                color: SilverTokens.ink2,
+                fontSize: 13.5,
+                fontWeight: FontWeight.w900)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: <Widget>[
+            for (final (String value, String labelVi) in kApplianceTypes)
+              ChoiceChip(
+                label: Text(labelVi,
+                    style: const TextStyle(fontWeight: FontWeight.w900)),
+                selected: applianceType == value,
+                onSelected: (_) => setState(() => applianceType = value),
+              ),
+          ],
+        ),
+        if (applianceType == 'other') ...<Widget>[
+          const SizedBox(height: 12),
+          _fieldCard('LOẠI THIẾT BỊ KHÁC (bắt buộc)', customTypeController,
+              'VD: Nồi chiên không dầu'),
+        ],
+        const SizedBox(height: 12),
+        _fieldCard('MODEL (không bắt buộc)', modelController, 'VD: EWF9024'),
+        if (!_canGoNext) ...<Widget>[
+          const SizedBox(height: 10),
+          Text(
+            brandController.text.trim().isEmpty
+                ? '⚠ Điền tên HÃNG để tiếp tục'
+                : '⚠ Điền LOẠI THIẾT BỊ KHÁC để tiếp tục',
+            style: const TextStyle(
+                color: SilverTokens.red,
+                fontSize: 15,
+                fontWeight: FontWeight.w900),
+          ),
+        ],
+        const SizedBox(height: 14),
+        SilverCard(
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const Text('Tự điền giúp ông/bà:',
+                  style: TextStyle(
+                      color: SilverTokens.ink2,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w900)),
+              const SizedBox(height: 6),
+              Text('Tên: $autoDisplayName\nMã mẫu: $autoTemplateCode',
+                  style: const TextStyle(
+                      color: SilverTokens.ink,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700)),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _fieldCard(
+      String label, TextEditingController controller, String hint) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(label,
+            style: const TextStyle(
+                color: SilverTokens.ink2,
+                fontSize: 13.5,
+                fontWeight: FontWeight.w900)),
+        const SizedBox(height: 7),
+        TextFormField(
+          controller: controller,
+          onChanged: (_) => setState(() {}),
+          style: const TextStyle(
+              color: SilverTokens.ink,
+              fontSize: 18,
+              fontWeight: FontWeight.w900),
+          decoration: InputDecoration(
+            hintText: hint,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(13),
+              borderSide:
+                  const BorderSide(color: SilverTokens.blueTint2, width: 2),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(13),
+              borderSide: const BorderSide(color: SilverTokens.blue, width: 2),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _labelStep() {
+    final bool logoDone = logoBox != null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        InfoCard(
+            index: '3',
+            title: logoDone
+                ? 'Khoanh vùng từng NÚT bấm'
+                : 'Khoanh vùng LOGO hãng trước',
+            subtitle: logoDone
+                ? 'Kéo tay trên ảnh để vẽ khung quanh mỗi nút'
+                : 'Kéo tay trên ảnh để vẽ khung quanh logo hãng'),
+        const SizedBox(height: 12),
+        if (photo != null && photoSize != null)
+          LabelCanvas(
+            photo: photo!,
+            photoSize: photoSize!,
+            logoBox: logoBox,
+            buttons: buttons,
+            onBoxDrawn: (Rect rect) {
+              setState(() {
+                if (logoBox == null) {
+                  logoBox = rect;
+                } else {
+                  buttons = <LabeledButtonBox>[
+                    ...buttons,
+                    LabeledButtonBox(
+                        rect: rect, name: 'Nút ${buttons.length + 1}'),
+                  ];
+                }
+              });
+            },
+          ),
+        const SizedBox(height: 10),
+        if (logoDone)
+          NeutralButton(
+            label: 'Vẽ lại logo',
+            icon: Icons.refresh,
+            compact: true,
+            onTap: () => setState(() => logoBox = null),
+          ),
+        const SizedBox(height: 6),
+        for (final (int i, LabeledButtonBox b) in buttons.indexed)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: SilverCard(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      CircleAvatar(
+                        radius: 15,
+                        backgroundColor: SilverTokens.redSoft,
+                        child: Text('${i + 1}',
+                            style: const TextStyle(
+                                color: SilverTokens.red,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w900)),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: TextFormField(
+                          initialValue: b.name,
+                          onChanged: (String value) =>
+                              setState(() => b.name = value),
+                          style: const TextStyle(
+                              color: SilverTokens.ink,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w900),
+                          decoration: const InputDecoration(
+                              hintText: 'Tên nút',
+                              border: InputBorder.none,
+                              isDense: true),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete_outline,
+                            color: SilverTokens.red),
+                        tooltip: 'Xoá nút này',
+                        onPressed: () =>
+                            setState(() => buttons = <LabeledButtonBox>[
+                              ...buttons.sublist(0, i),
+                              ...buttons.sublist(i + 1),
+                            ]),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 42),
+                    child: TextFormField(
+                      initialValue: b.usage,
+                      onChanged: (String value) =>
+                          setState(() => b.usage = value),
+                      minLines: 2,
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
+                      style: const TextStyle(
+                          color: SilverTokens.ink2,
+                          fontSize: 15,
+                          height: 1.35,
+                          fontWeight: FontWeight.w700),
+                      decoration: InputDecoration(
+                        hintText: 'Công dụng (VD: Bắt đầu chu trình giặt)',
+                        isDense: true,
+                        filled: true,
+                        fillColor: SilverTokens.surface2,
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 10),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Widget _confirmStep() {
+    return Column(
+      children: <Widget>[
+        const InfoCard(
+            index: '4',
+            title: 'Xác nhận và lưu',
+            subtitle: 'Kiểm tra lại rồi gửi cho quản trị viên duyệt',
+            tone: 'green'),
+        const SizedBox(height: 16),
+        SilverCard(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(autoDisplayName,
+                  style: const TextStyle(
+                      color: SilverTokens.ink,
+                      fontSize: 19,
+                      fontWeight: FontWeight.w900)),
+              const SizedBox(height: 8),
+              Text(
+                'Mã mẫu: $autoTemplateCode\n'
+                'Logo: ${logoBox == null ? "chưa có" : "đã khoanh"}\n'
+                '${buttons.length} nút đã gắn nhãn',
+                style: const TextStyle(
+                    color: SilverTokens.ink2,
+                    fontSize: 15,
+                    height: 1.5,
+                    fontWeight: FontWeight.w700),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+/// Photo with drag-to-draw labeling. Boxes are stored in image pixel
+/// coordinates so the export matches the label web tool.
+class LabelCanvas extends StatefulWidget {
+  const LabelCanvas({
+    required this.photo,
+    required this.photoSize,
+    required this.logoBox,
+    required this.buttons,
+    required this.onBoxDrawn,
+    super.key,
+  });
+
+  final Uint8List photo;
+  final Size photoSize;
+  final Rect? logoBox;
+  final List<LabeledButtonBox> buttons;
+  final void Function(Rect rectInImagePixels) onBoxDrawn;
+
+  @override
+  State<LabelCanvas> createState() => _LabelCanvasState();
+}
+
+class _LabelCanvasState extends State<LabelCanvas> {
+  Offset? _dragStart;
+  Offset? _dragCurrent;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final double width = constraints.maxWidth;
+        final double scale = width / widget.photoSize.width;
+        final double height = widget.photoSize.height * scale;
+
+        return GestureDetector(
+          onPanStart: (DragStartDetails d) => setState(() {
+            _dragStart = d.localPosition;
+            _dragCurrent = d.localPosition;
+          }),
+          onPanUpdate: (DragUpdateDetails d) =>
+              setState(() => _dragCurrent = d.localPosition),
+          onPanEnd: (_) {
+            final Offset? start = _dragStart;
+            final Offset? end = _dragCurrent;
+            setState(() {
+              _dragStart = null;
+              _dragCurrent = null;
+            });
+            if (start == null || end == null) return;
+            final Rect widgetRect = Rect.fromPoints(start, end);
+            // Ignore accidental taps: box must be meaningfully sized.
+            if (widgetRect.width < 12 || widgetRect.height < 12) return;
+            final Rect imageRect = Rect.fromLTRB(
+              (widgetRect.left / scale).clamp(0.0, widget.photoSize.width),
+              (widgetRect.top / scale).clamp(0.0, widget.photoSize.height),
+              (widgetRect.right / scale).clamp(0.0, widget.photoSize.width),
+              (widgetRect.bottom / scale).clamp(0.0, widget.photoSize.height),
+            );
+            widget.onBoxDrawn(imageRect);
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(14),
+            child: SizedBox(
+              width: width,
+              height: height,
+              child: Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  Image.memory(widget.photo, fit: BoxFit.fill),
+                  CustomPaint(
+                    painter: _LabelCanvasPainter(
+                      scale: scale,
+                      logoBox: widget.logoBox,
+                      buttons: widget.buttons,
+                      dragRect: _dragStart != null && _dragCurrent != null
+                          ? Rect.fromPoints(_dragStart!, _dragCurrent!)
+                          : null,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _LabelCanvasPainter extends CustomPainter {
+  _LabelCanvasPainter({
+    required this.scale,
+    required this.logoBox,
+    required this.buttons,
+    required this.dragRect,
+  });
+
+  final double scale;
+  final Rect? logoBox;
+  final List<LabeledButtonBox> buttons;
+
+  /// In-progress drag, already in widget coordinates.
+  final Rect? dragRect;
+
+  Rect _toWidget(Rect r) => Rect.fromLTRB(
+      r.left * scale, r.top * scale, r.right * scale, r.bottom * scale);
+
+  void _drawBox(Canvas canvas, Rect rect, Color color, String tag) {
+    canvas.drawRect(
+      rect,
+      Paint()
+        ..style = PaintingStyle.fill
+        ..color = color.withValues(alpha: 0.15),
+    );
+    canvas.drawRect(
+      rect,
+      Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2
+        ..color = color,
+    );
+    final TextPainter text = TextPainter(
+      text: TextSpan(
+        text: tag,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontWeight: FontWeight.w900,
+          backgroundColor: color,
+        ),
+      ),
+      textDirection: TextDirection.ltr,
+    )..layout();
+    text.paint(canvas, rect.topLeft + const Offset(2, 2));
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (logoBox != null) {
+      _drawBox(canvas, _toWidget(logoBox!), SilverTokens.blue, 'LOGO');
+    }
+    for (final (int i, LabeledButtonBox b) in buttons.indexed) {
+      _drawBox(canvas, _toWidget(b.rect), SilverTokens.red, '${i + 1}');
+    }
+    if (dragRect != null) {
+      canvas.drawRect(
+        dragRect!,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2
+          ..color = SilverTokens.green,
+      );
+    }
+  }
+
+  @override
+  bool shouldRepaint(_LabelCanvasPainter oldDelegate) =>
+      oldDelegate.logoBox != logoBox ||
+      oldDelegate.buttons != buttons ||
+      oldDelegate.dragRect != dragRect ||
+      oldDelegate.scale != scale;
 }
 
 class DevicesScreen extends StatelessWidget {
@@ -2873,7 +3546,7 @@ class StepperHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<String> labels = <String>[
       'Chụp ảnh',
-      'Nhận diện',
+      'Thông tin',
       'Gắn nhãn',
       'Xác nhận'
     ];
@@ -2939,254 +3612,6 @@ class StepperHeader extends StatelessWidget {
             )
             .toList(),
       ),
-    );
-  }
-}
-
-class PhotoStep extends StatelessWidget {
-  const PhotoStep({required this.captured, required this.onCapture, super.key});
-
-  final bool captured;
-  final VoidCallback onCapture;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        const InfoCard(
-            index: '1',
-            title: 'Chụp ảnh mặt trước thiết bị',
-            subtitle: 'Đảm bảo đủ ánh sáng, thấy rõ toàn bộ nút bấm'),
-        const SizedBox(height: 16),
-        GestureDetector(
-          onTap: onCapture,
-          child: Container(
-            width: double.infinity,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 34),
-            decoration: BoxDecoration(
-              color: captured ? SilverTokens.greenTint : SilverTokens.surface2,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(
-                color: captured ? SilverTokens.green : const Color(0xFFC3D4E2),
-                width: 2,
-                style: captured ? BorderStyle.solid : BorderStyle.solid,
-              ),
-            ),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: captured ? SilverTokens.green : SilverTokens.surface,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Icon(captured ? Icons.check : Icons.photo_camera,
-                      color: captured ? Colors.white : SilverTokens.ink2,
-                      size: 30),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  captured ? 'Đã chụp ảnh' : 'Chạm để chụp ảnh',
-                  style: const TextStyle(
-                      color: SilverTokens.ink,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w900),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  captured
-                      ? 'Chạm lại để chụp ảnh khác'
-                      : 'hoặc chọn từ thư viện',
-                  style: const TextStyle(
-                      color: SilverTokens.ink2,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        const TipBox(),
-      ],
-    );
-  }
-}
-
-class DetectStep extends StatelessWidget {
-  const DetectStep({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Column(
-      children: <Widget>[
-        InfoCard(
-            index: '2',
-            title: 'Hệ thống đang nhận diện',
-            subtitle: 'Đã tìm thấy các nút bấm trên ảnh của ông/bà'),
-        SizedBox(height: 16),
-        CameraCard(scanning: true),
-        SizedBox(height: 16),
-        Row(
-          children: <Widget>[
-            Expanded(
-                child: StatBox(big: '1', small: 'thiết bị', tone: 'green')),
-            SizedBox(width: 12),
-            Expanded(child: StatBox(big: '6', small: 'nút bấm', tone: 'red')),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class LabelStep extends StatelessWidget {
-  const LabelStep({
-    required this.labels,
-    required this.onChanged,
-    super.key,
-  });
-
-  final List<String> labels;
-  final void Function(List<String> labels) onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        const InfoCard(
-            index: '3',
-            title: 'Kiểm tra tên các nút',
-            subtitle: 'Chạm để sửa nếu tên nút chưa đúng'),
-        const SizedBox(height: 16),
-        ...labels.indexed.map(
-          (entry) => Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: SilverCard(
-              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-              child: Row(
-                children: <Widget>[
-                  CircleAvatar(
-                    radius: 15,
-                    backgroundColor: SilverTokens.redSoft,
-                    child: Text('${entry.$1 + 1}',
-                        style: const TextStyle(
-                            color: SilverTokens.red,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w900)),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextFormField(
-                      initialValue: entry.$2,
-                      onChanged: (String value) {
-                        final List<String> next = <String>[...labels];
-                        next[entry.$1] = value;
-                        onChanged(next);
-                      },
-                      style: const TextStyle(
-                          color: SilverTokens.ink,
-                          fontSize: 17,
-                          fontWeight: FontWeight.w900),
-                      decoration: const InputDecoration(
-                          border: InputBorder.none, isDense: true),
-                    ),
-                  ),
-                  const Icon(Icons.check, color: SilverTokens.ink3),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class ConfirmStep extends StatelessWidget {
-  const ConfirmStep({
-    required this.name,
-    required this.count,
-    required this.onChanged,
-    super.key,
-  });
-
-  final String name;
-  final int count;
-  final ValueChanged<String> onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        const InfoCard(
-            index: '4',
-            title: 'Xác nhận và lưu',
-            subtitle: 'Đặt tên dễ nhớ cho thiết bị này',
-            tone: 'green'),
-        const SizedBox(height: 16),
-        SilverCard(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Text('TÊN THIẾT BỊ',
-                  style: TextStyle(
-                      color: SilverTokens.ink2,
-                      fontSize: 13.5,
-                      fontWeight: FontWeight.w900)),
-              const SizedBox(height: 7),
-              TextFormField(
-                initialValue: name,
-                onChanged: onChanged,
-                style: const TextStyle(
-                    color: SilverTokens.ink,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w900),
-                decoration: InputDecoration(
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(13),
-                    borderSide: const BorderSide(
-                        color: SilverTokens.blueTint2, width: 2),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(13),
-                    borderSide:
-                        const BorderSide(color: SilverTokens.blue, width: 2),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 14),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 13),
-                decoration: BoxDecoration(
-                    color: SilverTokens.greenTint,
-                    borderRadius: BorderRadius.circular(13)),
-                child: Row(
-                  children: <Widget>[
-                    const Icon(Icons.check,
-                        color: SilverTokens.green, size: 24),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        '$count nút đã gắn nhãn xong',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            color: SilverTokens.ink,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w900),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }
