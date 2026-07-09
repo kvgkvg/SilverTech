@@ -169,6 +169,29 @@ void main() {
     expect(find.textContaining('Đang nhận diện trực tiếp'), findsOneWidget);
   });
 
+  testWidgets('asks for guidance when voice is opened from a saved device card',
+      (WidgetTester tester) async {
+    // Tapping a device in "Đã dùng gần đây" skips the recognise screen, so the
+    // shell has no template yet. Guidance must still work from there.
+    final fakeBackend = await pumpApp(tester);
+
+    await tester.tap(find.text('TV Samsung'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Mic'), findsOneWidget);
+
+    await tester.tap(find.text('Mic'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Hỏi hướng dẫn'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Chưa nhận diện thiết bị. Quét lại.'), findsNothing);
+    expect(fakeBackend.guidanceCalls, 1);
+    expect(fakeBackend.lastTemplateId,
+        'template_panasonic_microwave_nn_gt35hm_v1');
+    expect(find.text('Nhấn nút Bắt đầu.'), findsOneWidget);
+  });
+
   testWidgets('adds a device through four-step wizard',
       (WidgetTester tester) async {
     await pumpApp(tester);

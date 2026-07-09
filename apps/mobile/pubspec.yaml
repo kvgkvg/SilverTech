@@ -11,7 +11,7 @@ dependencies:
     sdk: flutter
   camera: ^0.11.0
   http: ^1.2.0
-  flutter_tts: ^4.0.0
+  audioplayers: ^6.1.0
   sherpa_onnx: ^1.12.0
   record: ^6.0.0
   path_provider: ^2.1.5

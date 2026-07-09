@@ -4,6 +4,7 @@ import os
 import time
 
 from app.services.button_validator import validate_guidance_buttons
+from app.services.instruction_sanitizer import humanize_button_ids
 from app.services.llm_log_service import write_llm_log
 from app.services.llm_prompt_builder import build_prompt_summary
 from app.services.llm_response_parser import parse_guidance
@@ -57,6 +58,7 @@ def create_guidance(template_id: str, user_query: str) -> dict:
         raise GuidanceError("invalid_button") from exc
     latency_ms = int((time.perf_counter() - started) * 1000)
     payload = guidance.model_dump()
+    _humanize_instructions(payload, template)
     _attach_audio_urls(payload)
     write_llm_log(
         template_id=template_id,
@@ -69,6 +71,13 @@ def create_guidance(template_id: str, user_query: str) -> dict:
         latency_ms=latency_ms,
     )
     return payload
+
+
+def _humanize_instructions(payload: dict, template: dict) -> None:
+    buttons = template.get("buttons", [])
+    for step in payload.get("steps", []):
+        step["instruction_vi"] = humanize_button_ids(step["instruction_vi"], buttons)
+        step["expected_result"] = humanize_button_ids(step["expected_result"], buttons)
 
 
 def _attach_audio_urls(payload: dict) -> None:

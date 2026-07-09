@@ -8,6 +8,13 @@ from app.storage.database import db_session, initialize_database
 from app.storage.seed_data import BUTTONS, DEVICES, NOW, TEMPLATES
 
 
+def is_labeled_button(button: dict) -> bool:
+    """A button is usable only once it has both an id and a name to speak."""
+    return bool(str(button.get("button_id", "")).strip()) and bool(
+        str(button.get("vietnamese_name", "")).strip()
+    )
+
+
 def seed_database() -> None:
     initialize_database()
     with db_session() as conn:
@@ -83,6 +90,14 @@ def seed_database() -> None:
                 },
             )
             for button in label["buttons"]:
+                if not is_labeled_button(button):
+                    # The labelling tool saves boxes that were drawn but never
+                    # named. Seeding them would offer the LLM an unusable button.
+                    print(
+                        f"skipping unlabeled button {button['id']} "
+                        f"in {label_path.name}"
+                    )
+                    continue
                 conn.execute(
                     """
                     INSERT OR REPLACE INTO buttons
@@ -101,6 +116,11 @@ def seed_database() -> None:
                         ),
                     },
                 )
+        # INSERT OR REPLACE cannot remove rows a previous seed wrote, so drop any
+        # unlabeled button left behind by an older run of this script.
+        conn.execute(
+            "DELETE FROM buttons WHERE trim(button_id) = '' OR trim(vietnamese_name) = ''"
+        )
 
 
 if __name__ == "__main__":

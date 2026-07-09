@@ -110,7 +110,10 @@ def _system_prompt() -> str:
         '"safety_note": Vietnamese string or null'
         "}. "
         "Use only the provided template buttons and their descriptions. "
-        "Do not invent button IDs. Keep each instruction short, direct, and safe."
+        "Do not invent button IDs. Keep each instruction short, direct, and safe. "
+        "instruction_vi and expected_result are read aloud by a Vietnamese "
+        "text-to-speech engine, so they must never contain a raw button_id such as "
+        "'time_1_min'. Refer to a button by its vietnamese_name instead."
     )
 
 

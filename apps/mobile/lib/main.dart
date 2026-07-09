@@ -8,6 +8,7 @@ import 'guidance/guidance_client.dart';
 import 'templates/template_repository_client.dart';
 import 'voice/stt_client.dart';
 import 'voice/stt_factory.dart';
+import 'voice/tts_manager.dart';
 
 void main() {
   runApp(const SilverTechApp());
@@ -401,9 +402,30 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
     });
   }
 
+  /// Loads the demo template when the voice screen was reached without going
+  /// through recognition — tapping a saved device card skips that screen.
+  Future<TemplateDetailDto?> _ensureTemplate() async {
+    if (_selectedTemplate != null) {
+      return _selectedTemplate;
+    }
+    try {
+      final result = await widget.backend.recognizeDefault();
+      if (!mounted) return null;
+      setState(() {
+        _selectedTemplate = result.template;
+        _recognitionMatchScore = result.matchScore;
+      });
+      return result.template;
+    } catch (_) {
+      return null;
+    }
+  }
+
   Future<void> _askBackendGuidance(DemoDevice device,
       {required String query}) async {
-    final String? templateId = _selectedTemplate?.id;
+    final TemplateDetailDto? template = await _ensureTemplate();
+    if (!mounted) return;
+    final String? templateId = template?.id;
     if (templateId == null) {
       setState(() => _toast = 'Chưa nhận diện thiết bị. Quét lại.');
       return;
@@ -994,6 +1016,30 @@ class GuideScreen extends StatefulWidget {
 
 class _GuideScreenState extends State<GuideScreen> {
   int step = 0;
+  final TTSManager _tts = TTSManager();
+
+  @override
+  void initState() {
+    super.initState();
+    _speakCurrentStep();
+  }
+
+  @override
+  void dispose() {
+    _tts.dispose();
+    super.dispose();
+  }
+
+  /// Audio is best-effort: a step without `audio_url`, an unreachable backend,
+  /// or a browser blocking autoplay must never break the guidance flow.
+  void _speakCurrentStep() {
+    unawaited(_tts.speak(widget.steps[step].audioUrl).catchError((_) {}));
+  }
+
+  void _goToStep(int next) {
+    setState(() => step = next);
+    _speakCurrentStep();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1005,7 +1051,7 @@ class _GuideScreenState extends State<GuideScreen> {
           device: widget.device,
           trailing: IconButton(
             icon: const Icon(Icons.volume_up, color: Colors.white),
-            onPressed: () {},
+            onPressed: _speakCurrentStep,
           ),
           onBack: () => widget.onNavigate('back'),
         ),
@@ -1087,7 +1133,7 @@ class _GuideScreenState extends State<GuideScreen> {
                             label: 'Lặp lại',
                             icon: Icons.refresh,
                             compact: true,
-                            onTap: () {})),
+                            onTap: _speakCurrentStep)),
                     const SizedBox(width: 8),
                     Expanded(
                       child: NeutralButton(
@@ -1095,7 +1141,7 @@ class _GuideScreenState extends State<GuideScreen> {
                         icon: Icons.arrow_back,
                         compact: true,
                         enabled: step > 0,
-                        onTap: () => setState(() => step -= 1),
+                        onTap: () => _goToStep(step - 1),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -1104,7 +1150,7 @@ class _GuideScreenState extends State<GuideScreen> {
                         label: 'Tiếp theo',
                         iconAfter: Icons.arrow_forward,
                         compact: true,
-                        onTap: () => setState(() => step += 1),
+                        onTap: () => _goToStep(step + 1),
                       ),
                     ),
                   ],
@@ -1116,7 +1162,7 @@ class _GuideScreenState extends State<GuideScreen> {
                         child: NeutralButton(
                             label: 'Làm lại',
                             icon: Icons.refresh,
-                            onTap: () => setState(() => step = 0))),
+                            onTap: () => _goToStep(0))),
                     const SizedBox(width: 10),
                     Expanded(
                       flex: 2,
