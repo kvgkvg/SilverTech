@@ -1765,8 +1765,10 @@ def test_the_report_counts_passes_and_flags():
 
 
 def test_issues_are_sorted_so_the_report_is_stable():
+    # Asserting the exact list, not `== sorted(itself)`, which would pass whatever
+    # qc.py returned. The quote is in the manual, so no_evidence must not appear.
     bad = button(button_id="", vietnamese_name="", confidence=0.1)
-    assert issues_for([bad])[0] == sorted(issues_for([bad])[0])
+    assert issues_for([bad])[0] == ["low_confidence", "missing_id", "missing_name"]
 ```
 
 - [ ] **Step 2: Run the tests and watch them fail**
@@ -2016,7 +2018,9 @@ say where a button is. Both only warn."
 **Interfaces:**
 - Consumes: every stage.
 - Produces:
-  - `build_draft(*, detections, described, qc_buttons, device, template) -> dict` — pure; assembles the label JSON.
+  - `build_draft(*, detections, qc_buttons, device, template) -> dict` — pure; assembles the label JSON.
+    `described` is deliberately absent: `_merge` folds the descriptions into `qc_buttons`
+    before `run_qc` sees them, so `build_draft` would never read it.
   - `run(args: argparse.Namespace, *, client: GeminiClient) -> dict`
   - `main(argv: list[str] | None = None) -> int`
 
@@ -2077,14 +2081,13 @@ QC_BUTTONS = [
 
 def test_the_draft_has_the_three_top_level_blocks_seed_expects():
     draft = build_draft(
-        detections=DETECTIONS, described={}, qc_buttons=QC_BUTTONS,
-        device=DEVICE, template=TEMPLATE,
+        detections=DETECTIONS, qc_buttons=QC_BUTTONS, device=DEVICE, template=TEMPLATE,
     )
     assert set(draft) == {"device", "template", "buttons"}
 
 
 def test_each_button_carries_the_columns_seed_inserts():
-    draft = build_draft(detections=DETECTIONS, described={}, qc_buttons=QC_BUTTONS,
+    draft = build_draft(detections=DETECTIONS, qc_buttons=QC_BUTTONS,
                         device=DEVICE, template=TEMPLATE)
     button = draft["buttons"][0]
     for key in ("id", "template_id", "button_id", "label", "vietnamese_name",
@@ -2094,20 +2097,20 @@ def test_each_button_carries_the_columns_seed_inserts():
 
 
 def test_the_button_row_id_follows_the_shipped_naming():
-    draft = build_draft(detections=DETECTIONS, described={}, qc_buttons=QC_BUTTONS,
+    draft = build_draft(detections=DETECTIONS, qc_buttons=QC_BUTTONS,
                         device=DEVICE, template=TEMPLATE)
     assert draft["buttons"][0]["id"] == "btn_panasonic_microwave_nn_gt35hm_start"
     assert draft["buttons"][0]["template_id"] == TEMPLATE["id"]
 
 
 def test_qc_rides_inside_the_button_so_label_web_reads_one_file():
-    draft = build_draft(detections=DETECTIONS, described={}, qc_buttons=QC_BUTTONS,
+    draft = build_draft(detections=DETECTIONS, qc_buttons=QC_BUTTONS,
                         device=DEVICE, template=TEMPLATE)
     assert draft["buttons"][0]["qc"]["status"] == "pass"
 
 
 def test_the_detected_regions_populate_logo_and_panel_bbox():
-    draft = build_draft(detections=DETECTIONS, described={}, qc_buttons=QC_BUTTONS,
+    draft = build_draft(detections=DETECTIONS, qc_buttons=QC_BUTTONS,
                         device=DEVICE, template=TEMPLATE)
     assert draft["template"]["logo_bbox"] == {"x": 1, "y": 2, "width": 3, "height": 4}
     assert draft["template"]["panel_bbox"] is None
@@ -2115,21 +2118,21 @@ def test_the_detected_regions_populate_logo_and_panel_bbox():
 
 def test_a_null_id_button_gets_a_row_id_from_its_index_not_from_none():
     qc_buttons = [{**QC_BUTTONS[0], "button_id": None, "label_text": ""}]
-    draft = build_draft(detections=DETECTIONS, described={}, qc_buttons=qc_buttons,
+    draft = build_draft(detections=DETECTIONS, qc_buttons=qc_buttons,
                         device=DEVICE, template=TEMPLATE)
     assert draft["buttons"][0]["id"].endswith("_unnamed_0")
     assert draft["buttons"][0]["button_id"] == ""
 
 
 def test_the_draft_is_json_serialisable_without_ascii_escaping():
-    draft = build_draft(detections=DETECTIONS, described={}, qc_buttons=QC_BUTTONS,
+    draft = build_draft(detections=DETECTIONS, qc_buttons=QC_BUTTONS,
                         device=DEVICE, template=TEMPLATE)
     text = json.dumps(draft, ensure_ascii=False)
     assert "Bắt đầu" in text
 
 
 def test_the_draft_button_type_defaults_to_touch():
-    draft = build_draft(detections=DETECTIONS, described={}, qc_buttons=QC_BUTTONS,
+    draft = build_draft(detections=DETECTIONS, qc_buttons=QC_BUTTONS,
                         device=DEVICE, template=TEMPLATE)
     assert draft["buttons"][0]["button_type"] == "touch"
 ```
@@ -2190,7 +2193,6 @@ def _now() -> str:
 def build_draft(
     *,
     detections: dict,
-    described: dict,
     qc_buttons: list[dict],
     device: dict,
     template: dict,
@@ -2293,8 +2295,7 @@ def run(args: argparse.Namespace, *, client: GeminiClient) -> dict:
     }
 
     draft = build_draft(
-        detections=detections, described=described, qc_buttons=qc_buttons,
-        device=device, template=template,
+        detections=detections, qc_buttons=qc_buttons, device=device, template=template,
     )
 
     # Never overwrite a reviewed label file.
