@@ -41,8 +41,12 @@ def test_a_page_below_the_threshold_is_ocred():
 def test_the_threshold_is_the_character_count_of_the_stripped_text():
     # 39 characters -> OCR; 40 -> text layer. Whitespace does not count.
     client = FakeClient(replies=[{"text": "ocr"}])
-    assert extract_manual([PageSource(1, "a" * 39, b"img")], client=client)[0]["mode"] == "gemini_ocr"
-    assert extract_manual([PageSource(1, "a" * 40, b"img")], client=FakeClient())[0]["mode"] == "text_layer"
+    below = extract_manual([PageSource(1, "a" * 39, b"img")], client=client)
+    at_threshold = extract_manual(
+        [PageSource(1, "a" * 40, b"img")], client=FakeClient()
+    )
+    assert below[0]["mode"] == "gemini_ocr"
+    assert at_threshold[0]["mode"] == "text_layer"
 
 
 def test_a_scanned_page_with_no_embedded_image_records_an_error():
