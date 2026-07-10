@@ -82,6 +82,12 @@ class GuidanceOutputDto {
   final String intent;
   final List<GuidanceStepDto> steps;
   final String? safetyNote;
+
+  @override
+  String toString() {
+    return 'GuidanceOutputDto(intent: $intent, steps: ${steps.length}, '
+        'safetyNote: $safetyNote)';
+  }
 }
 
 class GuidanceStepDto {
@@ -108,4 +114,10 @@ class GuidanceStepDto {
   final String buttonId;
   final String expectedResult;
   final String? audioUrl;
+
+  @override
+  String toString() {
+    return 'GuidanceStepDto(stepNumber: $stepNumber, buttonId: $buttonId, '
+        'instructionVi: $instructionVi)';
+  }
 }

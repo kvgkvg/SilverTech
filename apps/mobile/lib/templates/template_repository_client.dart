@@ -79,6 +79,12 @@ class FriendlyBackendException implements Exception {
   final String messageVi;
   final String recoveryAction;
   final int statusCode;
+
+  @override
+  String toString() {
+    return 'FriendlyBackendException(statusCode: $statusCode, '
+        'recoveryAction: $recoveryAction, messageVi: $messageVi)';
+  }
 }
 
 class TemplateSummaryDto {
@@ -111,6 +117,12 @@ class TemplateSummaryDto {
   final int version;
   final String status;
   final String templateImageUrl;
+
+  @override
+  String toString() {
+    return 'TemplateSummaryDto(id: $id, brand: $brand, '
+        'applianceType: $applianceType, version: $version, status: $status)';
+  }
 }
 
 class TemplateDetailDto {
@@ -150,6 +162,13 @@ class TemplateDetailDto {
   final String status;
   final String templateImageUrl;
   final List<TemplateButtonDto> buttons;
+
+  @override
+  String toString() {
+    return 'TemplateDetailDto(id: $id, brand: $brand, '
+        'applianceType: $applianceType, version: $version, '
+        'status: $status, buttons: ${buttons.length})';
+  }
 }
 
 class TemplateButtonDto {
@@ -181,6 +200,12 @@ class TemplateButtonDto {
   final String functionDescription;
   final TemplateBBoxDto bbox;
   final String buttonType;
+
+  @override
+  String toString() {
+    return 'TemplateButtonDto(buttonId: $buttonId, label: $label, '
+        'buttonType: $buttonType)';
+  }
 }
 
 class TemplateBBoxDto {
@@ -204,4 +229,9 @@ class TemplateBBoxDto {
   final double y;
   final double width;
   final double height;
+
+  @override
+  String toString() {
+    return 'TemplateBBoxDto(x: $x, y: $y, width: $width, height: $height)';
+  }
 }

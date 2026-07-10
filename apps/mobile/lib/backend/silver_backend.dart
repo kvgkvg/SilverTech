@@ -17,6 +17,7 @@ String get defaultSilverTechApiBaseUrl {
   if (_apiBaseUrlOverride.isNotEmpty) return _apiBaseUrlOverride;
   return kIsWeb ? 'http://localhost:8000' : 'http://10.0.2.2:8000';
 }
+
 const String demoTemplateId = 'template_panasonic_microwave_nn_gt35hm_v1';
 
 abstract class SilverBackendGateway {
@@ -65,6 +66,14 @@ class BackendRecognitionResult {
 
   /// Brand logo's box in frame pixel coordinates, when the pose was detected.
   final LogoFrameBox? logoFrameBox;
+
+  @override
+  String toString() {
+    return 'BackendRecognitionResult(templateId: ${template.id}, '
+        'matchScore: $matchScore, tier: $tier, brand: $brand, '
+        'projectedButtons: ${projectedButtons.length}, '
+        'logoFrameBox: $logoFrameBox)';
+  }
 }
 
 class HttpSilverBackendGateway implements SilverBackendGateway {

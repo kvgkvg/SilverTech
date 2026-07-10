@@ -105,6 +105,12 @@ class DemoDevice {
   final String last;
   final String? templateId;
 
+  @override
+  String toString() {
+    return 'DemoDevice(id: $id, kind: $kind, tone: $tone, name: $name, '
+        'short: $short, model: $model, last: $last, templateId: $templateId)';
+  }
+
   DemoDevice copyWith({
     String? id,
     String? kind,
@@ -214,6 +220,12 @@ class GuideStepData {
   final String title;
   final String hint;
   final String? audioUrl;
+
+  @override
+  String toString() {
+    return 'GuideStepData(kind: $kind, buttonId: $buttonId, title: $title, '
+        'hint: $hint, audioUrl: $audioUrl)';
+  }
 }
 
 class RouteState {
@@ -221,6 +233,11 @@ class RouteState {
 
   final String screen;
   final DemoDevice? device;
+
+  @override
+  String toString() {
+    return 'RouteState(screen: $screen, device: $device)';
+  }
 }
 
 const DemoDevice acDevice = DemoDevice(
@@ -474,8 +491,7 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
       setState(() {
         _selectedTemplate = result.template;
         _recognitionMatchScore = result.matchScore;
-        _recognitionFrame =
-            result.projectedButtons.isEmpty ? null : frame;
+        _recognitionFrame = result.projectedButtons.isEmpty ? null : frame;
         _recognitionButtons = result.projectedButtons;
         _recognitionLogoBox = result.logoFrameBox;
         _recognitionBusy = false;
@@ -669,7 +685,7 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
       short: template.templateCode,
       model: template.templateCode,
       last: 'Vừa nhận diện',
-          templateId: template.id,
+      templateId: template.id,
     );
   }
 
@@ -884,8 +900,7 @@ class _RecognizeScreenState extends State<RecognizeScreen> {
   double get matchScore => widget.matchScore;
 
   Future<void> _captureAndUse() async {
-    final Uint8List? frame =
-        await _cameraKey.currentState?.captureFrame();
+    final Uint8List? frame = await _cameraKey.currentState?.captureFrame();
     await widget.onUseResult(frame);
   }
 
@@ -1598,8 +1613,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
     if (!mounted) return;
     setState(() {
       photo = bytes;
-      photoSize =
-          Size(decoded.width.toDouble(), decoded.height.toDouble());
+      photoSize = Size(decoded.width.toDouble(), decoded.height.toDouble());
       // New photo invalidates any boxes drawn on the previous one.
       logoBox = null;
       buttons = <LabeledButtonBox>[];
@@ -1902,8 +1916,7 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: SilverCard(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
               child: Column(
                 children: <Widget>[
                   Row(
@@ -1939,9 +1952,9 @@ class _AddDeviceScreenState extends State<AddDeviceScreen> {
                         tooltip: 'Xoá nút này',
                         onPressed: () =>
                             setState(() => buttons = <LabeledButtonBox>[
-                              ...buttons.sublist(0, i),
-                              ...buttons.sublist(i + 1),
-                            ]),
+                                  ...buttons.sublist(0, i),
+                                  ...buttons.sublist(i + 1),
+                                ]),
                       ),
                     ],
                   ),
@@ -3517,8 +3530,7 @@ class _ButtonQuadPainter extends CustomPainter {
       Offset map(ProjectedPoint p) =>
           Offset((p.x - origin.dx) * scale, (p.y - origin.dy) * scale);
 
-      final Path path = Path()
-        ..moveTo(map(quad.first).dx, map(quad.first).dy);
+      final Path path = Path()..moveTo(map(quad.first).dx, map(quad.first).dy);
       for (final ProjectedPoint point in quad.skip(1)) {
         path.lineTo(map(point).dx, map(point).dy);
       }
@@ -3556,10 +3568,10 @@ class _ButtonQuadPainter extends CustomPainter {
           ellipsis: '…',
         )..layout(maxWidth: size.width);
         final Rect bounds = path.getBounds();
-        final double dx =
-            (bounds.center.dx - text.width / 2).clamp(0, size.width - text.width);
-        final double dy = (bounds.top - text.height - 2)
-            .clamp(0, size.height - text.height);
+        final double dx = (bounds.center.dx - text.width / 2)
+            .clamp(0, size.width - text.width);
+        final double dy =
+            (bounds.top - text.height - 2).clamp(0, size.height - text.height);
         text.paint(canvas, Offset(dx, dy));
       }
     });
