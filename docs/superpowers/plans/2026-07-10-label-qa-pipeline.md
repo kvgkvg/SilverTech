@@ -314,8 +314,10 @@ Append to `.gitignore`, under the existing `# Local data and secrets` block:
 
 ```gitignore
 .cache/
+.pipeline/
 data/manuals/*.pdf
 data/templates/labels/*.draft.json
+data/templates/labels/*.qc_report.json
 ```
 
 Drafts are ignored on purpose: a draft is a proposal, and only the reviewed file a human renames belongs in git.
@@ -2099,7 +2101,7 @@ def test_each_button_carries_the_columns_seed_inserts():
 def test_the_button_row_id_follows_the_shipped_naming():
     draft = build_draft(detections=DETECTIONS, qc_buttons=QC_BUTTONS,
                         device=DEVICE, template=TEMPLATE)
-    assert draft["buttons"][0]["id"] == "btn_panasonic_microwave_nn_gt35hm_start"
+    assert draft["buttons"][0]["id"] == "btn_panasonic_microwave_nn_gt35hm_v1_start"
     assert draft["buttons"][0]["template_id"] == TEMPLATE["id"]
 
 
@@ -2197,14 +2199,16 @@ def build_draft(
     device: dict,
     template: dict,
 ) -> dict:
-    device_slug = device["id"].removeprefix("device_")
+    # label_web/app.js:286 builds the row id from the template code, _v1 included,
+    # and recomputes it on every save. Diverge and the first save renames every row.
+    code = template["template_code"]
     rows: list[dict] = []
     for index, button in enumerate(qc_buttons):
         button_id = (button.get("button_id") or "").strip()
         suffix = button_id or f"unnamed_{index}"
         rows.append(
             {
-                "id": f"btn_{device_slug}_{suffix}",
+                "id": f"btn_{code}_{suffix}",
                 "template_id": template["id"],
                 "button_id": button_id,
                 "label": button.get("label_text") or button_id,
@@ -2222,6 +2226,8 @@ def build_draft(
     return {
         "device": {**device, "created_at": _now(), "updated_at": _now()},
         "template": {
+            # seed.py binds :feature_descriptor_path; omitting it fails the insert.
+            "feature_descriptor_path": None,
             **template,
             "logo_bbox": regions.get("logo"),
             "panel_bbox": regions.get("panel"),
@@ -2233,10 +2239,12 @@ def build_draft(
 
 
 def _merge(detections: dict, described: dict) -> list[dict]:
-    by_id = {b["button_id"]: b for b in described["buttons"]}
+    # Skip null ids: otherwise every icon-only button would share one description.
+    by_id = {b["button_id"]: b for b in described["buttons"] if b.get("button_id")}
     merged: list[dict] = []
     for detection in detections["detections"]:
-        description = by_id.get(detection["button_id"], {})
+        button_id = detection["button_id"]
+        description = by_id.get(button_id, {}) if button_id else {}
         merged.append(
             {
                 "button_id": detection["button_id"],
@@ -2274,10 +2282,11 @@ def run(args: argparse.Namespace, *, client: GeminiClient) -> dict:
         confidence_threshold=args.confidence_threshold,
     )
 
-    template_code = args.template_code or slug(f"{args.brand} {args.appliance_type} {args.model_name}") + "_v1"
-    device_slug = template_code.removesuffix("_v1")
+    template_code = args.template_code or (
+        slug(f"{args.brand} {args.appliance_type} {args.model_name}") + "_v1"
+    )
     device = {
-        "id": f"device_{device_slug}",
+        "id": f"device_{template_code.removesuffix('_v1')}",
         "brand": args.brand,
         "appliance_type": args.appliance_type,
         "model_name": args.model_name,
@@ -2351,7 +2360,7 @@ if __name__ == "__main__":
 PYTHONPATH=apps/vision-tools pytest -q apps/vision-tools/tests/test_label_pipeline.py
 ```
 
-Expected: `8 passed`.
+Expected: `11 passed`.
 
 - [ ] **Step 5: Check the CLI refuses to clobber a reviewed file**
 
@@ -2897,7 +2906,7 @@ manual PDF plus a panel photo into a draft label file with per-button QC flags â
 make test-label
 ```
 
-Expected: `109 passed` (12 + 24 + 8 + 11 + 7 + 27 + 8 + 13).
+Expected: `114 passed` (12 + 24 + 8 + 11 + 7 + 27 + 11 + 13) â€” 114 today, 127 once Task 8 lands.
 
 - [ ] **Step 5: Commit**
 
