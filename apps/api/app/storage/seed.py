@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 from app.models.common import encode_json
 from app.storage.database import ROOT
@@ -13,6 +14,27 @@ def is_labeled_button(button: dict) -> bool:
     return bool(str(button.get("button_id", "")).strip()) and bool(
         str(button.get("vietnamese_name", "")).strip()
     )
+
+
+def is_reviewed_label_file(path: Path) -> bool:
+    """True for a reviewed label ready to seed, false for a pipeline artifact.
+
+    `label_pipeline/pipeline.py` writes two files next to every reviewed label:
+    `<code>.draft.json` (template status "draft", which the `templates.status`
+    CHECK constraint rejects) and `<code>.qc_report.json` (no `device`/`template`
+    keys at all). Both live in the same directory and match `*.json`, so the glob
+    in `seed_database` must exclude them explicitly.
+
+    Matched on the suffix chain, not a substring, so a reviewed file renamed from
+    "foo.draft.json" to "foo.json" (dropping ".draft" as the docs instruct) is
+    still picked up. A file literally named "draft.json" (no template-code
+    prefix) is not something the pipeline ever writes -- it always writes
+    "<template_code>.draft.json" with a non-empty code -- so this predicate
+    does not special-case it and would treat it as a reviewed label. That is a
+    deliberate judgement call, not an oversight.
+    """
+    name = path.name
+    return not name.endswith(".draft.json") and not name.endswith(".qc_report.json")
 
 
 def seed_database() -> None:
@@ -63,7 +85,8 @@ def seed_database() -> None:
                 """,
                 row,
             )
-        for label_path in sorted((ROOT / "data" / "templates" / "labels").glob("*.json")):
+        label_paths = (ROOT / "data" / "templates" / "labels").glob("*.json")
+        for label_path in sorted(p for p in label_paths if is_reviewed_label_file(p)):
             label = json.loads(label_path.read_text(encoding="utf-8"))
             device = label["device"]
             template = label["template"]
