@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:http/http.dart' as http;
 
+import '../backend/api_http_client.dart';
 import '../templates/template_repository_client.dart' show FriendlyBackendException;
 
 /// Client for the template submission workflow:
@@ -12,7 +13,7 @@ class SubmissionClient {
   SubmissionClient({
     required this.baseUrl,
     http.Client? httpClient,
-  }) : _httpClient = httpClient ?? http.Client();
+  }) : _httpClient = httpClient ?? ApiHttpClient();
 
   final String baseUrl;
   final http.Client _httpClient;

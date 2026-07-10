@@ -6,6 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'backend/api_http_client.dart';
 import 'backend/silver_backend.dart';
 import 'guidance/guidance_client.dart';
 import 'templates/template_repository_client.dart';
@@ -3019,6 +3020,7 @@ class _TemplateDataPanelState extends State<TemplateDataPanel> {
     _detachImageListener();
     final ImageStream stream = NetworkImage(
       '$defaultSilverTechApiBaseUrl/${widget.template.templateImageUrl}',
+      headers: apiRequestHeaders,
     ).resolve(ImageConfiguration.empty);
     final ImageStreamListener listener = ImageStreamListener(
       (ImageInfo info, bool _) {
@@ -3085,6 +3087,7 @@ class _TemplateDataPanelState extends State<TemplateDataPanel> {
               Positioned.fill(
                 child: Image.network(
                   '$defaultSilverTechApiBaseUrl/${template.templateImageUrl}',
+                  headers: apiRequestHeaders,
                   fit: BoxFit.fill,
                   errorBuilder: (BuildContext context, Object error,
                       StackTrace? stackTrace) {

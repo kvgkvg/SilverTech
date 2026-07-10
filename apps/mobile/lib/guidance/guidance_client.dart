@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../backend/api_http_client.dart';
 import '../templates/template_repository_client.dart';
 
 class GuidanceClient {
@@ -10,7 +11,7 @@ class GuidanceClient {
     required this.baseUrl,
     this.timeout = const Duration(seconds: 60),
     http.Client? httpClient,
-  }) : _httpClient = httpClient ?? http.Client();
+  }) : _httpClient = httpClient ?? ApiHttpClient();
 
   final String baseUrl;
 

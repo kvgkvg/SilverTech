@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -20,10 +22,22 @@ app = FastAPI(
     description="Template retrieval, Vietnamese guidance, and reviewed-template APIs.",
 )
 
+# Any localhost port stays allowed so `flutter run -d chrome`, which picks a
+# random port, needs no configuration. Deployed frontends (Vercel) are named
+# one per line in SILVERTECH_CORS_ORIGINS, comma separated. A wildcard is not
+# an option here: allow_credentials=True forbids it.
+_DEV_ORIGIN_REGEX = r"^http://(localhost|127\.0\.0\.1):\d+$"
+
+
+def _configured_cors_origins() -> list[str]:
+    raw = os.getenv("SILVERTECH_CORS_ORIGINS", "")
+    return [origin.strip().rstrip("/") for origin in raw.split(",") if origin.strip()]
+
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:*", "http://127.0.0.1:*"],
-    allow_origin_regex=r"^http://(localhost|127\.0\.0\.1):\d+$",
+    allow_origins=_configured_cors_origins(),
+    allow_origin_regex=_DEV_ORIGIN_REGEX,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
