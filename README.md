@@ -68,6 +68,7 @@ PYTHONPATH=apps/api:apps/vision-tools pytest -q apps/api/tests tests/contract ap
 dart run apps/mobile/test/vision/homography_projector_test.dart
 dart run apps/mobile/test/guidance/instruction_player_test.dart
 dart run apps/mobile/test/ui/rescan_guidance_ui_test.dart
+make test-label
 cd apps/mobile && flutter test
 ```
 

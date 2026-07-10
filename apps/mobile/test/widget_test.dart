@@ -184,7 +184,7 @@ void main() {
 
   testWidgets('runs home to voice to guidance prototype flow',
       (WidgetTester tester) async {
-    final (fakeBackend, _) = await pumpApp(tester);
+    final (fakeBackend, fakeStore) = await pumpApp(tester);
 
     expect(find.text('SILVERTECH'), findsOneWidget);
     expect(find.text('Xin chào!'), findsOneWidget);
