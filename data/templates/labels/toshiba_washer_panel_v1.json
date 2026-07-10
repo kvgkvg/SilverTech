@@ -1,0 +1,193 @@
+{
+  "device": {
+    "id": "device_toshiba_washer_aw_dug1700wv",
+    "brand": "Toshiba",
+    "appliance_type": "washer",
+    "model_name": "AW-DUG1700WV",
+    "display_name": "Máy giặt Toshiba AW-DUG1700WV",
+    "status": "active"
+  },
+  "template": {
+    "id": "template_toshiba_washer_panel_v1",
+    "device_id": "device_toshiba_washer_aw_dug1700wv",
+    "template_code": "toshiba_washer_panel_v1",
+    "template_image_url": "data/templates/toshiba_washer_panel_v1.png",
+    "logo_bbox": {
+      "x": 120,
+      "y": 100,
+      "width": 300,
+      "height": 90
+    },
+    "panel_bbox": {
+      "x": 80,
+      "y": 80,
+      "width": 2500,
+      "height": 720
+    },
+    "feature_descriptor_path": null,
+    "version": 1,
+    "status": "official"
+  },
+  "buttons": [
+    {
+      "id": "btn_toshiba_washer_power",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "button_id": "power",
+      "label": "Mở/Tắt",
+      "vietnamese_name": "Nguồn",
+      "function_description": "Nút Mở/Tắt là nút điều khiển nguồn chính của máy giặt Toshiba.\n\nCông dụng:\n- Bật nguồn máy giặt trước khi lựa chọn chương trình giặt.\n- Tắt nguồn máy giặt sau khi hoàn thành việc giặt hoặc khi muốn dừng máy hoàn toàn.\n\nCách sử dụng:\n- Nhấn nút Mở/Tắt 1 lần: Màn hình hiển thị và các đèn báo chương trình sẽ sáng lên.\n- Nhấn nút Mở/Tắt lần nữa: Tắt nguồn toàn bộ thiết bị.\n\nLưu ý an toàn:\n- Nếu máy giặt bật nguồn nhưng không hoạt động (không nhấn nút Khởi động/Tạm dừng) trong vòng 10 phút, máy sẽ tự động tắt nguồn để tiết kiệm điện năng.\n- Không nhấn phím này khi tay đang ướt để tránh giật điện.",
+      "bbox_template_coordinates": {
+        "x": 2100,
+        "y": 200,
+        "width": 180,
+        "height": 180
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "physical"
+    },
+    {
+      "id": "btn_toshiba_washer_start_pause",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "button_id": "start_pause",
+      "label": "Khởi động/Tạm dừng",
+      "vietnamese_name": "Khởi động/Tạm dừng",
+      "function_description": "Nút Khởi động/Tạm dừng dùng để bắt đầu chạy chu trình giặt hoặc tạm ngắt chu trình để bổ sung đồ giặt.\n\nCách sử dụng:\n- Sau khi chọn chương trình giặt và mực nước, nhấn nút này để khởi động máy giặt bắt đầu cấp nước và đảo lồng.\n- Nhấn nút này lần nữa khi máy đang chạy để tạm dừng chu trình giặt (đèn báo sẽ nhấp nháy).\n\nLưu ý quan trọng:\n- Khi máy giặt đang ở chế độ tạm dừng, cửa máy giặt có thể mở được nếu mực nước và nhiệt độ trong lồng giặt ở mức an toàn.\n- Để tiếp tục giặt sau khi tạm dừng, hãy đóng chặt cửa lồng giặt và nhấn nút Khởi động/Tạm dừng một lần nữa.",
+      "bbox_template_coordinates": {
+        "x": 1900,
+        "y": 200,
+        "width": 180,
+        "height": 180
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "physical"
+    },
+    {
+      "id": "btn_toshiba_washer_water_level",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "button_id": "water_level",
+      "label": "Chọn mực nước",
+      "vietnamese_name": "Mực nước",
+      "function_description": "Nút Chọn mực nước cho phép điều chỉnh thủ công lượng nước cấp vào lồng giặt phù hợp với khối lượng đồ giặt thực tế.\n\nCách sử dụng:\n- Nhấn nút liên tục để chuyển đổi giữa các mức nước từ thấp đến cao (thường từ mức 1 đến mức 8 hoặc hiển thị dạng lít nước tùy dòng máy).\n- Nếu không chọn, máy sẽ tự động cân khối lượng đồ giặt và tự động chọn mức nước tối ưu sau khi nhấn nút Khởi động.\n\nKhuyến nghị sử dụng:\n- Đồ giặt ít (dưới 2kg): Chọn mức nước 1 - 3.\n- Đồ giặt vừa (2kg - 5kg): Chọn mức nước 4 - 6.\n- Đồ giặt nhiều hoặc chăn mền dày: Chọn mức nước 7 - 8.",
+      "bbox_template_coordinates": {
+        "x": 1500,
+        "y": 200,
+        "width": 160,
+        "height": 160
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch"
+    },
+    {
+      "id": "btn_toshiba_washer_quick_wash",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "button_id": "quick_wash",
+      "label": "Giặt nhanh",
+      "vietnamese_name": "Giặt nhanh",
+      "function_description": "Chương trình Giặt nhanh giúp rút ngắn tối đa thời gian của chu trình giặt xuống còn khoảng 15-20 phút.\n\nKhi nào nên dùng:\n- Phù hợp với quần áo ít bẩn, quần áo thể thao mỏng, đồ mới mua chỉ cần giặt sơ.\n- Thích hợp khi cần làm sạch quần áo gấp để sử dụng.\n\nKhuyến nghị tải trọng:\n- Chỉ nên giặt với khối lượng quần áo nhỏ (dưới 2kg) để đạt hiệu quả làm sạch và vắt khô tốt nhất.\n- Không sử dụng chế độ này cho chăn màn, quần áo dày hoặc đồ bẩn nặng.",
+      "bbox_template_coordinates": {
+        "x": 1100,
+        "y": 200,
+        "width": 160,
+        "height": 160
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch"
+    },
+    {
+      "id": "btn_toshiba_washer_tub_clean",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "button_id": "tub_clean",
+      "label": "Vệ sinh lồng giặt",
+      "vietnamese_name": "Vệ sinh lồng giặt",
+      "function_description": "Chương trình Vệ sinh lồng giặt được thiết kế để làm sạch bụi bẩn, vi khuẩn, nấm mốc và cặn bột giặt bám tích tụ trong lồng giặt sau thời gian dài sử dụng.\n\nCách sử dụng:\n1. Đảm bảo lồng giặt hoàn toàn trống (không có quần áo).\n2. Cho thêm chất tẩy rửa chuyên dụng cho lồng giặt (bột vệ sinh hoặc nước tẩy rửa).\n3. Nhấn nút Chọn chương trình cho đến khi đèn báo dừng ở mức 'Vệ sinh lồng giặt' hoặc nhấn phím tắt Tub Clean chuyên biệt.\n4. Nhấn nút Khởi động để bắt đầu chu trình.\n\nLưu ý bảo dưỡng:\n- Nên thực hiện vệ sinh lồng giặt định kỳ từ 1 đến 2 tháng một lần để đảm bảo quần áo luôn thơm tho và kéo dài tuổi thọ cho máy.",
+      "bbox_template_coordinates": {
+        "x": 900,
+        "y": 200,
+        "width": 160,
+        "height": 160
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch"
+    },
+    {
+      "id": "btn_toshiba_washer_spin_only",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "button_id": "spin_only",
+      "label": "Chỉ vắt",
+      "vietnamese_name": "Chỉ vắt",
+      "function_description": "Chương trình Chỉ vắt dùng khi người dùng chỉ muốn làm khô quần áo đã được giặt bằng tay hoặc quần áo còn ẩm ướt mà không cần qua các bước giặt và xả.\n\nCách sử dụng:\n1. Cho quần áo ướt vào lồng giặt.\n2. Nhấn nút Mở/Tắt để bật máy.\n3. Nhấn nút Chọn tiến trình hoặc nhấn trực tiếp nút 'Vắt' (Spin) cho đến khi chỉ có đèn báo ở bước vắt sáng lên.\n4. Nhấn nút Khởi động để bắt đầu vắt.\n\nLưu ý:\n- Máy giặt sẽ tự động xả bỏ nước thừa trong lồng giặt (nếu có) trước khi bắt đầu quay lồng ở tốc độ cao để vắt khô.",
+      "bbox_template_coordinates": {
+        "x": 700,
+        "y": 200,
+        "width": 160,
+        "height": 160
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch"
+    },
+    {
+      "id": "btn_toshiba_washer_rinse_only",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "button_id": "rinse_only",
+      "label": "Chỉ xả",
+      "vietnamese_name": "Chỉ xả",
+      "function_description": "Chương trình Chỉ xả dùng khi người dùng muốn xả lại quần áo bằng nước sạch và vắt khô (không sử dụng xà phòng giặt).\n\nCách sử dụng:\n- Nhấn nút Mở/Tắt bật nguồn.\n- Nhấn nút Chọn tiến trình cho đến khi đèn báo sáng ở hai bước 'Xả' và 'Vắt' (hoặc chỉ bước 'Xả' nếu tắt chức năng vắt).\n- Nhấn nút Khởi động.\n\nTác dụng:\n- Giúp trôi hết xà phòng thừa của đồ giặt tay hoặc làm sạch bụi bẩn nhẹ bám trên đồ giặt nhanh chóng.",
+      "bbox_template_coordinates": {
+        "x": 500,
+        "y": 200,
+        "width": 160,
+        "height": 160
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch"
+    },
+    {
+      "id": "btn_toshiba_washer_wash_only",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "button_id": "wash_only",
+      "label": "Chỉ giặt",
+      "vietnamese_name": "Chỉ giặt",
+      "function_description": "Chương trình Chỉ giặt thực hiện công đoạn giặt đảo xà phòng bình thường nhưng máy sẽ không thực hiện xả nước sạch và vắt khô cuối chu kỳ.\n\nKhi nào nên dùng:\n- Dùng khi bạn muốn giữ lại nước xà phòng trong lồng giặt để giặt tiếp các mẻ quần áo khác ít bẩn hơn.\n- Quần áo sau khi giặt xong sẽ nằm ngập trong nước xà phòng, người dùng tự vắt bằng tay hoặc chọn chương trình tiếp theo sau.",
+      "bbox_template_coordinates": {
+        "x": 300,
+        "y": 200,
+        "width": 160,
+        "height": 160
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch"
+    },
+    {
+      "id": "btn_toshiba_washer_soak",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "button_id": "soak",
+      "label": "Giặt ngâm",
+      "vietnamese_name": "Giặt ngâm",
+      "function_description": "Chương trình Giặt ngâm kéo dài thời gian quần áo được ngâm trong nước xà phòng trước khi bắt đầu giặt đảo chính thức, giúp làm mềm các vết bẩn cứng đầu.\n\nCách hoạt động:\n- Máy sẽ cấp nước, quay đảo nhẹ để hòa tan xà phòng và thấm đều quần áo, sau đó dừng hoạt động để ngâm trong khoảng 30 đến 60 phút tùy chọn.\n- Sau thời gian ngâm, máy tự động chuyển sang chu trình giặt tiêu chuẩn.\n\nKhi nào nên dùng:\n- Dùng cho quần áo trẻ em dính nhiều đất cát, ga trải giường bẩn nặng, quần áo lao động ẩm mốc.",
+      "bbox_template_coordinates": {
+        "x": 150,
+        "y": 200,
+        "width": 140,
+        "height": 140
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch"
+    },
+    {
+      "id": "btn_toshiba_washer_fragrance",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "button_id": "fragrance",
+      "label": "Lưu giữ hương thơm",
+      "vietnamese_name": "Hương thơm",
+      "function_description": "Chế độ Lưu giữ hương thơm (Fragrance Course) tối ưu hóa thời gian và lượng nước xả vải để hương thơm bám lâu hơn trên sợi vải quần áo.\n\nCách hoạt động:\n- Ở lần xả cuối cùng, máy giặt sẽ tự động ngâm quần áo trong nước xả khoảng 10-15 phút và phát âm báo hiệu cảnh báo để người dùng biết.\n- Lồng giặt sẽ tự động đảo nhẹ giúp nước xả thấm sâu vào từng kẽ vải trước khi thực hiện vắt khô.\n\nKhuyến nghị sử dụng:\n- Cho nước xả vải vào đúng ngăn chứa quy định trước khi bắt đầu giặt để máy tự động lấy đúng thời điểm.",
+      "bbox_template_coordinates": {
+        "x": 2250,
+        "y": 200,
+        "width": 150,
+        "height": 150
+      },
+      "polygon_template_coordinates": null,
+      "button_type": "touch"
+    }
+  ]
+}
