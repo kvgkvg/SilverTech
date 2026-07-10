@@ -26,6 +26,8 @@ abstract class SilverBackendGateway {
   /// names the brand, picks the template, and projects button quads.
   Future<BackendRecognitionResult> recognizeFromFrame(Uint8List frameBytes);
 
+  Future<TemplateDetailDto> fetchTemplate(String templateId);
+
   Future<GuidanceOutputDto> createGuidance({
     required String templateId,
     required String userQueryText,
@@ -149,6 +151,11 @@ class HttpSilverBackendGateway implements SilverBackendGateway {
       template: template,
       matchScore: candidateConfidence,
     );
+  }
+
+  @override
+  Future<TemplateDetailDto> fetchTemplate(String templateId) {
+    return _templates.fetchTemplate(templateId);
   }
 
   @override

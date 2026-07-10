@@ -48,6 +48,11 @@ class FakeBackendGateway implements SilverBackendGateway {
   }
 
   @override
+  Future<TemplateDetailDto> fetchTemplate(String templateId) async {
+    return (await recognizeDefault()).template;
+  }
+
+  @override
   Future<String> submitTemplate({
     required Uint8List imageBytes,
     required String brand,
@@ -77,6 +82,25 @@ class FakeBackendGateway implements SilverBackendGateway {
       ],
     );
   }
+}
+
+class FakeDeviceLibraryStore implements DeviceLibraryStore {
+  FakeDeviceLibraryStore([List<DemoDevice>? seedDevices])
+      : _devices = List<DemoDevice>.from(seedDevices ?? const <DemoDevice>[]);
+
+  List<DemoDevice> _devices;
+
+  @override
+  Future<List<DemoDevice>> loadDevices() async {
+    return List<DemoDevice>.from(_devices);
+  }
+
+  @override
+  Future<void> saveDevices(List<DemoDevice> devices) async {
+    _devices = List<DemoDevice>.from(devices);
+  }
+
+  List<DemoDevice> get devices => List<DemoDevice>.from(_devices);
 }
 
 class FakeSpeechToTextClient implements SpeechToTextClient {
@@ -116,22 +140,51 @@ class FakeSpeechToTextClient implements SpeechToTextClient {
 }
 
 void main() {
-  Future<FakeBackendGateway> pumpApp(WidgetTester tester) async {
+  Future<(FakeBackendGateway, FakeDeviceLibraryStore)> pumpApp(
+    WidgetTester tester, {
+    List<DemoDevice>? seedDevices,
+  }) async {
     final fakeBackend = FakeBackendGateway();
+    final fakeStore = FakeDeviceLibraryStore(
+      seedDevices ??
+          <DemoDevice>[
+            const DemoDevice(
+              id: 'tv',
+              kind: 'tv',
+              tone: 'blue',
+              name: 'TV Samsung',
+              short: 'UA55AU7000',
+              model: 'UA55AU7000',
+              last: 'Hôm nay, 14:30',
+              templateId: 'template_panasonic_microwave_nn_gt35hm_v1',
+            ),
+            const DemoDevice(
+              id: 'ac',
+              kind: 'ac',
+              tone: 'green',
+              name: 'Điều hòa Daikin',
+              short: 'FTKM35',
+              model: 'FTKM35RVMV',
+              last: 'Hôm qua',
+              templateId: 'template_panasonic_microwave_nn_gt35hm_v1',
+            ),
+          ],
+    );
     await tester.binding.setSurfaceSize(const Size(402, 874));
     await tester.pumpWidget(
       SilverTechApp(
         backend: fakeBackend,
         speechToText: FakeSpeechToTextClient(),
+        deviceStore: fakeStore,
       ),
     );
     await tester.pumpAndSettle();
-    return fakeBackend;
+    return (fakeBackend, fakeStore);
   }
 
   testWidgets('runs home to voice to guidance prototype flow',
       (WidgetTester tester) async {
-    final fakeBackend = await pumpApp(tester);
+    final (fakeBackend, _) = await pumpApp(tester);
 
     expect(find.text('SILVERTECH'), findsOneWidget);
     expect(find.text('Xin chào!'), findsOneWidget);
@@ -150,6 +203,9 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(fakeBackend.recognitionCalls, 1);
+    expect(fakeStore.devices.first.name, 'Lò vi sóng Panasonic');
+    expect(fakeStore.devices.first.templateId,
+      'template_panasonic_microwave_nn_gt35hm_v1');
     expect(find.textContaining('Lò vi sóng Panasonic'), findsOneWidget);
     expect(find.text('1 nút'), findsOneWidget);
     expect(find.text('Mic'), findsOneWidget);
@@ -190,7 +246,7 @@ void main() {
       (WidgetTester tester) async {
     // Tapping a device in "Đã dùng gần đây" skips the recognise screen, so the
     // shell has no template yet. Guidance must still work from there.
-    final fakeBackend = await pumpApp(tester);
+    final (fakeBackend, _) = await pumpApp(tester);
 
     await tester.tap(find.text('TV Samsung'));
     await tester.pumpAndSettle();

@@ -1,10 +1,13 @@
+import 'dart:convert';
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'backend/api_http_client.dart';
 import 'backend/silver_backend.dart';
@@ -20,10 +23,16 @@ void main() {
 }
 
 class SilverTechApp extends StatelessWidget {
-  const SilverTechApp({this.backend, this.speechToText, super.key});
+  const SilverTechApp({
+    this.backend,
+    this.speechToText,
+    this.deviceStore,
+    super.key,
+  });
 
   final SilverBackendGateway? backend;
   final SpeechToTextClient? speechToText;
+  final DeviceLibraryStore? deviceStore;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +54,7 @@ class SilverTechApp extends StatelessWidget {
       home: SilverPrototypeShell(
         backend: backend ?? HttpSilverBackendGateway(),
         speechToText: speechToText,
+        deviceStore: deviceStore,
       ),
     );
   }
@@ -83,6 +93,7 @@ class DemoDevice {
     required this.short,
     required this.model,
     required this.last,
+    this.templateId,
   });
 
   final String id;
@@ -92,6 +103,101 @@ class DemoDevice {
   final String short;
   final String model;
   final String last;
+  final String? templateId;
+
+  DemoDevice copyWith({
+    String? id,
+    String? kind,
+    String? tone,
+    String? name,
+    String? short,
+    String? model,
+    String? last,
+    String? templateId,
+  }) {
+    return DemoDevice(
+      id: id ?? this.id,
+      kind: kind ?? this.kind,
+      tone: tone ?? this.tone,
+      name: name ?? this.name,
+      short: short ?? this.short,
+      model: model ?? this.model,
+      last: last ?? this.last,
+      templateId: templateId ?? this.templateId,
+    );
+  }
+
+  Map<String, Object?> toJson() {
+    return <String, Object?>{
+      'id': id,
+      'kind': kind,
+      'tone': tone,
+      'name': name,
+      'short': short,
+      'model': model,
+      'last': last,
+      if (templateId != null) 'template_id': templateId,
+    };
+  }
+
+  factory DemoDevice.fromJson(Map<String, Object?> json) {
+    return DemoDevice(
+      id: json['id'] as String,
+      kind: json['kind'] as String,
+      tone: json['tone'] as String,
+      name: json['name'] as String,
+      short: json['short'] as String,
+      model: json['model'] as String,
+      last: json['last'] as String,
+      templateId: json['template_id'] as String?,
+    );
+  }
+}
+
+abstract class DeviceLibraryStore {
+  Future<List<DemoDevice>> loadDevices();
+
+  Future<void> saveDevices(List<DemoDevice> devices);
+}
+
+class JsonFileDeviceLibraryStore implements DeviceLibraryStore {
+  JsonFileDeviceLibraryStore();
+
+  static const String _storageKey = 'silvertech.device_library.v1';
+
+  Future<File> _storageFile() async {
+    final Directory directory = await getApplicationDocumentsDirectory();
+    return File('${directory.path}/$_storageKey.json');
+  }
+
+  @override
+  Future<List<DemoDevice>> loadDevices() async {
+    final File file = await _storageFile();
+    if (!await file.exists()) {
+      return <DemoDevice>[];
+    }
+    try {
+      final String raw = await file.readAsString();
+      if (raw.isEmpty) {
+        return <DemoDevice>[];
+      }
+      final List<dynamic> decoded = jsonDecode(raw) as List<dynamic>;
+      return decoded
+          .whereType<Map<String, dynamic>>()
+          .map((Map<String, dynamic> json) => DemoDevice.fromJson(json))
+          .toList();
+    } catch (_) {
+      return <DemoDevice>[];
+    }
+  }
+
+  @override
+  Future<void> saveDevices(List<DemoDevice> devices) async {
+    final File file = await _storageFile();
+    await file.writeAsString(
+      jsonEncode(devices.map((DemoDevice device) => device.toJson()).toList()),
+    );
+  }
 }
 
 class GuideStepData {
@@ -234,18 +340,20 @@ class SilverPrototypeShell extends StatefulWidget {
   const SilverPrototypeShell({
     required this.backend,
     this.speechToText,
+    this.deviceStore,
     super.key,
   });
 
   final SilverBackendGateway backend;
   final SpeechToTextClient? speechToText;
+  final DeviceLibraryStore? deviceStore;
 
   @override
   State<SilverPrototypeShell> createState() => _SilverPrototypeShellState();
 }
 
 class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
-  List<DemoDevice> _devices = List<DemoDevice>.from(initialDevices);
+  List<DemoDevice> _devices = <DemoDevice>[];
   List<RouteState> _stack = const <RouteState>[RouteState('home')];
   String _tab = 'home';
   String? _toast;
@@ -263,6 +371,7 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   LogoFrameBox? _recognitionLogoBox;
   List<GuideStepData> _currentGuideSteps = guideSteps;
   late final SpeechToTextClient _stt;
+  late final DeviceLibraryStore _deviceStore;
   Future<bool>? _startFuture;
   String _recognizedText = '';
 
@@ -270,8 +379,10 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   void initState() {
     super.initState();
     _stt = widget.speechToText ?? createPlatformSpeechToText();
+    _deviceStore = widget.deviceStore ?? JsonFileDeviceLibraryStore();
     // Preload ASR model so first hold-to-talk is responsive.
     _stt.warmUp();
+    unawaited(_restoreDevices());
   }
 
   @override
@@ -281,6 +392,31 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
   }
 
   RouteState get _current => _stack.last;
+
+  Future<void> _restoreDevices() async {
+    final List<DemoDevice> savedDevices = await _deviceStore.loadDevices();
+    if (!mounted) return;
+    setState(() {
+      _devices = savedDevices;
+    });
+  }
+
+  List<DemoDevice> _upsertDeviceHistory(DemoDevice device) {
+    return <DemoDevice>[
+      device.copyWith(last: 'Vừa xong'),
+      for (final DemoDevice existing in _devices)
+        if (existing.id != device.id) existing,
+    ];
+  }
+
+  Future<void> _persistDeviceHistory(DemoDevice device) async {
+    final List<DemoDevice> updated = _upsertDeviceHistory(device);
+    if (!mounted) return;
+    setState(() {
+      _devices = updated;
+    });
+    await _deviceStore.saveDevices(updated);
+  }
 
   void _nav(String target, {DemoDevice? device}) {
     setState(() {
@@ -296,6 +432,9 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
         _stack = <RouteState>[RouteState(target)];
         return;
       }
+      if (target == 'voice' && device != null) {
+        unawaited(_persistDeviceHistory(device));
+      }
       _stack = <RouteState>[..._stack, RouteState(target, device: device)];
     });
   }
@@ -310,8 +449,8 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
       model: 'Vừa thêm',
       last: 'Vừa xong',
     );
+    unawaited(_persistDeviceHistory(newDevice));
     setState(() {
-      _devices = <DemoDevice>[newDevice, ..._devices];
       _tab = 'devices';
       _stack = const <RouteState>[RouteState('devices')];
       _toast = 'Đã lưu "$name"';
@@ -342,6 +481,7 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
         _recognitionBusy = false;
         _stack = <RouteState>[..._stack, RouteState('voice', device: device)];
       });
+      unawaited(_persistDeviceHistory(device));
     } on FriendlyBackendException catch (error) {
       if (!mounted) return;
       setState(() {
@@ -414,14 +554,19 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
     if (_selectedTemplate != null) {
       return _selectedTemplate;
     }
+    final DemoDevice? device = _current.device;
+    final String? templateId = device?.templateId;
+    if (templateId == null) {
+      return null;
+    }
     try {
-      final result = await widget.backend.recognizeDefault();
+      final TemplateDetailDto template =
+          await widget.backend.fetchTemplate(templateId);
       if (!mounted) return null;
       setState(() {
-        _selectedTemplate = result.template;
-        _recognitionMatchScore = result.matchScore;
+        _selectedTemplate = template;
       });
-      return result.template;
+      return template;
     } catch (_) {
       return null;
     }
@@ -524,6 +669,7 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
       short: template.templateCode,
       model: template.templateCode,
       last: 'Vừa nhận diện',
+          templateId: template.id,
     );
   }
 
@@ -623,6 +769,25 @@ class HomeScreen extends StatelessWidget {
       'Hỏi bằng giọng nói',
       'Làm theo nút sáng',
     ];
+    final List<Widget> recentCards = devices.isEmpty
+        ? <Widget>[
+            const _EmptyDeviceState(
+              title: 'Chưa có thiết bị nào',
+              subtitle: 'Thiết bị sẽ xuất hiện sau lần đầu bạn dùng hoặc lưu.',
+            ),
+          ]
+        : devices
+            .take(2)
+            .map(
+              (DemoDevice device) => Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: DeviceRow(
+                  device: device,
+                  onTap: () => onNavigate('voice', device: device),
+                ),
+              ),
+            )
+            .toList();
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 18),
       children: <Widget>[
@@ -681,15 +846,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        ...devices.take(2).map(
-              (DemoDevice device) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: DeviceRow(
-                  device: device,
-                  onTap: () => onNavigate('voice', device: device),
-                ),
-              ),
-            ),
+        ...recentCards,
         SecondaryDashedButton(
           label: 'Thêm thiết bị mới',
           icon: Icons.add,
@@ -2037,6 +2194,7 @@ class DevicesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isEmpty = devices.isEmpty;
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 18),
       children: <Widget>[
@@ -2071,21 +2229,63 @@ class DevicesScreen extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 20),
-        ...devices.map(
-          (DemoDevice device) => Padding(
-            padding: const EdgeInsets.only(bottom: 14),
-            child: DeviceCard(
-              device: device,
-              onOpen: () => onNavigate('voice', device: device),
+        if (isEmpty)
+          const _EmptyDeviceState(
+            title: 'Danh sách còn trống',
+            subtitle: 'Thiết bị bạn đã dùng sẽ xuất hiện ở đây.',
+          )
+        else
+          ...devices.map(
+            (DemoDevice device) => Padding(
+              padding: const EdgeInsets.only(bottom: 14),
+              child: DeviceCard(
+                device: device,
+                onOpen: () => onNavigate('voice', device: device),
+              ),
             ),
           ),
-        ),
         SecondaryDashedButton(
           label: 'Thêm thiết bị mới',
           icon: Icons.add,
           onTap: () => onNavigate('add'),
         ),
       ],
+    );
+  }
+}
+
+class _EmptyDeviceState extends StatelessWidget {
+  const _EmptyDeviceState({required this.title, required this.subtitle});
+
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return SilverCard(
+      padding: const EdgeInsets.all(18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: const TextStyle(
+              color: SilverTokens.ink,
+              fontSize: 18,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            subtitle,
+            style: const TextStyle(
+              color: SilverTokens.ink2,
+              fontSize: 15,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
