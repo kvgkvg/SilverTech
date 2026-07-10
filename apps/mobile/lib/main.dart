@@ -423,6 +423,16 @@ class _SilverPrototypeShellState extends State<SilverPrototypeShell> {
       );
       debugPrint('[GUIDE] intent=${guidance.intent} '
           'steps=${guidance.steps.length}');
+      if (guidance.steps.isEmpty) {
+        // Out-of-scope refusal: no button steps, just tell the user.
+        setState(() {
+          _voiceBusy = false;
+          _toast = guidance.safetyNote ??
+              'Câu hỏi không liên quan đến thiết bị này. '
+                  'Hãy hỏi về cách sử dụng thiết bị.';
+        });
+        return;
+      }
       setState(() {
         _currentGuideSteps = _mapGuidanceSteps(guidance);
         _voiceBusy = false;
@@ -4382,13 +4392,14 @@ class ToastBanner extends StatelessWidget {
           ],
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             const Icon(Icons.check, color: SilverTokens.greenBright),
             const SizedBox(width: 11),
             Expanded(
               child: Text(
                 text,
-                maxLines: 1,
+                maxLines: 4,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                     color: Colors.white,
