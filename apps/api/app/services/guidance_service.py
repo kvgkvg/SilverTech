@@ -25,49 +25,83 @@ def create_guidance(template_id: str, user_query: str) -> dict:
     try:
         raw = LLMService().generate(user_query, template)
     except LLMProviderError as exc:
-        latency_ms = int((time.perf_counter() - started) * 1000)
-        write_llm_log(
+        _log_rejected_attempt(
             template_id=template_id,
             user_query=user_query,
-            stt_text=None,
             prompt_summary=prompt_summary,
             raw_response={"error": str(exc)},
-            validated_steps=None,
-            validation_status="rejected",
-            latency_ms=latency_ms,
+            started=started,
         )
         raise GuidanceError("llm_failed") from exc
     try:
         guidance = parse_guidance(raw)
         validate_guidance_buttons(template_id, guidance)
     except Exception as exc:
-        latency_ms = int((time.perf_counter() - started) * 1000)
-        write_llm_log(
+        _log_rejected_attempt(
             template_id=template_id,
             user_query=user_query,
-            stt_text=None,
             prompt_summary=prompt_summary,
             raw_response=raw,
-            validated_steps=None,
-            validation_status="rejected",
-            latency_ms=latency_ms,
+            started=started,
         )
         raise GuidanceError("invalid_button") from exc
-    latency_ms = int((time.perf_counter() - started) * 1000)
     payload = guidance.model_dump()
     _humanize_instructions(payload, template)
     _attach_audio_urls(payload)
+    _log_accepted_attempt(
+        template_id=template_id,
+        user_query=user_query,
+        prompt_summary=prompt_summary,
+        raw_response=raw,
+        validated_steps=payload,
+        started=started,
+    )
+    return payload
+
+
+def _latency_ms(started: float) -> int:
+    return int((time.perf_counter() - started) * 1000)
+
+
+def _log_rejected_attempt(
+    *,
+    template_id: str,
+    user_query: str,
+    prompt_summary: str,
+    raw_response: dict,
+    started: float,
+) -> None:
     write_llm_log(
         template_id=template_id,
         user_query=user_query,
         stt_text=None,
         prompt_summary=prompt_summary,
-        raw_response=raw,
-        validated_steps=payload,
-        validation_status="accepted",
-        latency_ms=latency_ms,
+        raw_response=raw_response,
+        validated_steps=None,
+        validation_status="rejected",
+        latency_ms=_latency_ms(started),
     )
-    return payload
+
+
+def _log_accepted_attempt(
+    *,
+    template_id: str,
+    user_query: str,
+    prompt_summary: str,
+    raw_response: dict,
+    validated_steps: dict,
+    started: float,
+) -> None:
+    write_llm_log(
+        template_id=template_id,
+        user_query=user_query,
+        stt_text=None,
+        prompt_summary=prompt_summary,
+        raw_response=raw_response,
+        validated_steps=validated_steps,
+        validation_status="accepted",
+        latency_ms=_latency_ms(started),
+    )
 
 
 def _humanize_instructions(payload: dict, template: dict) -> None:
