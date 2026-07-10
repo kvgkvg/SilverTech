@@ -1,3 +1,4 @@
+# Author: Le Nguyen Khang (MSSV: 23122034) - Vision Confidence score benchmark
 from __future__ import annotations
 
 from scripts.confidence import score_confidence

@@ -1,3 +1,4 @@
+// Author: Luu Thuong Hong (MSSV: 23122006) - Fallback Rescan UI State Logic Test
 import 'package:flutter_test/flutter_test.dart';
 import 'package:silvertech_mobile/ui/rescan_guidance_ui.dart';
 import 'package:silvertech_mobile/vision/geometry.dart';

@@ -1,3 +1,4 @@
+# Author: Le Nguyen Khang (MSSV: 23122034) - LLM Hallucination Validator Tests
 from __future__ import annotations
 
 import pytest

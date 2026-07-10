@@ -1,3 +1,4 @@
+// Author: Luu Thuong Hong (MSSV: 23122006) - Flutter E2E Prototype Widget Flow Test
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';

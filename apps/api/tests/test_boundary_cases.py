@@ -1,3 +1,4 @@
+# Author: Nguyen Thien An (MSSV: 23122020) - Backend API & Integration Testing
 from __future__ import annotations
 
 """
