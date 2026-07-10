@@ -54,7 +54,7 @@ Lint: ruff, `line-length = 100` (configured in `apps/api/pyproject.toml`).
 Monorepo with three apps under `apps/`:
 
 - **`apps/api`** — FastAPI backend (`app/`). Entry `app/main.py` registers routers and calls `initialize_database()` at import time.
-- **`apps/vision-tools`** — Offline OpenCV/numpy proof-of-concept for the matching pipeline (`scripts/`). Not wired into the API; validates projection + confidence on synthetic fixtures.
+- **`apps/vision-tools`** — Offline OpenCV/numpy proof-of-concept for the matching pipeline (`scripts/`). Not wired into the API; validates projection + confidence on synthetic fixtures. It also hosts the offline label QA/QC pipeline (`scripts/label_pipeline/`), which turns a manual PDF plus a panel photo into a draft label file with per-button QC flags — see `docs/label-qa-pipeline.md`. It calls Gemini and is never imported by the API.
 - **`apps/mobile`** — Flutter/Dart scaffold (`lib/`). Source + a few Dart logic tests only; full Flutter build is NOT set up in this repo (Flutter unavailable from conda channels).
 
 ### Backend layering (`apps/api/app`)

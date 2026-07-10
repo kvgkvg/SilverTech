@@ -1,4 +1,4 @@
-.PHONY: setup-api seed-api run-api test-api test-vision test smoke
+.PHONY: setup-api seed-api run-api test-api test-vision test-label test smoke
 
 setup-api:
 	python3 -m pip install -e apps/api
@@ -17,6 +17,16 @@ test-api:
 
 test-vision:
 	PYTHONPATH=apps/vision-tools pytest -q apps/vision-tools/tests
+
+test-label:
+	PYTHONPATH=apps/vision-tools pytest -q apps/vision-tools/tests/test_label_geometry.py \
+	  apps/vision-tools/tests/test_label_gemini_client.py \
+	  apps/vision-tools/tests/test_label_extract.py \
+	  apps/vision-tools/tests/test_label_detect.py \
+	  apps/vision-tools/tests/test_label_describe.py \
+	  apps/vision-tools/tests/test_label_qc.py \
+	  apps/vision-tools/tests/test_label_pipeline.py \
+	  apps/vision-tools/tests/test_label_eval_detect.py
 
 test: test-api test-vision
 
