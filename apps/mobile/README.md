@@ -14,3 +14,4 @@ flutter run
 The current first screen shows the camera-scanning instruction and validates
 the mobile guidance/projection/rescan logic through tests. Real camera capture
 and Android-device demo wiring remain part of the final real-device validation.
+For repo-wide label/QC checks, run `make test-label` from the repository root.
