@@ -28,6 +28,8 @@ data/tts/*.mp3
 .cache/
 data/manuals/*.pdf
 data/templates/labels/*.draft.json
+data/templates/labels/*.qc_report.json
+.pipeline/
 
 # Editors and OS
 .DS_Store

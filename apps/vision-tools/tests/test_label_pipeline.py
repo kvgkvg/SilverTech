@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 
-from scripts.label_pipeline.pipeline import build_draft
+from scripts.label_pipeline.pipeline import _merge, build_draft
 
 DEVICE = {
     "id": "device_panasonic_microwave_nn_gt35hm",
@@ -63,10 +63,10 @@ def test_each_button_carries_the_columns_seed_inserts():
         assert key in button, key
 
 
-def test_the_button_row_id_follows_the_shipped_naming():
+def test_the_button_row_id_follows_label_webs_naming():
     draft = build_draft(detections=DETECTIONS, qc_buttons=QC_BUTTONS,
                         device=DEVICE, template=TEMPLATE)
-    assert draft["buttons"][0]["id"] == "btn_panasonic_microwave_nn_gt35hm_start"
+    assert draft["buttons"][0]["id"] == "btn_panasonic_microwave_nn_gt35hm_v1_start"
     assert draft["buttons"][0]["template_id"] == TEMPLATE["id"]
 
 
@@ -102,3 +102,43 @@ def test_the_draft_button_type_defaults_to_touch():
     draft = build_draft(detections=DETECTIONS, qc_buttons=QC_BUTTONS,
                         device=DEVICE, template=TEMPLATE)
     assert draft["buttons"][0]["button_type"] == "touch"
+
+
+def test_a_template_missing_feature_descriptor_path_gets_none_so_seed_can_bind_it():
+    assert "feature_descriptor_path" not in TEMPLATE
+    draft = build_draft(detections=DETECTIONS, qc_buttons=QC_BUTTONS,
+                        device=DEVICE, template=TEMPLATE)
+    assert draft["template"]["feature_descriptor_path"] is None
+
+
+def test_an_explicit_feature_descriptor_path_is_not_overridden():
+    template = {**TEMPLATE, "feature_descriptor_path": "data/descriptors/foo.npz"}
+    draft = build_draft(detections=DETECTIONS, qc_buttons=QC_BUTTONS,
+                        device=DEVICE, template=template)
+    assert draft["template"]["feature_descriptor_path"] == "data/descriptors/foo.npz"
+
+
+def test_a_null_id_described_button_is_never_attributed_to_a_null_id_detection():
+    detections = {
+        **DETECTIONS,
+        "detections": [
+            {
+                "button_id": None,
+                "label_text": "",
+                "bbox_template_coordinates": {"x": 1, "y": 1, "width": 5, "height": 5},
+                "confidence": 0.8,
+            }
+        ],
+    }
+    described = {
+        "buttons": [
+            {
+                "button_id": None,
+                "vietnamese_name": "SAI: không nên gán cho nút không tên",
+                "function_description": "SAI",
+            }
+        ]
+    }
+    merged = _merge(detections, described)
+    assert merged[0]["vietnamese_name"] == ""
+    assert merged[0]["function_description"] == ""

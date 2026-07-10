@@ -45,14 +45,15 @@ def build_draft(
     device: dict,
     template: dict,
 ) -> dict:
-    device_slug = device["id"].removeprefix("device_")
     rows: list[dict] = []
     for index, button in enumerate(qc_buttons):
         button_id = (button.get("button_id") or "").strip()
         suffix = button_id or f"unnamed_{index}"
         rows.append(
             {
-                "id": f"btn_{device_slug}_{suffix}",
+                # Row id must match what label_web/app.js:286 recomputes on save:
+                # `btn_${templateId without "template_" prefix}_${button_id}`.
+                "id": f"btn_{template['template_code']}_{suffix}",
                 "template_id": template["id"],
                 "button_id": button_id,
                 "label": button.get("label_text") or button_id,
@@ -70,6 +71,7 @@ def build_draft(
     return {
         "device": {**device, "created_at": _now(), "updated_at": _now()},
         "template": {
+            "feature_descriptor_path": None,
             **template,
             "logo_bbox": regions.get("logo"),
             "panel_bbox": regions.get("panel"),
@@ -81,10 +83,14 @@ def build_draft(
 
 
 def _merge(detections: dict, described: dict) -> list[dict]:
-    by_id = {b["button_id"]: b for b in described["buttons"]}
+    # Only key on truthy button_id: icon-only buttons carry button_id=None, and a
+    # None key here would let every null-id detection collide on the same lookup
+    # and inherit whichever description was described last.
+    by_id = {b["button_id"]: b for b in described["buttons"] if b.get("button_id")}
     merged: list[dict] = []
     for detection in detections["detections"]:
-        description = by_id.get(detection["button_id"], {})
+        button_id = detection["button_id"]
+        description = by_id.get(button_id, {}) if button_id else {}
         merged.append(
             {
                 "button_id": detection["button_id"],
