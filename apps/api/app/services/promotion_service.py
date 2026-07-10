@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import shutil
 from typing import Any
 
 from app.models.common import BUTTON_TYPES
@@ -46,3 +47,27 @@ def validate_labels(labels: dict[str, Any]) -> None:
             raise PromotionError(f"button {button_id} has a degenerate bbox")
         if button.get("button_type") not in BUTTON_TYPES:
             raise PromotionError(f"button {button_id} has an unknown button_type")
+
+
+def copy_submission_image(image_url: str, template_id: str) -> str:
+    """Copy the submitted photo into data/templates/ and return its new url.
+
+    data/submissions/ is a queue: deleting it must not kill a live template.
+    The destination name is built from template_id, which the server minted.
+    No part of the request reaches the filesystem path.
+    """
+    source = (ROOT / image_url).resolve()
+    submissions_dir = SUBMISSIONS_DIR.resolve()
+    if source.parent != submissions_dir:
+        raise PromotionError("the submission image must live in data/submissions/")
+
+    suffix = source.suffix.lower()
+    if suffix not in _ALLOWED_IMAGE_SUFFIXES:
+        raise PromotionError(f"unsupported image type: {suffix or '(none)'}")
+    if not source.is_file():
+        raise PromotionError(f"the submission image is missing: {image_url}")
+
+    TEMPLATES_DIR.mkdir(parents=True, exist_ok=True)
+    destination = TEMPLATES_DIR / f"{template_id}{suffix}"
+    shutil.copyfile(source, destination)
+    return f"data/templates/{destination.name}"
