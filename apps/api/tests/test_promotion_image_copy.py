@@ -49,3 +49,24 @@ def test_the_destination_name_comes_only_from_the_template_id(promotion_dirs):
     url = copy_submission_image("data/submissions/abc.jpeg", "template_ab12cd34")
     assert url == "data/templates/template_ab12cd34.jpeg"
     assert [p.name for p in templates.iterdir()] == ["template_ab12cd34.jpeg"]
+
+
+def test_a_dotdot_template_id_cannot_escape_the_templates_directory(promotion_dirs):
+    submissions, templates = promotion_dirs
+
+    with pytest.raises(PromotionError, match="template_id"):
+        copy_submission_image("data/submissions/abc.png", "../../pwned")
+
+    escaped = templates.parent.parent / "pwned.png"
+    assert not escaped.is_file()
+    assert list(templates.iterdir()) == []
+
+
+def test_a_slash_in_template_id_cannot_escape_the_templates_directory(promotion_dirs):
+    submissions, templates = promotion_dirs
+
+    with pytest.raises(PromotionError, match="template_id"):
+        copy_submission_image("data/submissions/abc.png", "sub/evil")
+
+    assert not (templates / "sub").exists()
+    assert list(templates.iterdir()) == []

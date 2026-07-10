@@ -68,6 +68,10 @@ def copy_submission_image(image_url: str, template_id: str) -> str:
         raise PromotionError(f"the submission image is missing: {image_url}")
 
     TEMPLATES_DIR.mkdir(parents=True, exist_ok=True)
-    destination = TEMPLATES_DIR / f"{template_id}{suffix}"
+    templates_dir = TEMPLATES_DIR.resolve()
+    destination = (templates_dir / f"{template_id}{suffix}").resolve()
+    if destination.parent != templates_dir:
+        raise PromotionError(f"template_id must not contain a path separator: {template_id!r}")
+
     shutil.copyfile(source, destination)
     return f"data/templates/{destination.name}"
