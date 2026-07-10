@@ -6,6 +6,17 @@ logo-guided template matching, confidence checks, Vietnamese voice/text queries,
 and validated `button_id` guidance.
 
 **Data link**: https://drive.google.com/drive/folders/1JwesdumQ9GoQBLPNvIU4FEUvrY0AW4lO?usp=sharing
+
+## Development Team & Roles
+
+| Member | Student ID | Roles | Core Responsibilities |
+| :--- | :--- | :--- | :--- |
+| **Bui Anh Quan** | 23122017 | Project Manager (PM), Business Analyst (BA), QA Tester | Project coordination, requirements gathering, API contracts design, integration testing |
+| **Luu Thuong Hong** | 23122006 | Mobile & AI Integration Developer | Flutter camera integration, client-side vision logic, platform bridging, STT/TTS wireframe |
+| **Nguyen Thien An** | 23122020 | Backend & Data Pipeline Developer | FastAPI services, LLM orchestration, structured prompt engineering, validation logic |
+| **Le Nguyen Khang** | 23122034 | Database Administrator (DBA) | SQLite schema design, relational constraints, log auditing, template seeding, migrations |
+| **Nguyen Ngoc Khoa** | 23122036 | UI/UX Designer | User journey definition, high-contrast elderly UI/UX layouts, AR highlight guidelines |
+
 ## Current MVP Scope
 
 - Backend API with SQLite seed data for reviewed appliance templates.
