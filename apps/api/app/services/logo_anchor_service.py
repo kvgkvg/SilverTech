@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 from typing import Any
 
@@ -12,12 +11,10 @@ except Exception:  # pragma: no cover - environment dependent
     cv2 = None
 
 from app.services.template_repository import get_template, list_candidates
+from app.services.vision_tools_path import ensure_vision_tools_on_path
 from app.storage.database import ROOT
 
-# vision-tools runs via path, not install (see CLAUDE.md); make its scripts importable.
-_VISION_TOOLS = ROOT / "apps" / "vision-tools"
-if str(_VISION_TOOLS) not in sys.path:
-    sys.path.insert(0, str(_VISION_TOOLS))
+ensure_vision_tools_on_path()
 
 from scripts.brand_gallery import BrandLogo, detect_brand, load_gallery  # noqa: E402
 from scripts.logo_anchor import LogoPose  # noqa: E402
