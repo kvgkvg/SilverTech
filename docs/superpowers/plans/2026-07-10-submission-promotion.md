@@ -30,6 +30,13 @@ Design: `docs/superpowers/specs/2026-07-10-submission-promotion-design.md`
   that first uses it — a module written ahead of its imports fails the commit.
 - `database_path()` reads `SILVERTECH_DB_PATH` on every call, so a fixture that
   repoints it really does get its own database. Row-count assertions are safe.
+- Tasks 2-5 share two fixtures from `apps/api/tests/conftest.py`: `make_labels`
+  and `promotion_dirs`. Task 2 writes them; later tasks use them and never
+  redefine them.
+- `label_web/` has no JS test harness — no `package.json`, no bundler, three
+  plain scripts. Tasks 10 and 11 are verified by driving the page in a browser
+  and reporting what was observed. Adding vitest is out of scope, decided
+  2026-07-10.
 - User-facing error strings in this repo are **unaccented** Vietnamese
   (`"Khong tim thay mau gui len."`). Match that. `recovery_action` must be one of
   `rescan | move_closer | reduce_glare | scan_wider | manual_select | type_query | try_again`
@@ -176,6 +183,7 @@ zero-width logo becomes a `ZeroDivisionError` inside `compute_button_offsets`.
 
 **Files:**
 - Create: `apps/api/app/services/promotion_service.py`
+- Modify: `apps/api/tests/conftest.py`
 - Test: `apps/api/tests/test_promotion_validation.py`
 
 **Interfaces:**
@@ -184,8 +192,91 @@ zero-width logo becomes a `ZeroDivisionError` inside `compute_button_offsets`.
   - `class PromotionError(ValueError)`
   - `validate_labels(labels: dict[str, Any]) -> None` — raises `PromotionError`
   - `TEMPLATES_DIR: Path`, `SUBMISSIONS_DIR: Path` — module constants, monkeypatchable
+  - fixtures `make_labels` and `promotion_dirs` in `apps/api/tests/conftest.py`,
+    used by Tasks 3, 4 and 5
 
-- [ ] **Step 1: Write the failing tests**
+- [ ] **Step 1: Add the shared fixtures to `apps/api/tests/conftest.py`**
+
+Three later test files need the same reviewed-label dict and the same pair of
+temporary directories. Append (do not touch the existing `client` fixture):
+
+```python
+@pytest.fixture()
+def make_labels():
+    """Reviewed labels in the shape POST /api/submissions stores them.
+
+    The `status` values and the template `id` are what the mobile wizard
+    actually sends. Promotion must discard all three.
+    """
+
+    def _make(device=None, template=None, buttons=None):
+        base_device = {
+            "brand": "Panasonic",
+            "appliance_type": "microwave",
+            "model_name": "NN-GT35HM",
+            "display_name": "Lo vi song Panasonic",
+            "status": "submitted",
+        }
+        base_template = {
+            "id": "template_from_the_client",
+            "template_code": "panasonic_microwave_nn_gt35hm_v1",
+            "template_image_url": "data/submissions/abc.png",
+            "logo_bbox": {"x": 0, "y": 0, "width": 100, "height": 40},
+            "panel_bbox": {"x": 0, "y": 0, "width": 800, "height": 600},
+            "status": "submitted",
+        }
+        base_buttons = [
+            {
+                "button_id": "1",
+                "label": "Start",
+                "vietnamese_name": "khoi dong",
+                "function_description": "bat dau",
+                "bbox_template_coordinates": {"x": 200, "y": 100, "width": 50, "height": 50},
+                "button_type": "physical",
+            },
+            {
+                "button_id": "2",
+                "label": "Stop",
+                "vietnamese_name": "dung",
+                "function_description": "dung lai",
+                "bbox_template_coordinates": {"x": 300, "y": 100, "width": 50, "height": 50},
+                "button_type": "touch",
+            },
+        ]
+        return {
+            "device": {**base_device, **(device or {})},
+            "template": {**base_template, **(template or {})},
+            "buttons": base_buttons if buttons is None else buttons,
+        }
+
+    return _make
+
+
+@pytest.fixture()
+def promotion_dirs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+    """Point promotion_service at throwaway data/ directories.
+
+    Yields (submissions_dir, templates_dir) with one fake photo already in the
+    submissions dir at the path make_labels' template_image_url names.
+    """
+    from app.services import promotion_service
+
+    submissions = tmp_path / "data" / "submissions"
+    templates = tmp_path / "data" / "templates"
+    submissions.mkdir(parents=True)
+    templates.mkdir(parents=True)
+    (submissions / "abc.png").write_bytes(b"fake-png")
+    monkeypatch.setattr(promotion_service, "ROOT", tmp_path)
+    monkeypatch.setattr(promotion_service, "SUBMISSIONS_DIR", submissions)
+    monkeypatch.setattr(promotion_service, "TEMPLATES_DIR", templates)
+    return submissions, templates
+```
+
+`promotion_service` is imported inside the fixture, not at module scope: until
+Step 3 of this task the module does not exist, and a conftest that fails to
+import takes every test in the directory down with it.
+
+- [ ] **Step 2: Write the failing tests**
 
 ```python
 # apps/api/tests/test_promotion_validation.py
@@ -196,87 +287,57 @@ import pytest
 from app.services.promotion_service import PromotionError, validate_labels
 
 
-def _labels(**overrides):
-    labels = {
-        "device": {
-            "brand": "Panasonic",
-            "appliance_type": "microwave",
-            "model_name": "NN-GT35HM",
-            "display_name": "Lo vi song Panasonic",
-        },
-        "template": {
-            "template_code": "panasonic_microwave_nn_gt35hm_v1",
-            "template_image_url": "data/submissions/abc.jpg",
-            "logo_bbox": {"x": 476, "y": 3862, "width": 857, "height": 226},
-            "panel_bbox": {"x": 238, "y": 428, "width": 5301, "height": 3701},
-        },
-        "buttons": [
-            {
-                "button_id": "1",
-                "label": "Start",
-                "vietnamese_name": "khoi dong",
-                "function_description": "bat dau",
-                "bbox_template_coordinates": {"x": 10, "y": 10, "width": 50, "height": 50},
-                "button_type": "physical",
-            }
-        ],
-    }
-    labels.update(overrides)
-    return labels
+def test_a_complete_submission_validates(make_labels):
+    validate_labels(make_labels())
 
 
-def test_a_complete_submission_validates():
-    validate_labels(_labels())
-
-
-def test_a_missing_logo_bbox_is_rejected():
-    template = dict(_labels()["template"], logo_bbox=None)
+def test_a_missing_logo_bbox_is_rejected(make_labels):
     with pytest.raises(PromotionError, match="logo_bbox"):
-        validate_labels(_labels(template=template))
+        validate_labels(make_labels(template={"logo_bbox": None}))
 
 
-def test_a_zero_width_logo_is_rejected():
+def test_a_zero_width_logo_is_rejected(make_labels):
     # compute_button_offsets divides by the logo width.
-    template = dict(_labels()["template"], logo_bbox={"x": 0, "y": 0, "width": 0, "height": 10})
+    logo = {"x": 0, "y": 0, "width": 0, "height": 10}
     with pytest.raises(PromotionError, match="logo_bbox"):
-        validate_labels(_labels(template=template))
+        validate_labels(make_labels(template={"logo_bbox": logo}))
 
 
-def test_a_submission_without_buttons_is_rejected():
+def test_a_submission_without_buttons_is_rejected(make_labels):
     with pytest.raises(PromotionError, match="no buttons"):
-        validate_labels(_labels(buttons=[]))
+        validate_labels(make_labels(buttons=[]))
 
 
-def test_duplicate_button_ids_are_rejected():
-    button = _labels()["buttons"][0]
+def test_duplicate_button_ids_are_rejected(make_labels):
+    button = make_labels()["buttons"][0]
     with pytest.raises(PromotionError, match="duplicate"):
-        validate_labels(_labels(buttons=[button, dict(button)]))
+        validate_labels(make_labels(buttons=[button, dict(button)]))
 
 
-def test_a_button_drawn_without_a_name_is_rejected():
+def test_a_button_drawn_without_a_name_is_rejected(make_labels):
     # Matches seed.is_labeled_button: the name is what TTS reads aloud.
-    button = dict(_labels()["buttons"][0], vietnamese_name="  ")
+    button = dict(make_labels()["buttons"][0], vietnamese_name="  ")
     with pytest.raises(PromotionError, match="name"):
-        validate_labels(_labels(buttons=[button]))
+        validate_labels(make_labels(buttons=[button]))
 
 
-def test_a_degenerate_button_bbox_is_rejected():
+def test_a_degenerate_button_bbox_is_rejected(make_labels):
     button = dict(
-        _labels()["buttons"][0],
+        make_labels()["buttons"][0],
         bbox_template_coordinates={"x": 10, "y": 10, "width": 0, "height": 50},
     )
     with pytest.raises(PromotionError, match="bbox"):
-        validate_labels(_labels(buttons=[button]))
+        validate_labels(make_labels(buttons=[button]))
 
 
-def test_an_unknown_button_type_is_rejected():
+def test_an_unknown_button_type_is_rejected(make_labels):
     # buttons.button_type has a CHECK constraint; a bad value fails the insert.
-    button = dict(_labels()["buttons"][0], button_type="slider")
+    button = dict(make_labels()["buttons"][0], button_type="slider")
     with pytest.raises(PromotionError, match="button_type"):
-        validate_labels(_labels(buttons=[button]))
+        validate_labels(make_labels(buttons=[button]))
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [ ] **Step 2b: Run tests to verify they fail**
 
 Run: `rtk proxy env PYTHONPATH=apps/api pytest -q apps/api/tests/test_promotion_validation.py`
 Expected: FAIL, `ModuleNotFoundError: No module named 'app.services.promotion_service'`
@@ -347,7 +408,7 @@ Expected: PASS, 8 passed
 
 ```bash
 rtk proxy ruff check apps/api
-rtk proxy git add apps/api/app/services/promotion_service.py apps/api/tests/test_promotion_validation.py
+rtk proxy git add apps/api/app/services/promotion_service.py apps/api/tests/conftest.py apps/api/tests/test_promotion_validation.py
 rtk proxy git commit -m "feat(api): validate reviewed labels before promotion"
 ```
 
@@ -370,33 +431,20 @@ Neither may appear in a path.
 
 - [ ] **Step 1: Write the failing tests**
 
+Uses the `promotion_dirs` fixture from Task 2, which already leaves an
+`abc.png` in the submissions directory.
+
 ```python
 # apps/api/tests/test_promotion_image_copy.py
 from __future__ import annotations
 
-from pathlib import Path
-
 import pytest
 
-from app.services import promotion_service
 from app.services.promotion_service import PromotionError, copy_submission_image
 
 
-@pytest.fixture()
-def dirs(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
-    submissions = tmp_path / "data" / "submissions"
-    templates = tmp_path / "data" / "templates"
-    submissions.mkdir(parents=True)
-    templates.mkdir(parents=True)
-    monkeypatch.setattr(promotion_service, "ROOT", tmp_path)
-    monkeypatch.setattr(promotion_service, "SUBMISSIONS_DIR", submissions)
-    monkeypatch.setattr(promotion_service, "TEMPLATES_DIR", templates)
-    return submissions, templates
-
-
-def test_it_copies_the_photo_and_returns_the_new_url(dirs):
-    submissions, templates = dirs
-    (submissions / "abc.png").write_bytes(b"fake-png")
+def test_it_copies_the_photo_and_returns_the_new_url(promotion_dirs):
+    _, templates = promotion_dirs
 
     url = copy_submission_image("data/submissions/abc.png", "template_ab12cd34")
 
@@ -404,38 +452,37 @@ def test_it_copies_the_photo_and_returns_the_new_url(dirs):
     assert (templates / "template_ab12cd34.png").read_bytes() == b"fake-png"
 
 
-def test_the_original_survives(dirs):
-    submissions, _ = dirs
-    (submissions / "abc.png").write_bytes(b"fake-png")
+def test_the_original_survives(promotion_dirs):
+    submissions, _ = promotion_dirs
     copy_submission_image("data/submissions/abc.png", "template_ab12cd34")
     assert (submissions / "abc.png").is_file()
 
 
-def test_a_path_outside_the_submissions_directory_is_rejected(dirs):
+def test_a_path_outside_the_submissions_directory_is_rejected(promotion_dirs):
     # image_url arrives from the client in SubmissionCreate.
     with pytest.raises(PromotionError, match="data/submissions"):
         copy_submission_image("data/templates/panasonic.png", "template_ab12cd34")
 
 
-def test_a_traversing_image_url_is_rejected(dirs):
+def test_a_traversing_image_url_is_rejected(promotion_dirs):
     with pytest.raises(PromotionError, match="data/submissions"):
         copy_submission_image("data/submissions/../../etc/passwd", "template_ab12cd34")
 
 
-def test_a_missing_file_is_rejected(dirs):
+def test_a_missing_file_is_rejected(promotion_dirs):
     with pytest.raises(PromotionError, match="missing"):
         copy_submission_image("data/submissions/gone.png", "template_ab12cd34")
 
 
-def test_an_unsupported_suffix_is_rejected(dirs):
-    submissions, _ = dirs
+def test_an_unsupported_suffix_is_rejected(promotion_dirs):
+    submissions, _ = promotion_dirs
     (submissions / "abc.svg").write_bytes(b"<svg/>")
     with pytest.raises(PromotionError, match="image type"):
         copy_submission_image("data/submissions/abc.svg", "template_ab12cd34")
 
 
-def test_the_destination_name_comes_only_from_the_template_id(dirs):
-    submissions, templates = dirs
+def test_the_destination_name_comes_only_from_the_template_id(promotion_dirs):
+    submissions, templates = promotion_dirs
     (submissions / "abc.jpeg").write_bytes(b"x")
     url = copy_submission_image("data/submissions/abc.jpeg", "template_ab12cd34")
     assert url == "data/templates/template_ab12cd34.jpeg"
@@ -516,103 +563,54 @@ from pathlib import Path
 
 import pytest
 
-from app.services import promotion_service
 from app.services.promotion_service import PromotionError, promote_submission
 
 SUBMISSION_ID = "ab12cd34-0000-0000-0000-000000000000"
 
 
-def _labels():
-    return {
-        "device": {
-            "brand": "Panasonic",
-            "appliance_type": "microwave",
-            "model_name": "NN-GT35HM",
-            "display_name": "Lo vi song Panasonic",
-            "status": "submitted",  # the wizard sends this; devices CHECK forbids it
-        },
-        "template": {
-            "id": "template_from_the_client",  # must be ignored
-            "template_code": "panasonic_microwave_nn_gt35hm_v1",
-            "template_image_url": "data/submissions/abc.png",
-            "logo_bbox": {"x": 0, "y": 0, "width": 100, "height": 40},
-            "panel_bbox": {"x": 0, "y": 0, "width": 800, "height": 600},
-            "status": "submitted",
-        },
-        "buttons": [
-            {
-                "button_id": "1",
-                "label": "Start",
-                "vietnamese_name": "khoi dong",
-                "function_description": "bat dau",
-                "bbox_template_coordinates": {"x": 200, "y": 100, "width": 50, "height": 50},
-                "button_type": "physical",
-            },
-            {
-                "button_id": "2",
-                "label": "Stop",
-                "vietnamese_name": "dung",
-                "function_description": "dung lai",
-                "bbox_template_coordinates": {"x": 300, "y": 100, "width": 50, "height": 50},
-                "button_type": "touch",
-            },
-        ],
-    }
-
-
 @pytest.fixture()
-def conn(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def conn(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, promotion_dirs):
     monkeypatch.setenv("SILVERTECH_DB_PATH", str(tmp_path / "promo.sqlite3"))
     from app.storage.database import connect, initialize_database
 
     initialize_database()
-
-    submissions = tmp_path / "data" / "submissions"
-    templates = tmp_path / "data" / "templates"
-    submissions.mkdir(parents=True)
-    templates.mkdir(parents=True)
-    (submissions / "abc.png").write_bytes(b"fake-png")
-    monkeypatch.setattr(promotion_service, "ROOT", tmp_path)
-    monkeypatch.setattr(promotion_service, "SUBMISSIONS_DIR", submissions)
-    monkeypatch.setattr(promotion_service, "TEMPLATES_DIR", templates)
-
     connection = connect()
     yield connection
     connection.close()
 
 
-def test_it_returns_a_template_id_derived_from_the_submission(conn):
-    assert promote_submission(conn, SUBMISSION_ID, _labels()) == "template_ab12cd34"
+def test_it_returns_a_template_id_derived_from_the_submission(conn, make_labels):
+    assert promote_submission(conn, SUBMISSION_ID, make_labels()) == "template_ab12cd34"
 
 
-def test_the_client_supplied_template_id_is_ignored(conn):
-    promote_submission(conn, SUBMISSION_ID, _labels())
+def test_the_client_supplied_template_id_is_ignored(conn, make_labels):
+    promote_submission(conn, SUBMISSION_ID, make_labels())
     ids = [r["id"] for r in conn.execute("SELECT id FROM templates")]
     assert ids == ["template_ab12cd34"]
 
 
-def test_the_device_is_active_and_the_template_is_official(conn):
+def test_the_device_is_active_and_the_template_is_official(conn, make_labels):
     # list_candidates filters on exactly these two columns; get either wrong and
     # the promoted template is invisible to the camera.
-    promote_submission(conn, SUBMISSION_ID, _labels())
+    promote_submission(conn, SUBMISSION_ID, make_labels())
     assert conn.execute("SELECT status FROM devices").fetchone()["status"] == "active"
     assert conn.execute("SELECT status FROM templates").fetchone()["status"] == "official"
 
 
-def test_it_writes_every_button(conn):
-    promote_submission(conn, SUBMISSION_ID, _labels())
+def test_it_writes_every_button(conn, make_labels):
+    promote_submission(conn, SUBMISSION_ID, make_labels())
     rows = conn.execute("SELECT id, button_id FROM buttons ORDER BY button_id").fetchall()
     assert [r["button_id"] for r in rows] == ["1", "2"]
     assert [r["id"] for r in rows] == ["btn_ab12cd34_1", "btn_ab12cd34_2"]
 
 
-def test_it_writes_button_offsets(conn):
+def test_it_writes_button_offsets(conn, make_labels):
     # The whole feature turns on this table. run_logo_anchor raises 409
     # "no button_offsets" without it.
     from scripts.logo_anchor import compute_button_offsets
 
-    promote_submission(conn, SUBMISSION_ID, _labels())
-    labels = _labels()
+    labels = make_labels()
+    promote_submission(conn, SUBMISSION_ID, labels)
     expected = compute_button_offsets(
         labels["template"]["logo_bbox"],
         {b["button_id"]: b["bbox_template_coordinates"] for b in labels["buttons"]},
@@ -622,24 +620,21 @@ def test_it_writes_button_offsets(conn):
     assert actual == expected
 
 
-def test_the_template_points_at_the_copied_image(conn):
-    promote_submission(conn, SUBMISSION_ID, _labels())
+def test_the_template_points_at_the_copied_image(conn, make_labels):
+    promote_submission(conn, SUBMISSION_ID, make_labels())
     row = conn.execute("SELECT template_image_url, template_code FROM templates").fetchone()
     assert row["template_image_url"] == "data/templates/template_ab12cd34.png"
     assert row["template_code"] == "panasonic_microwave_nn_gt35hm_v1"
 
 
-def test_invalid_labels_write_nothing(conn):
-    labels = _labels()
-    labels["template"]["logo_bbox"] = None
+def test_invalid_labels_write_nothing(conn, make_labels):
     with pytest.raises(PromotionError):
-        promote_submission(conn, SUBMISSION_ID, labels)
+        promote_submission(conn, SUBMISSION_ID, make_labels(template={"logo_bbox": None}))
     assert conn.execute("SELECT count(*) AS n FROM devices").fetchone()["n"] == 0
 
 
-def test_a_missing_photo_writes_nothing(conn):
-    labels = _labels()
-    labels["template"]["template_image_url"] = "data/submissions/gone.png"
+def test_a_missing_photo_writes_nothing(conn, make_labels):
+    labels = make_labels(template={"template_image_url": "data/submissions/gone.png"})
     with pytest.raises(PromotionError):
         promote_submission(conn, SUBMISSION_ID, labels)
     assert conn.execute("SELECT count(*) AS n FROM templates").fetchone()["n"] == 0
@@ -820,60 +815,24 @@ from pathlib import Path
 
 import pytest
 
-from app.services import promotion_service
 from app.services.promotion_service import PromotionError
 from app.services.review_service import AlreadyReviewedError, review_submission
 from app.services.submission_service import create_submission
 
-LABELS = {
-    "device": {
-        "brand": "Panasonic",
-        "appliance_type": "microwave",
-        "model_name": "NN-GT35HM",
-        "display_name": "Lo vi song Panasonic",
-    },
-    "template": {
-        "template_code": "panasonic_microwave_nn_gt35hm_v1",
-        "template_image_url": "data/submissions/abc.png",
-        "logo_bbox": {"x": 0, "y": 0, "width": 100, "height": 40},
-        "panel_bbox": None,
-    },
-    "buttons": [
-        {
-            "button_id": "1",
-            "label": "Start",
-            "vietnamese_name": "khoi dong",
-            "function_description": "bat dau",
-            "bbox_template_coordinates": {"x": 200, "y": 100, "width": 50, "height": 50},
-            "button_type": "physical",
-        }
-    ],
-}
-
 
 @pytest.fixture()
-def submission_id(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def submission_id(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, promotion_dirs, make_labels):
     monkeypatch.setenv("SILVERTECH_DB_PATH", str(tmp_path / "review.sqlite3"))
     from app.storage.database import initialize_database
 
     initialize_database()
-
-    submissions = tmp_path / "data" / "submissions"
-    templates = tmp_path / "data" / "templates"
-    submissions.mkdir(parents=True)
-    templates.mkdir(parents=True)
-    (submissions / "abc.png").write_bytes(b"fake-png")
-    monkeypatch.setattr(promotion_service, "ROOT", tmp_path)
-    monkeypatch.setattr(promotion_service, "SUBMISSIONS_DIR", submissions)
-    monkeypatch.setattr(promotion_service, "TEMPLATES_DIR", templates)
-
     return create_submission(
         {
             "submitted_by": None,
             "brand": "Panasonic",
             "appliance_type": "microwave",
             "image_url": "data/submissions/abc.png",
-            "proposed_labels_json": LABELS,
+            "proposed_labels_json": make_labels(),
         }
     )
 
@@ -898,14 +857,17 @@ def test_reject_creates_no_template(submission_id):
     assert _count("templates") == 0
 
 
-def test_edit_promotes_the_edited_labels(submission_id):
-    edited = {**LABELS, "buttons": [dict(LABELS["buttons"][0], vietnamese_name="bat dau ngay")]}
-    review_submission(submission_id, "edit", None, edited_template=edited)
+def test_edit_promotes_the_edited_labels(submission_id, make_labels):
+    labels = make_labels()
+    labels["buttons"][0]["vietnamese_name"] = "bat dau ngay"
+    review_submission(submission_id, "edit", None, edited_template=labels)
 
     from app.storage.database import db_session
 
     with db_session() as conn:
-        name = conn.execute("SELECT vietnamese_name FROM buttons").fetchone()["vietnamese_name"]
+        name = conn.execute(
+            "SELECT vietnamese_name FROM buttons WHERE button_id = '1'"
+        ).fetchone()["vietnamese_name"]
     assert name == "bat dau ngay"
 
 
