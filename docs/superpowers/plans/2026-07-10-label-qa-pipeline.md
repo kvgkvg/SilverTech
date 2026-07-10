@@ -2906,7 +2906,7 @@ manual PDF plus a panel photo into a draft label file with per-button QC flags â
 make test-label
 ```
 
-Expected: `114 passed` (12 + 24 + 8 + 11 + 7 + 27 + 11 + 13) â€” 114 today, 127 once Task 8 lands.
+Expected: `113 passed` (12 + 24 + 8 + 11 + 7 + 27 + 11 + 13). The whole vision-tools suite is 127, the extra 14 being the pre-existing matcher tests.
 
 - [ ] **Step 5: Commit**
 
