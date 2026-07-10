@@ -113,7 +113,11 @@ def _system_prompt() -> str:
         "Do not invent button IDs. Keep each instruction short, direct, and safe. "
         "instruction_vi and expected_result are read aloud by a Vietnamese "
         "text-to-speech engine, so they must never contain a raw button_id such as "
-        "'time_1_min'. Refer to a button by its vietnamese_name instead."
+        "'time_1_min'. Refer to a button by its vietnamese_name instead. "
+        "If the question is NOT about operating this specific appliance (small talk, "
+        "recipes, weather, other devices, anything unrelated), refuse: return "
+        '{"intent": "out_of_scope", "steps": [], "safety_note": a short polite '
+        "Vietnamese sentence explaining you can only help with this appliance}."
     )
 
 
@@ -165,14 +169,25 @@ def _mock_guidance(user_query: str, template: dict[str, Any]) -> dict[str, Any]:
         button_id = "turbo_defrost" if "turbo_defrost" in buttons else next(iter(buttons))
         intent = "defrost"
         instruction = "Nhấn nút Rã đông để chọn chế độ rã đông."
+    elif "nhiệt độ" in query or "nhiet do" in query:
+        button_id = "temp_up" if "temp_up" in buttons else next(iter(buttons))
+        intent = "temperature"
+        instruction = "Nhấn nút Tăng nhiệt độ để chỉnh nhiệt độ."
     elif "hẹn giờ" in query or "hen gio" in query:
         button_id = "time_clock" if "time_clock" in buttons else next(iter(buttons))
         intent = "timer"
         instruction = "Nhấn nút Hẹn giờ/Đồng hồ."
     else:
-        button_id = next(iter(buttons))
-        intent = "general_guidance"
-        instruction = f"Nhấn nút {buttons[button_id]['vietnamese_name']}."
+        # Unknown query: refuse instead of guessing a button. Telling an elderly
+        # user to press an arbitrary button is worse than admitting no answer.
+        return {
+            "intent": "out_of_scope",
+            "steps": [],
+            "safety_note": (
+                "Câu hỏi này không liên quan đến thiết bị. "
+                "Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé."
+            ),
+        }
     return {
         "intent": intent,
         "steps": [

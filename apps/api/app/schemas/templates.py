@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 
 class BBox(BaseModel):
@@ -85,8 +85,16 @@ class GuidanceStep(BaseModel):
 
 class GuidanceOutput(BaseModel):
     intent: str
-    steps: list[GuidanceStep] = Field(min_length=1)
+    steps: list[GuidanceStep] = Field(default_factory=list)
     safety_note: str | None = None
+
+    @model_validator(mode="after")
+    def _steps_required_unless_out_of_scope(self) -> "GuidanceOutput":
+        # Out-of-scope refusals carry no steps; every actionable intent must
+        # give the user at least one validated button press.
+        if self.intent != "out_of_scope" and not self.steps:
+            raise ValueError("steps must contain at least one item")
+        return self
 
 
 class VisionLogRequest(BaseModel):
