@@ -72,10 +72,10 @@ def test_a_reply_without_a_buttons_key_raises():
 
 
 def test_write_descriptions_skips_null_ids_and_writes_the_file(tmp_path):
-    manual_text = {
-        "source": "m.pdf",
-        "pages": [{"page": 1, "mode": "text_layer", "text": "Start."}],
-    }
+    # pipeline.py joins the manual document into a single string with
+    # manual_full_text before calling write_descriptions; describe.py no longer
+    # imports extract.py itself, so the test hands it the already-joined string.
+    manual_text = "[page 1]\nStart."
     detections = {"detections": [
         {"button_id": "start", "label_text": "Start"},
         {"button_id": None, "label_text": ""},
@@ -88,7 +88,7 @@ def test_write_descriptions_skips_null_ids_and_writes_the_file(tmp_path):
         def prompt_version(self, prompt):
             return "sha256:fake"
 
-        def generate_json(self, prompt, *, image=None, mime_type="image/png", cache_salt=b""):
+        def generate_json(self, prompt, *, image=None, mime_type="image/png"):
             FakeClient.captured_prompt = prompt
             assert image is None  # describe.py must never see the image
             return {"buttons": [{"button_id": "start", "vietnamese_name": "Bắt đầu",

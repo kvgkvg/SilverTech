@@ -9,7 +9,6 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from scripts.label_pipeline.extract import manual_full_text
 from scripts.label_pipeline.gemini_client import GeminiClient
 
 DESCRIBE_PROMPT = """Bạn đang đọc sách hướng dẫn sử dụng của một thiết bị gia dụng.
@@ -69,7 +68,7 @@ def describe_buttons(reply: dict, *, button_ids: list[str]) -> list[dict]:
 
 
 def write_descriptions(
-    manual_text: dict,
+    manual_text: str,
     detections: dict,
     out_path: Path,
     *,
@@ -83,8 +82,7 @@ def write_descriptions(
         for d in detections["detections"]
         if d.get("button_id")
     )
-    manual = manual_full_text(manual_text)
-    prompt = DESCRIBE_PROMPT.format(manual=manual, buttons=listing)
+    prompt = DESCRIBE_PROMPT.format(manual=manual_text, buttons=listing)
 
     # The manual text and the id listing are both interpolated into the prompt, so the
     # prompt hash (computed by GeminiClient from the full prompt text) already keys the

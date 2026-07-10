@@ -14,7 +14,7 @@ class FakeClient:
         self.error = error
         self.calls = 0
 
-    def generate_json(self, prompt, *, image=None, mime_type="image/png", cache_salt=b""):
+    def generate_json(self, prompt, *, image=None, mime_type="image/png"):
         self.calls += 1
         if self.error is not None:
             raise self.error

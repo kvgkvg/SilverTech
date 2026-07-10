@@ -113,16 +113,17 @@ def run(args: argparse.Namespace, *, client: GeminiClient) -> dict:
     manual_text = write_manual_text(
         Path(args.manual), work_dir / "manual_text.json", client=client
     )
+    manual = manual_full_text(manual_text)
     detections = write_detections(
         Path(args.image), work_dir / "detections.json", client=client
     )
     described = write_descriptions(
-        manual_text, detections, work_dir / "described.json", client=client
+        manual, detections, work_dir / "described.json", client=client
     )
 
     qc_buttons, report = run_qc(
         _merge(detections, described),
-        manual_text=manual_full_text(manual_text),
+        manual_text=manual,
         image=detections["image"],
         panel_bbox=(detections.get("regions") or {}).get("panel"),
         confidence_threshold=args.confidence_threshold,

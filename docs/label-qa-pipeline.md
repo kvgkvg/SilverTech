@@ -21,7 +21,10 @@ PYTHONPATH=apps/vision-tools python -m scripts.label_pipeline.pipeline \
 ```
 
 Then open the draft in `label_web/`, fix every button whose `qc.status` is `flag`,
-and rename the file to drop `.draft`. Only then does `make seed-api` see it.
+and rename the file to drop `.draft`. `seed.py` deliberately skips any file ending
+in `.draft.json` or `.qc_report.json` when it globs the labels directory, so a
+draft is invisible to `make seed-api` until that rename makes it an ordinary
+`.json` file.
 
 The CLI refuses an `--out` that is not a `.draft.json`. A reviewed label file is a
 human artifact.

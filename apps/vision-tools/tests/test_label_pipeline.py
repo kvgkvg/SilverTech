@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+import argparse
 import json
 
-from scripts.label_pipeline.pipeline import _merge, build_draft
+from scripts.label_pipeline.pipeline import _merge, build_draft, run
 
 DEVICE = {
     "id": "device_panasonic_microwave_nn_gt35hm",
@@ -142,3 +143,90 @@ def test_a_null_id_described_button_is_never_attributed_to_a_null_id_detection()
     merged = _merge(detections, described)
     assert merged[0]["vietnamese_name"] == ""
     assert merged[0]["function_description"] == ""
+
+
+class _FakeGeminiClient:
+    """Stands in for GeminiClient: canned detect/describe replies, no network."""
+
+    model = "fake-model-1"
+
+    def prompt_version(self, prompt: str) -> str:
+        return "sha256:fake"
+
+    def generate_json(self, prompt, *, image=None, mime_type="image/png"):
+        if image is not None:
+            # detect.py's call: image is present.
+            return {
+                "detections": [
+                    {"label_text": "Start", "box_2d": [100, 100, 300, 400], "confidence": 0.9},
+                ],
+                "regions": {
+                    "logo": [0, 0, 50, 50],
+                    "panel": [0, 0, 1000, 1000],
+                },
+            }
+        # describe.py's call: no image.
+        return {
+            "buttons": [
+                {
+                    "button_id": "start",
+                    "vietnamese_name": "Bắt đầu",
+                    "function_description": "bắt đầu nấu",
+                    "manual_evidence": {"page": 1, "quote": "Nhấn Start để bắt đầu."},
+                }
+            ]
+        }
+
+
+def test_run_writes_a_draft_and_qc_report_with_intermediates_under_pipeline(
+    tmp_path, monkeypatch
+):
+    # This is the missing coverage that let the seed.py collision (Finding 1) ship
+    # unseen: run() and main() had zero tests, so nothing exercised the file names
+    # run() actually writes.
+    from PIL import Image
+
+    import scripts.label_pipeline.extract as extract_module
+    from scripts.label_pipeline.extract import PageSource
+
+    image_path = tmp_path / "panel.png"
+    Image.new("RGB", (1200, 900), color="white").save(image_path)
+
+    manual_page = PageSource(
+        1, "Nhấn Start để bắt đầu quá trình nấu ăn một cách nhanh chóng.", None
+    )
+    monkeypatch.setattr(extract_module, "read_pdf", lambda _path: [manual_page])
+
+    out_path = tmp_path / "acme_toaster_t100_v1.draft.json"
+    args = argparse.Namespace(
+        manual=str(tmp_path / "manual.pdf"),
+        image=str(image_path),
+        out=str(out_path),
+        brand="Acme",
+        model_name="T-100",
+        appliance_type="toaster",
+        display_name=None,
+        template_code=None,
+        model="fake-model-1",
+        confidence_threshold=0.5,
+    )
+
+    run(args, client=_FakeGeminiClient())
+
+    report_path = out_path.with_name(out_path.name.replace(".draft.json", ".qc_report.json"))
+    assert out_path.exists()
+    assert report_path.exists()
+
+    draft = json.loads(out_path.read_text(encoding="utf-8"))
+    assert set(draft) == {"device", "template", "buttons"}
+
+    # seed.py (Finding 1's fix) deliberately skips every "*.draft.json" file when it
+    # globs data/templates/labels/, so a template with status "draft" never reaches
+    # the `templates.status` CHECK constraint -- it is simply never seeded until a
+    # human reviews and renames the file. Asserting "draft" here pins that contract.
+    assert draft["template"]["status"] == "draft"
+
+    work_dir = out_path.parent / ".pipeline" / image_path.stem
+    assert (work_dir / "manual_text.json").exists()
+    assert (work_dir / "detections.json").exists()
+    assert (work_dir / "described.json").exists()

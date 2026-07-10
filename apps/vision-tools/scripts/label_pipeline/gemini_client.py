@@ -82,7 +82,7 @@ class GeminiClient:
     def prompt_version(self, prompt: str) -> str:
         return "sha256:" + hashlib.sha256(prompt.encode("utf-8")).hexdigest()[:12]
 
-    def _cache_path(self, prompt: str, image: bytes | None, cache_salt: bytes) -> Path:
+    def _cache_path(self, prompt: str, image: bytes | None) -> Path:
         # The api key is deliberately absent: it is a credential, not an input, and two
         # developers with different keys should share a cache.
         digest = hashlib.sha256()
@@ -91,8 +91,6 @@ class GeminiClient:
         digest.update(self.prompt_version(prompt).encode("utf-8"))
         digest.update(b"\0")
         digest.update(hashlib.sha256(b"\0no-image" if image is None else image).digest())
-        digest.update(b"\0")
-        digest.update(cache_salt)
         return self.cache_dir / f"{digest.hexdigest()}.json"
 
     def generate_json(
@@ -101,9 +99,8 @@ class GeminiClient:
         *,
         image: bytes | None = None,
         mime_type: str = "image/png",
-        cache_salt: bytes = b"",
     ) -> dict[str, Any]:
-        cache_path = self._cache_path(prompt, image, cache_salt)
+        cache_path = self._cache_path(prompt, image)
         if cache_path.exists():
             return json.loads(cache_path.read_text(encoding="utf-8"))
 
