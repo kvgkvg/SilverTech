@@ -1,13 +1,18 @@
 from __future__ import annotations
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
+from app.api.deps import require_admin_token
 from app.schemas.errors import friendly_error
 from app.schemas.templates import SubmissionReview
 from app.services.promotion_service import PromotionError
 from app.services.review_service import AlreadyReviewedError, review_submission
 
-router = APIRouter(prefix="/api/admin", tags=["admin"])
+router = APIRouter(
+    prefix="/api/admin",
+    tags=["admin"],
+    dependencies=[Depends(require_admin_token)],
+)
 
 
 @router.post("/submissions/{submission_id}/review")

@@ -14,6 +14,7 @@ def test_admin_review_contract(client):
     response = client.post(
         f"/api/admin/submissions/{submission['submission_id']}/review",
         json={"decision": "reject", "reviewer_note": "Needs clearer panel image"},
+        headers={"X-Admin-Token": "test-token"},
     )
     assert response.status_code == 200
     assert response.json()["status"] == "rejected"

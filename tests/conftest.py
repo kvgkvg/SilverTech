@@ -9,6 +9,7 @@ from fastapi.testclient import TestClient
 @pytest.fixture()
 def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     monkeypatch.setenv("SILVERTECH_DB_PATH", str(tmp_path / "contract.sqlite3"))
+    monkeypatch.setenv("SILVERTECH_ADMIN_TOKEN", "test-token")
     # Without this, env_loader hands the real provider from .env to the guidance
     # test, and running the contract suite bills a live OpenRouter key.
     monkeypatch.setenv("SILVERTECH_LLM_PROVIDER", "mock")

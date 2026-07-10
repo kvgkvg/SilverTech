@@ -139,6 +139,7 @@ def test_admin_review_nonexistent(client):
             "decision": "accept",
             "reviewer_note": "Approved by testing script.",
         },
+        headers={"X-Admin-Token": "test-token"},
     )
     assert response.status_code == 404
 
@@ -158,5 +159,6 @@ def test_admin_review_invalid_decision(client):
             "decision": "delete_all",
             "reviewer_note": "Should fail validator.",
         },
+        headers={"X-Admin-Token": "test-token"},
     )
     assert response.status_code == 422
