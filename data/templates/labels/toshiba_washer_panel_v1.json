@@ -8,7 +8,7 @@
     "status": "active"
   },
   "template": {
-    "id": "template_toshiba_washer_panel_v1",
+    "id": "template_toshiba_washer_aw_dug1700wv_v1",
     "device_id": "device_toshiba_washer_aw_dug1700wv",
     "template_code": "toshiba_washer_panel_v1",
     "template_image_url": "data/templates/toshiba_washer_panel_v1.png",
@@ -31,7 +31,7 @@
   "buttons": [
     {
       "id": "btn_toshiba_washer_power",
-      "template_id": "template_toshiba_washer_panel_v1",
+      "template_id": "template_toshiba_washer_aw_dug1700wv_v1",
       "button_id": "power",
       "label": "Mở/Tắt",
       "vietnamese_name": "Nguồn",
@@ -47,7 +47,7 @@
     },
     {
       "id": "btn_toshiba_washer_start_pause",
-      "template_id": "template_toshiba_washer_panel_v1",
+      "template_id": "template_toshiba_washer_aw_dug1700wv_v1",
       "button_id": "start_pause",
       "label": "Khởi động/Tạm dừng",
       "vietnamese_name": "Khởi động/Tạm dừng",
@@ -63,7 +63,7 @@
     },
     {
       "id": "btn_toshiba_washer_water_level",
-      "template_id": "template_toshiba_washer_panel_v1",
+      "template_id": "template_toshiba_washer_aw_dug1700wv_v1",
       "button_id": "water_level",
       "label": "Chọn mực nước",
       "vietnamese_name": "Mực nước",
@@ -79,7 +79,7 @@
     },
     {
       "id": "btn_toshiba_washer_quick_wash",
-      "template_id": "template_toshiba_washer_panel_v1",
+      "template_id": "template_toshiba_washer_aw_dug1700wv_v1",
       "button_id": "quick_wash",
       "label": "Giặt nhanh",
       "vietnamese_name": "Giặt nhanh",
@@ -95,7 +95,7 @@
     },
     {
       "id": "btn_toshiba_washer_tub_clean",
-      "template_id": "template_toshiba_washer_panel_v1",
+      "template_id": "template_toshiba_washer_aw_dug1700wv_v1",
       "button_id": "tub_clean",
       "label": "Vệ sinh lồng giặt",
       "vietnamese_name": "Vệ sinh lồng giặt",
@@ -111,7 +111,7 @@
     },
     {
       "id": "btn_toshiba_washer_spin_only",
-      "template_id": "template_toshiba_washer_panel_v1",
+      "template_id": "template_toshiba_washer_aw_dug1700wv_v1",
       "button_id": "spin_only",
       "label": "Chỉ vắt",
       "vietnamese_name": "Chỉ vắt",
@@ -127,7 +127,7 @@
     },
     {
       "id": "btn_toshiba_washer_rinse_only",
-      "template_id": "template_toshiba_washer_panel_v1",
+      "template_id": "template_toshiba_washer_aw_dug1700wv_v1",
       "button_id": "rinse_only",
       "label": "Chỉ xả",
       "vietnamese_name": "Chỉ xả",
@@ -143,7 +143,7 @@
     },
     {
       "id": "btn_toshiba_washer_wash_only",
-      "template_id": "template_toshiba_washer_panel_v1",
+      "template_id": "template_toshiba_washer_aw_dug1700wv_v1",
       "button_id": "wash_only",
       "label": "Chỉ giặt",
       "vietnamese_name": "Chỉ giặt",
@@ -159,7 +159,7 @@
     },
     {
       "id": "btn_toshiba_washer_soak",
-      "template_id": "template_toshiba_washer_panel_v1",
+      "template_id": "template_toshiba_washer_aw_dug1700wv_v1",
       "button_id": "soak",
       "label": "Giặt ngâm",
       "vietnamese_name": "Giặt ngâm",
@@ -175,7 +175,7 @@
     },
     {
       "id": "btn_toshiba_washer_fragrance",
-      "template_id": "template_toshiba_washer_panel_v1",
+      "template_id": "template_toshiba_washer_aw_dug1700wv_v1",
       "button_id": "fragrance",
       "label": "Lưu giữ hương thơm",
       "vietnamese_name": "Hương thơm",

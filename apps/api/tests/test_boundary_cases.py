@@ -53,7 +53,7 @@ def test_query_nonexistent_template(client):
         },
     )
     assert response.status_code == 404
-    assert response.json()["detail"] == "missing_template"
+    assert response.json()["detail"]["recovery_action"] == "manual_select"
 
 
 def test_query_extremely_long_text(client):
@@ -82,13 +82,17 @@ def test_query_extremely_long_text(client):
 
 def test_candidates_empty_body(client):
     """
-    Verify that the candidates search endpoint rejects empty JSON bodies.
+    Verify that an empty JSON body means "no filters" rather than a bad request.
+
+    Every field of VisionCandidateRequest is optional, so {} is the unfiltered
+    search the recognise screen falls back to.
 
     Args:
         client: The TestClient fixture initialized with the FastAPI application.
     """
     response = client.post("/api/vision/candidates", json={})
-    assert response.status_code == 422
+    assert response.status_code == 200
+    assert response.json()["candidates"]
 
 
 def test_candidates_invalid_confidence(client):

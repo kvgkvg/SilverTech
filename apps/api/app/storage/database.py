@@ -9,7 +9,6 @@ from typing import Iterator
 
 ROOT = Path(__file__).resolve().parents[4]
 DEFAULT_DB_PATH = ROOT / "apps" / "api" / "silvertech.sqlite3"
-DB_PATH = Path(os.getenv("SILVERTECH_DB_PATH", str(DEFAULT_DB_PATH)))
 
 
 SCHEMA_SQL = """
@@ -112,13 +111,18 @@ def database_path() -> Path:
     """
     Get the resolved absolute path to the SQLite database file.
 
+    Reads SILVERTECH_DB_PATH on every call rather than once at import: a test
+    that repoints the variable in a fixture would otherwise keep writing to
+    whichever database the first imported test happened to create.
+
     Creates the parent directory if it does not already exist.
 
     Returns:
         Path: The Path object pointing to the sqlite3 file.
     """
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    return DB_PATH
+    path = Path(os.getenv("SILVERTECH_DB_PATH", str(DEFAULT_DB_PATH)))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    return path
 
 
 def connect() -> sqlite3.Connection:
