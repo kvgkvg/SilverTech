@@ -5,4 +5,9 @@ class FriendlyErrorScreenModel {
   });
   final String titleVi;
   final String actionVi;
+
+  @override
+  String toString() {
+    return 'FriendlyErrorScreenModel(titleVi: $titleVi, actionVi: $actionVi)';
+  }
 }
