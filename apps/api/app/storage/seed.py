@@ -88,8 +88,10 @@ def seed_database() -> None:
         label_paths = (ROOT / "data" / "templates" / "labels").glob("*.json")
         for label_path in sorted(p for p in label_paths if is_reviewed_label_file(p)):
             label = json.loads(label_path.read_text(encoding="utf-8"))
-            device = label["device"]
-            template = label["template"]
+            # A hand-written label file may omit the timestamps. Seeding is all or
+            # nothing, so one missing key used to take every template down with it.
+            device = {"created_at": NOW, "updated_at": NOW, **label["device"]}
+            template = {"created_at": NOW, "updated_at": NOW, **label["template"]}
             conn.execute(
                 """
                 INSERT OR REPLACE INTO devices
@@ -130,6 +132,8 @@ def seed_database() -> None:
                             :bbox_template_coordinates, :polygon_template_coordinates, :button_type, :created_at, :updated_at)
                     """,
                     {
+                        "created_at": NOW,
+                        "updated_at": NOW,
                         **button,
                         "bbox_template_coordinates": encode_json(
                             button["bbox_template_coordinates"]

@@ -40,7 +40,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 
 from app.services.guidance_service import GuidanceError, create_guidance  # noqa: E402
-from app.storage.database import DB_PATH  # noqa: E402
+from app.storage.database import database_path  # noqa: E402
 
 CSV_FIELDS = [
     "id", "template_id", "provider", "outcome", "gate", "scope_correct",
@@ -100,7 +100,7 @@ def run_case(case: dict, provider: str) -> dict:
 
 
 def llm_logs_stats() -> dict:
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(database_path())
     try:
         rows = conn.execute(
             "SELECT validation_status, COUNT(*), AVG(latency_ms) FROM llm_logs "
