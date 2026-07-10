@@ -29,3 +29,22 @@ Vietnamese text fields such as `vietnamese_name` and
 `function_description` accept spaces and Vietnamese diacritics. IDs such as
 `button_id`, `device_id`, and `template_id` should still use stable ASCII
 snake_case values.
+
+## Reviewing user submissions
+
+`review.html` lists submissions filed by the mobile wizard, draws their boxes
+over the panel photo, lets you fix them, and accepts or rejects the submission.
+Accepting writes a real template: `devices`, `templates`, `buttons` and
+`button_offsets`, plus a copy of the photo under `data/templates/`.
+
+```bash
+SILVERTECH_ADMIN_TOKEN=<a long random string> make run-api
+python3 -m http.server 8080 --directory label_web
+```
+
+Open `http://localhost:8080/review.html?token=<the same string>`. The token is
+kept in `localStorage` after the first load.
+
+Serve the page; do not open it as a `file://` URL. `file://` sends
+`Origin: null`, which the API's CORS policy rejects. Override the backend with
+`?api=https://...` if it is not on `http://localhost:8000`.

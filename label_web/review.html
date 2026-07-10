@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SilverTech — Duyệt mẫu gửi lên</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      main {
+        display: grid;
+        grid-template-columns: 260px minmax(0, 1fr) 320px;
+        gap: 16px;
+        padding: 16px;
+        align-items: start;
+      }
+      header {
+        display: flex;
+        align-items: baseline;
+        gap: 16px;
+        padding: 16px 20px;
+        background: var(--surface);
+        border-bottom: 1px solid var(--line);
+      }
+      main > aside,
+      main > section {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 14px;
+      }
+      #queue,
+      #buttonList {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      #queue button,
+      #buttonList button {
+        width: 100%;
+        text-align: left;
+      }
+      section {
+        position: relative;
+        min-height: 640px;
+        overflow: auto;
+      }
+      #emptyState {
+        color: var(--muted);
+        font-weight: 750;
+        padding: 40px;
+        text-align: center;
+      }
+      canvas {
+        display: block;
+        touch-action: none;
+      }
+      #result {
+        min-height: 1.2em;
+        color: var(--muted);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Duyệt mẫu gửi lên</h1>
+      <p id="connection"></p>
+    </header>
+    <main>
+      <aside>
+        <h2>Đang chờ duyệt</h2>
+        <ul id="queue"></ul>
+      </aside>
+      <section>
+        <canvas id="canvas" width="960" height="640"></canvas>
+        <div id="emptyState">Chọn một mẫu ở cột bên trái.</div>
+      </section>
+      <aside>
+        <h2>Nút bấm</h2>
+        <ul id="buttonList"></ul>
+        <label>Tên nút (tiếng Việt)<input id="buttonName" /></label>
+        <label>Mô tả<input id="buttonUsage" /></label>
+        <label>Ghi chú của người duyệt<input id="reviewerNote" /></label>
+        <button id="accept">Duyệt</button>
+        <button id="reject">Từ chối</button>
+        <p id="result"></p>
+      </aside>
+    </main>
+    <script src="boxes.js"></script>
+    <script src="review.js"></script>
+  </body>
+</html>
