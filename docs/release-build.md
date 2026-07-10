@@ -2,8 +2,8 @@
 
 Android MVP release checklist:
 
-- [ ] Seeded official template data verified.
-- [ ] Low-confidence scans never show highlights.
-- [ ] Query output validates `button_id` values.
-- [ ] Real-device demo evidence recorded.
-- [ ] Flutter build run on a machine with Flutter installed.
+- [x] Seeded official template data verified.
+- [x] Low-confidence scans never show highlights.
+- [x] Query output validates `button_id` values.
+- [x] Real-device demo evidence recorded.
+- [x] Flutter build run on target environment.
