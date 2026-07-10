@@ -12,7 +12,21 @@ class LLMProviderError(RuntimeError):
 
 
 class LLMService:
+    """
+    Service adapter for generating step-by-step guidance via a language model or mock.
+    """
+
     def generate(self, user_query: str, template: dict[str, Any]) -> dict[str, Any]:
+        """
+        Generate guidance steps for a given user query and template.
+
+        Args:
+            user_query (str): The Vietnamese voice transcription or text query.
+            template (dict[str, Any]): The matched appliance template database record.
+
+        Returns:
+            dict[str, Any]: Parsed JSON dictionary containing steps and safety notes.
+        """
         provider = os.getenv("SILVERTECH_LLM_PROVIDER", "mock").strip().lower()
         if provider == "mock":
             return _mock_guidance(user_query, template)
@@ -22,6 +36,19 @@ class LLMService:
 
 
 def _generate_openrouter(user_query: str, template: dict[str, Any]) -> dict[str, Any]:
+    """
+    Call the OpenRouter API to generate structured guidance using an LLM.
+
+    Args:
+        user_query (str): The user's query in Vietnamese.
+        template (dict[str, Any]): The matched template database record.
+
+    Raises:
+        LLMProviderError: If credentials/options are missing or if the API call fails.
+
+    Returns:
+        dict[str, Any]: The parsed JSON response matching the guidance schema.
+    """
     api_key = os.getenv("OPENROUTER_API_KEY", "").strip()
     if not api_key:
         raise LLMProviderError("OPENROUTER_API_KEY is not configured")
@@ -79,6 +106,18 @@ def _generate_openrouter(user_query: str, template: dict[str, Any]) -> dict[str,
 
 
 def _parse_json_content(content: Any) -> dict[str, Any]:
+    """
+    Sanitize and parse raw string content from LLM into a dictionary.
+
+    Args:
+        content (Any): The content returned by the LLM (string or dict).
+
+    Raises:
+        LLMProviderError: If the content is not valid JSON or not a dictionary.
+
+    Returns:
+        dict[str, Any]: Parsed JSON dictionary.
+    """
     if isinstance(content, dict):
         return content
     if not isinstance(content, str):
@@ -98,6 +137,12 @@ def _parse_json_content(content: Any) -> dict[str, Any]:
 
 
 def _system_prompt() -> str:
+    """
+    Build the system instructions to enforce the JSON schema and correct button references.
+
+    Returns:
+        str: The system prompt string.
+    """
     return (
         "You are SilverTech's appliance guidance engine for elderly Vietnamese users. "
         "Return JSON only. The JSON must match exactly this schema: "
@@ -119,6 +164,16 @@ def _system_prompt() -> str:
 
 
 def _user_prompt(user_query: str, template: dict[str, Any]) -> str:
+    """
+    Build the user prompt containing the question and database context of template buttons.
+
+    Args:
+        user_query (str): The Vietnamese voice transcription/query text.
+        template (dict[str, Any]): Matched template database record.
+
+    Returns:
+        str: The user prompt string.
+    """
     buttons = [
         {
             "button_id": button["button_id"],
