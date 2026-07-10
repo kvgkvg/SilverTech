@@ -54,39 +54,6 @@ const fields = [
   return acc;
 }, {});
 
-function slug(value) {
-  return String(value || "")
-    .trim()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "_")
-    .replace(/^_+|_+$/g, "");
-}
-
-function nowIso() {
-  return new Date().toISOString();
-}
-
-function box(x, y, width, height) {
-  const nx = Math.round(Math.min(x, x + width));
-  const ny = Math.round(Math.min(y, y + height));
-  return {
-    x: nx,
-    y: ny,
-    width: Math.round(Math.abs(width)),
-    height: Math.round(Math.abs(height)),
-  };
-}
-
-function screenToImage(evt) {
-  const rect = canvas.getBoundingClientRect();
-  return {
-    x: (evt.clientX - rect.left) / state.scale,
-    y: (evt.clientY - rect.top) / state.scale,
-  };
-}
-
 function selectedButton() {
   return state.buttons.find((button) => button.localId === state.selectedButtonId) || null;
 }
@@ -168,28 +135,6 @@ function writeSelectedButtonForm() {
     : "Draw a button box on the image";
 }
 
-function drawBox(rect, color, label, active = false) {
-  if (!rect) return;
-  const x = rect.x * state.scale;
-  const y = rect.y * state.scale;
-  const w = rect.width * state.scale;
-  const h = rect.height * state.scale;
-  ctx.save();
-  ctx.lineWidth = active ? 4 : 2;
-  ctx.strokeStyle = color;
-  ctx.fillStyle = `${color}22`;
-  ctx.fillRect(x, y, w, h);
-  ctx.strokeRect(x, y, w, h);
-  ctx.fillStyle = color;
-  ctx.font = "700 13px system-ui";
-  const text = label || "";
-  const textWidth = ctx.measureText(text).width + 10;
-  ctx.fillRect(x, Math.max(0, y - 22), textWidth, 22);
-  ctx.fillStyle = "#ffffff";
-  ctx.fillText(text, x + 5, Math.max(14, y - 7));
-  ctx.restore();
-}
-
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   if (state.image) {
@@ -204,11 +149,13 @@ function draw() {
     );
   }
 
-  drawBox(state.panelBox, "#16834a", "panel");
-  drawBox(state.logoBox, "#c27803", "logo");
+  drawBox(ctx, state.panelBox, state.scale, "#16834a", "panel");
+  drawBox(ctx, state.logoBox, state.scale, "#c27803", "logo");
   for (const button of state.buttons) {
     drawBox(
+      ctx,
       button.bbox_template_coordinates,
+      state.scale,
       "#256fb3",
       button.button_id || button.label || "button",
       button.localId === state.selectedButtonId,
@@ -216,7 +163,7 @@ function draw() {
   }
 
   if (state.drawing) {
-    drawBox(state.drawing.rect, "#cc3b3b", state.drawing.mode);
+    drawBox(ctx, state.drawing.rect, state.scale, "#cc3b3b", state.drawing.mode);
   }
 }
 
@@ -349,7 +296,7 @@ function hitTestButton(point) {
 canvas.addEventListener("mousedown", (evt) => {
   if (!state.image) return;
   readForm();
-  const point = screenToImage(evt);
+  const point = screenToImage(evt, canvas, state.scale);
   const mode = els.drawMode.value;
   if (mode === "button") {
     let button = selectedButton();
@@ -368,7 +315,7 @@ canvas.addEventListener("mousedown", (evt) => {
 
 canvas.addEventListener("mousemove", (evt) => {
   if (!state.drawing) return;
-  const point = screenToImage(evt);
+  const point = screenToImage(evt, canvas, state.scale);
   state.drawing.rect = box(
     state.drawing.start.x,
     state.drawing.start.y,
@@ -395,7 +342,7 @@ canvas.addEventListener("mouseup", () => {
 
 canvas.addEventListener("click", (evt) => {
   if (state.drawing) return;
-  const button = hitTestButton(screenToImage(evt));
+  const button = hitTestButton(screenToImage(evt, canvas, state.scale));
   if (button) {
     readForm();
     state.selectedButtonId = button.localId;
