@@ -131,20 +131,23 @@ paths:
       requestBody:
         required: true
         content:
-          multipart/form-data:
+          application/json:
             schema:
               type: object
-              required: [brand, appliance_type, image, proposed_labels_json]
+              required: [brand, appliance_type, image_url, proposed_labels_json]
               properties:
+                submitted_by:
+                  type: string
+                  nullable: true
                 brand:
                   type: string
                 appliance_type:
                   type: string
-                image:
+                image_url:
                   type: string
-                  format: binary
+                  description: Returned by POST /api/submissions/image
                 proposed_labels_json:
-                  type: string
+                  $ref: "#/components/schemas/TemplateEdit"
       responses:
         "201":
           description: Submission created and pending review
@@ -161,10 +164,93 @@ paths:
                     enum: [pending]
         "400":
           $ref: "#/components/responses/FriendlyError"
+  /api/submissions/image:
+    post:
+      summary: Upload a panel photo and get back its image_url
+      operationId: uploadSubmissionImage
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [image]
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        "201":
+          description: Stored under data/submissions/
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [image_url]
+                properties:
+                  image_url:
+                    type: string
+        "400":
+          $ref: "#/components/responses/FriendlyError"
+  /api/admin/submissions:
+    get:
+      summary: List submissions, newest first
+      operationId: listSubmissions
+      security:
+        - AdminToken: []
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [pending, accepted, rejected]
+      responses:
+        "200":
+          description: Submissions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SubmissionSummary"
+        "401":
+          $ref: "#/components/responses/FriendlyError"
+        "503":
+          $ref: "#/components/responses/FriendlyError"
+  /api/admin/submissions/{id}:
+    get:
+      summary: One submission with its proposed labels
+      operationId: getSubmission
+      security:
+        - AdminToken: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Submission detail
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/SubmissionSummary"
+                  - type: object
+                    required: [proposed_labels_json]
+                    properties:
+                      proposed_labels_json:
+                        $ref: "#/components/schemas/TemplateEdit"
+        "404":
+          $ref: "#/components/responses/FriendlyError"
   /api/admin/submissions/{id}/review:
     post:
       summary: Accept, edit, or reject a submitted template
       operationId: reviewSubmission
+      security:
+        - AdminToken: []
       parameters:
         - name: id
           in: path
@@ -205,7 +291,14 @@ paths:
                     type: string
         "400":
           $ref: "#/components/responses/FriendlyError"
+        "409":
+          $ref: "#/components/responses/FriendlyError"
 components:
+  securitySchemes:
+    AdminToken:
+      type: apiKey
+      in: header
+      name: X-Admin-Token
   responses:
     FriendlyError:
       description: Friendly Vietnamese recovery instruction
@@ -320,6 +413,29 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Button"
+    SubmissionSummary:
+      type: object
+      required: [id, brand, appliance_type, image_url, status, created_at]
+      properties:
+        id:
+          type: string
+        submitted_by:
+          type: string
+          nullable: true
+        brand:
+          type: string
+        appliance_type:
+          type: string
+        image_url:
+          type: string
+        status:
+          type: string
+          enum: [pending, accepted, rejected]
+        reviewer_note:
+          type: string
+          nullable: true
+        created_at:
+          type: string
     BBox:
       type: object
       required: [x, y, width, height]
