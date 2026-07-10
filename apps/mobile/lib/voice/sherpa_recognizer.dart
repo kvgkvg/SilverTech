@@ -27,6 +27,10 @@ class SherpaRecognizer {
   ];
 
   /// Lazily initializes (model load is heavy — call once, e.g. at startup).
+  /// Lazily initializes and returns the singleton instance of the offline ASR recognizer.
+  ///
+  /// Extracts the model files from assets onto disk on first run and loads the ONNX runtime
+  /// configurations for offline Vietnamese speech-to-text inference.
   static Future<SherpaRecognizer> instance() async {
     final existing = _instance;
     if (existing != null) return existing;

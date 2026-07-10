@@ -409,12 +409,26 @@ def match_with_logo_anchor(
     template_logo_width: float,
     template_logo_center: tuple[float, float] | None = None,
 ) -> dict[str, Any]:
-    """Combine coarse logo projection with homography refinement.
+    """
+    Perform template matching by aligning keypoints and checking geometric constraints.
 
-    frame_points/template_points feed the existing ORB pipeline (Nx2 keypoint
-    arrays or images). logo_pose comes from detect_logo (or a synthetic pose
-    in tests). Buttons use absolute template coordinates, offsets use
-    logo-width units.
+    Combines coarse pose detection (via brand logo alignment) with fine-grained
+    ORB feature matching and Homography estimation. Validates geometric safety gates:
+    reprojection error, logo consistency, inlier spatial spread, and projected
+    button area scales.
+
+    Args:
+        frame_points (np.ndarray): Target frame image, or synthetic keypoint coordinates.
+        template_points (np.ndarray): Template image, or synthetic keypoint coordinates.
+        buttons (dict[str, dict[str, float]]): Bounding boxes of buttons in template coords.
+        logo_offsets (dict[str, dict[str, float]]): Offset coordinates of buttons relative to logo.
+        logo_pose (LogoPose | None): Coarse logo pose returned by logo detection.
+        template_logo_width (float): Physical or pixel width of the logo in the template.
+        template_logo_center (tuple[float, float] | None): Center coordinates of logo in template.
+
+    Returns:
+        dict[str, Any]: A dictionary containing the matching outcome, confidence metrics,
+            and the projected button coordinates.
     """
     coarse: dict[str, list[dict[str, float]]] = {}
     if logo_pose is not None and logo_offsets:

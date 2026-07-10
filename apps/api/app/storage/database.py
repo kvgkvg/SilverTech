@@ -109,11 +109,28 @@ CREATE TABLE IF NOT EXISTS vision_logs (
 
 
 def database_path() -> Path:
+    """
+    Get the resolved absolute path to the SQLite database file.
+
+    Creates the parent directory if it does not already exist.
+
+    Returns:
+        Path: The Path object pointing to the sqlite3 file.
+    """
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     return DB_PATH
 
 
 def connect() -> sqlite3.Connection:
+    """
+    Establish a connection to the SQLite database.
+
+    Enables foreign key constraints and configures the connection row factory
+    to return sqlite3.Row dict-like rows.
+
+    Returns:
+        sqlite3.Connection: The established SQLite connection.
+    """
     conn = sqlite3.connect(database_path())
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
@@ -122,6 +139,15 @@ def connect() -> sqlite3.Connection:
 
 @contextmanager
 def db_session() -> Iterator[sqlite3.Connection]:
+    """
+    Provide a transactional database session context manager.
+
+    Automatically commits the transaction upon successful completion or
+    rolls back in case of exceptions. Closes the connection at the end.
+
+    Yields:
+        Iterator[sqlite3.Connection]: The active database connection.
+    """
     conn = connect()
     try:
         yield conn
@@ -134,5 +160,10 @@ def db_session() -> Iterator[sqlite3.Connection]:
 
 
 def initialize_database() -> None:
+    """
+    Create the database schema tables if they do not exist.
+
+    Uses SCHEMA_SQL script containing all table creation scripts.
+    """
     with db_session() as conn:
         conn.executescript(SCHEMA_SQL)

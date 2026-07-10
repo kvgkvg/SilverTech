@@ -202,6 +202,25 @@ def _better(candidate: dict[str, Any], best: dict[str, Any] | None) -> bool:
 
 
 def run_logo_anchor(template_id: str | None, frame_bytes: bytes) -> dict[str, Any]:
+    """
+    Execute the computer vision pipeline to align a frame against templates.
+
+    If a template_id is specified, directly matches against that template's logo.
+    Otherwise, executes the brand-first algorithm: detects the brand from the logo gallery,
+    filters templates of that brand, and selects the best matching template by comparing
+    homography inlier scores.
+
+    Args:
+        template_id (str | None): Explicit template ID, or None for auto-detection.
+        frame_bytes (bytes): The raw uploaded camera image file bytes.
+
+    Raises:
+        LogoAnchorError: 503 if OpenCV is missing, 400 if image cannot be decoded,
+            404 if no logo/template is matched, or 409 if template is misconfigured.
+
+    Returns:
+        dict[str, Any]: Match outcome with projections, match tier, and score metrics.
+    """
     if cv2 is None:
         raise LogoAnchorError(503, "OpenCV is not available on the server")
 

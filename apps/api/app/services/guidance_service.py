@@ -17,6 +17,24 @@ class GuidanceError(Exception):
 
 
 def create_guidance(template_id: str, user_query: str) -> dict:
+    """
+    Generate, validate, and log step-by-step guidance for a template and query.
+
+    Retrieves the template, builds the context prompt, invokes the LLM Service,
+    enforces validation checks (ensuring all step buttons exist on the template),
+    and records full latency and log telemetry to the database.
+
+    Args:
+        template_id (str): The ID of the appliance template.
+        user_query (str): The user's query text or transcription.
+
+    Raises:
+        GuidanceError: "missing_template" if template is not found in database,
+            "llm_failed" if API call fails, or "invalid_button" if validation fails.
+
+    Returns:
+        dict: The serialized dictionary of the validated GuidanceOutput.
+    """
     started = time.perf_counter()
     template = get_template(template_id)
     if template is None:
