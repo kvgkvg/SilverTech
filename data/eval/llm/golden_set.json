@@ -1,0 +1,781 @@
+{
+  "description": "Golden set for guidance (LLM) evaluation, ~100 Vietnamese queries. Each case: query, target template, REQUIRED button_ids a correct answer must reference, ALLOWED extra button_ids that are acceptable helpers (start, time adjust, power...), and expect_out_of_scope for queries that must be refused. Multiple phrasings per button: formal, colloquial, no-diacritics, indirect scenario. Authored from the appliance manuals / seeded function_descriptions, independent of any provider.",
+  "cases": [
+    {
+      "id": "mw_grill_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Làm sao để nướng gà?",
+      "expected_buttons": ["grill"],
+      "allowed_extra": ["start", "time_1_min", "time_10_min", "time_10_sec", "up", "down", "quick_30", "add_time"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_grill_2",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Nuong banh mi cho gion thi bam nut nao?",
+      "expected_buttons": ["grill"],
+      "allowed_extra": ["start", "time_1_min", "time_10_min", "time_10_sec", "up", "down", "quick_30", "add_time"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_grill_3",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Tôi muốn nướng cá thu",
+      "expected_buttons": ["grill"],
+      "allowed_extra": ["start", "time_1_min", "time_10_min", "time_10_sec", "up", "down", "quick_30", "add_time"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_grill_4",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Chế độ nướng của lò dùng như thế nào?",
+      "expected_buttons": ["grill"],
+      "allowed_extra": ["start", "time_1_min", "time_10_min", "time_10_sec", "up", "down", "quick_30", "add_time"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_defrost_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Tôi muốn rã đông thịt đông lạnh",
+      "expected_buttons": ["turbo_defrost"],
+      "allowed_extra": ["start", "up", "down", "time_1_min", "time_10_min", "time_10_sec"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_defrost_2",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Ra dong ca bam nut gi?",
+      "expected_buttons": ["turbo_defrost"],
+      "allowed_extra": ["start", "up", "down", "time_1_min", "time_10_min", "time_10_sec"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_defrost_3",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Thịt để ngăn đá cứng quá, làm mềm nhanh được không?",
+      "expected_buttons": ["turbo_defrost"],
+      "allowed_extra": ["start", "up", "down", "time_1_min", "time_10_min", "time_10_sec"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_defrost_4",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Rã đông 500 gam thịt bò thì làm sao?",
+      "expected_buttons": ["turbo_defrost"],
+      "allowed_extra": ["start", "up", "down", "time_1_min", "time_10_min", "time_10_sec"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_reheat_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Hâm nóng cơm thế nào?",
+      "expected_buttons": ["auto_reheat"],
+      "allowed_extra": ["start", "micro_power", "time_1_min", "quick_30"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_reheat_2",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Hâm lại thức ăn nguội trong tủ lạnh",
+      "expected_buttons": ["auto_reheat"],
+      "allowed_extra": ["start", "micro_power", "time_1_min", "quick_30"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_reheat_3",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Ham nong chao cho nong lai",
+      "expected_buttons": ["auto_reheat"],
+      "allowed_extra": ["start", "micro_power", "time_1_min", "quick_30"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_reheat_4",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Hâm sữa cho cháu uống thì bấm nút nào?",
+      "expected_buttons": ["auto_reheat"],
+      "allowed_extra": ["start", "micro_power", "time_1_min", "time_10_sec", "quick_30"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_auto_menu_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Dùng chương trình nấu tự động như thế nào?",
+      "expected_buttons": ["auto_menu"],
+      "allowed_extra": ["start", "up", "down"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_auto_menu_2",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Lò có sẵn món nấu tự động không, chọn ở đâu?",
+      "expected_buttons": ["auto_menu"],
+      "allowed_extra": ["start", "up", "down"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_auto_menu_3",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Nau tu dong mon rau cu",
+      "expected_buttons": ["auto_menu"],
+      "allowed_extra": ["start", "up", "down"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_combination_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Nấu kết hợp vừa nướng vừa vi sóng được không?",
+      "expected_buttons": ["combination"],
+      "allowed_extra": ["start", "up", "down", "time_1_min", "time_10_min", "time_10_sec"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_combination_2",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Chế độ kết hợp dùng khi nào?",
+      "expected_buttons": ["combination"],
+      "allowed_extra": ["start", "up", "down", "time_1_min", "time_10_min", "time_10_sec"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_combination_3",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Muốn gà vừa chín bên trong vừa vàng da bên ngoài thì chọn chế độ gì?",
+      "expected_buttons": ["combination"],
+      "allowed_extra": ["start", "up", "down", "time_1_min", "time_10_min", "time_10_sec", "grill", "micro_power"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_power_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Chọn công suất vi sóng ở đâu?",
+      "expected_buttons": ["micro_power"],
+      "allowed_extra": ["start", "up", "down", "time_1_min", "time_10_min", "time_10_sec"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_power_2",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Giảm công suất xuống mức thấp để nấu liu riu",
+      "expected_buttons": ["micro_power"],
+      "allowed_extra": ["start", "up", "down", "time_1_min", "time_10_min", "time_10_sec"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_power_3",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Chon muc cong suat lo vi song",
+      "expected_buttons": ["micro_power"],
+      "allowed_extra": ["start", "up", "down", "time_1_min", "time_10_min", "time_10_sec"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_quick30_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Nấu nhanh 30 giây làm sao?",
+      "expected_buttons": ["quick_30"],
+      "allowed_extra": ["start"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_quick30_2",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Cài nhanh từng 30 giây một thì bấm gì?",
+      "expected_buttons": ["quick_30"],
+      "allowed_extra": ["start"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_quick30_3",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Chi can quay nong 30 giay thoi",
+      "expected_buttons": ["quick_30"],
+      "allowed_extra": ["start", "auto_reheat", "micro_power"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_timer_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Cách hẹn giờ trên lò vi sóng?",
+      "expected_buttons": ["time_clock"],
+      "allowed_extra": ["start", "up", "down", "time_1_min", "time_10_min", "time_10_sec"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_timer_2",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Dùng lò làm đồng hồ đếm giờ trong bếp được không?",
+      "expected_buttons": ["time_clock"],
+      "allowed_extra": ["start", "up", "down", "time_1_min", "time_10_min", "time_10_sec"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_timer_3",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Cài đồng hồ của lò về 7 giờ sáng",
+      "expected_buttons": ["time_clock"],
+      "allowed_extra": ["start", "up", "down", "time_1_min", "time_10_min", "time_10_sec"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_time1min_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Tăng thêm 1 phút nấu",
+      "expected_buttons": ["time_1_min"],
+      "allowed_extra": ["add_time", "up", "start"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_time1min_2",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Cài thời gian nấu 3 phút thì bấm sao?",
+      "expected_buttons": ["time_1_min"],
+      "allowed_extra": ["add_time", "up", "start", "time_10_sec", "quick_30"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_time10min_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Cộng thêm 10 phút vào thời gian nấu",
+      "expected_buttons": ["time_10_min"],
+      "allowed_extra": ["add_time", "up", "start"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_time10min_2",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Muốn nấu lâu 20 phút thì cài thế nào?",
+      "expected_buttons": ["time_10_min"],
+      "allowed_extra": ["add_time", "up", "start", "time_1_min", "micro_power"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_time10sec_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Thêm 10 giây nữa thôi",
+      "expected_buttons": ["time_10_sec"],
+      "allowed_extra": ["add_time", "up", "start", "quick_30"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_addtime_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Đồ ăn chưa chín, cộng thêm thời gian đang nấu được không?",
+      "expected_buttons": ["add_time"],
+      "allowed_extra": ["time_1_min", "time_10_min", "time_10_sec", "up", "start"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_addtime_2",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Nut Add Time dung de lam gi?",
+      "expected_buttons": ["add_time"],
+      "allowed_extra": ["time_1_min", "time_10_min", "time_10_sec", "up", "start"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_stop_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Làm sao dừng lò lại?",
+      "expected_buttons": ["stop_reset"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_stop_2",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Lò đang chạy, tôi muốn tắt ngay",
+      "expected_buttons": ["stop_reset"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_stop_3",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Bấm nhầm rồi, xoá cài đặt đi làm lại",
+      "expected_buttons": ["stop_reset"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_stop_4",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Dung lo lai gap",
+      "expected_buttons": ["stop_reset"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_start_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Cài xong rồi thì bấm gì để lò chạy?",
+      "expected_buttons": ["start"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_start_2",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Bắt đầu nấu đi",
+      "expected_buttons": ["start"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_start_3",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Nut khoi dong lo o dau?",
+      "expected_buttons": ["start"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_up_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Chỉnh thời gian tăng lên chút xíu",
+      "expected_buttons": ["up"],
+      "allowed_extra": ["time_10_sec", "time_1_min", "add_time"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_down_1",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Lỡ cài nhiều quá, giảm thời gian xuống",
+      "expected_buttons": ["down"],
+      "allowed_extra": ["stop_reset"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_multi_grill_time",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Nướng trong 10 phút thì bấm những nút nào?",
+      "expected_buttons": ["grill", "time_10_min"],
+      "allowed_extra": ["start", "up"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_multi_defrost_grill",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Cá đông lạnh, muốn rã đông xong nướng luôn",
+      "expected_buttons": ["turbo_defrost", "grill"],
+      "allowed_extra": ["start", "up", "down", "time_1_min", "time_10_min", "time_10_sec"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "mw_oos_weather",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Hôm nay thời tiết thế nào?",
+      "expected_buttons": [],
+      "allowed_extra": [],
+      "expect_out_of_scope": true
+    },
+    {
+      "id": "mw_oos_recipe",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Cho tôi công thức nấu phở bò",
+      "expected_buttons": [],
+      "allowed_extra": [],
+      "expect_out_of_scope": true
+    },
+    {
+      "id": "mw_oos_other_device",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Máy giặt nhà tôi kêu to quá phải làm sao?",
+      "expected_buttons": [],
+      "allowed_extra": [],
+      "expect_out_of_scope": true
+    },
+    {
+      "id": "mw_oos_smalltalk",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Buồn quá, nói chuyện với tôi chút đi",
+      "expected_buttons": [],
+      "allowed_extra": [],
+      "expect_out_of_scope": true
+    },
+    {
+      "id": "mw_oos_lottery",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Hôm nay đánh con lô nào đẹp?",
+      "expected_buttons": [],
+      "allowed_extra": [],
+      "expect_out_of_scope": true
+    },
+    {
+      "id": "mw_oos_tv",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "query_vi": "Chuyển kênh tivi sang VTV3 giúp tôi",
+      "expected_buttons": [],
+      "allowed_extra": [],
+      "expect_out_of_scope": true
+    },
+    {
+      "id": "el_program_1",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Chọn chương trình giặt nhanh 15 phút thì làm sao?",
+      "expected_buttons": ["1"],
+      "allowed_extra": ["3", "8"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_program_2",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Giặt đồ len thì vặn núm về đâu?",
+      "expected_buttons": ["1"],
+      "allowed_extra": ["3", "8"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_program_3",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Muốn giặt chăn mền dày thì chọn chế độ nào?",
+      "expected_buttons": ["1"],
+      "allowed_extra": ["3", "8", "2", "4"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_program_4",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Giat do the thao thi chon o dau?",
+      "expected_buttons": ["1"],
+      "allowed_extra": ["3", "8"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_temp_1",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Chỉnh nhiệt độ nước giặt ở đâu?",
+      "expected_buttons": ["2"],
+      "allowed_extra": ["3", "1"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_temp_2",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Giặt nước nóng 60 độ cho sạch khuẩn",
+      "expected_buttons": ["2"],
+      "allowed_extra": ["3", "1", "8"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_temp_3",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Doi sang giat nuoc lanh",
+      "expected_buttons": ["2"],
+      "allowed_extra": ["3", "1"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_power_1",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Bật máy giặt lên như thế nào?",
+      "expected_buttons": ["3"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_power_2",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Tắt nguồn máy giặt đi",
+      "expected_buttons": ["3"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_power_3",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Nut nguon o cho nao?",
+      "expected_buttons": ["3"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_spin_1",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Muốn đổi tốc độ vắt thì bấm nút nào?",
+      "expected_buttons": ["4"],
+      "allowed_extra": ["3", "1"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_spin_2",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Vắt nhẹ thôi cho đồ đỡ nhăn",
+      "expected_buttons": ["4"],
+      "allowed_extra": ["3", "1"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_spin_3",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Chinh vong vat 800 vong",
+      "expected_buttons": ["4"],
+      "allowed_extra": ["3", "1"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_vapour_1",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Thêm hơi nước để diệt khuẩn quần áo",
+      "expected_buttons": ["5"],
+      "allowed_extra": ["3", "1", "8"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_vapour_2",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Chế độ hơi nước Vapour bật ở đâu?",
+      "expected_buttons": ["5"],
+      "allowed_extra": ["3", "1"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_prewash_1",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Bật chế độ giặt sơ trước",
+      "expected_buttons": ["6"],
+      "allowed_extra": ["3", "1"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_prewash_2",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Áo bẩn nhiều bùn đất, muốn máy giặt sơ một lần trước khi giặt chính",
+      "expected_buttons": ["6"],
+      "allowed_extra": ["3", "1", "8"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_prewash_3",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Giat so bat the nao?",
+      "expected_buttons": ["6"],
+      "allowed_extra": ["3", "1"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_rinse_1",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Tôi muốn máy xả thêm nước cho sạch xà phòng",
+      "expected_buttons": ["7"],
+      "allowed_extra": ["3", "1"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_rinse_2",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Da cháu bị dị ứng bột giặt, làm sao xả kỹ hơn?",
+      "expected_buttons": ["7"],
+      "allowed_extra": ["3", "1", "8"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_rinse_3",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Bat xa them Extra Rinse",
+      "expected_buttons": ["7"],
+      "allowed_extra": ["3", "1"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_start_1",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Máy đang giặt mà muốn thêm quần áo thì làm sao?",
+      "expected_buttons": ["8"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_start_2",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Chọn xong chương trình rồi, bấm gì để máy bắt đầu giặt?",
+      "expected_buttons": ["8"],
+      "allowed_extra": ["3"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_start_3",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Tạm dừng máy giặt lại một chút",
+      "expected_buttons": ["8"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_start_4",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Lo bo sot cai ao, mo cua bo them vao duoc khong?",
+      "expected_buttons": ["8"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_timemgr_1",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Rút ngắn thời gian giặt lại được không?",
+      "expected_buttons": ["9"],
+      "allowed_extra": ["3", "1"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_timemgr_2",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Điều chỉnh thời gian giặt Time Manager dùng sao?",
+      "expected_buttons": ["9"],
+      "allowed_extra": ["3", "1"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_delay_1",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Hẹn giờ giặt xong sau 3 tiếng nữa",
+      "expected_buttons": ["10"],
+      "allowed_extra": ["3", "1", "8"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_delay_2",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Muốn máy giặt xong đúng lúc tôi đi chợ về",
+      "expected_buttons": ["10"],
+      "allowed_extra": ["3", "1", "8"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_delay_3",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Hen gio ket thuc o dau?",
+      "expected_buttons": ["10"],
+      "allowed_extra": ["3", "1"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_display_1",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Màn hình máy giặt đang hiển thị gì vậy?",
+      "expected_buttons": ["11"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "el_oos_time",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Bây giờ là mấy giờ rồi?",
+      "expected_buttons": [],
+      "allowed_extra": [],
+      "expect_out_of_scope": true
+    },
+    {
+      "id": "el_oos_fridge",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Tủ lạnh nhà tôi không lạnh, sửa thế nào?",
+      "expected_buttons": [],
+      "allowed_extra": [],
+      "expect_out_of_scope": true
+    },
+    {
+      "id": "el_oos_detergent",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Nên mua bột giặt hãng nào tốt?",
+      "expected_buttons": [],
+      "allowed_extra": [],
+      "expect_out_of_scope": true
+    },
+    {
+      "id": "el_oos_joke",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "query_vi": "Kể cho tôi một câu chuyện cười đi",
+      "expected_buttons": [],
+      "allowed_extra": [],
+      "expect_out_of_scope": true
+    },
+    {
+      "id": "ts_quick_1",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "query_vi": "Tôi muốn giặt nhanh",
+      "expected_buttons": ["quick_wash"],
+      "allowed_extra": ["start_pause"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "ts_quick_2",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "query_vi": "Giat nhanh do it ban",
+      "expected_buttons": ["quick_wash"],
+      "allowed_extra": ["start_pause"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "ts_dry_1",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "query_vi": "Sấy quần áo thì bấm nút nào?",
+      "expected_buttons": ["dry_mode"],
+      "allowed_extra": ["start_pause"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "ts_dry_2",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "query_vi": "Trời mưa đồ không khô, dùng chế độ sấy được không?",
+      "expected_buttons": ["dry_mode"],
+      "allowed_extra": ["start_pause"],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "ts_start_1",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "query_vi": "Bấm gì để máy bắt đầu giặt?",
+      "expected_buttons": ["start_pause"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "ts_start_2",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "query_vi": "Tạm dừng máy một lát",
+      "expected_buttons": ["start_pause"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "ts_oos_price",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "query_vi": "Máy giặt này giá bao nhiêu tiền?",
+      "expected_buttons": [],
+      "allowed_extra": [],
+      "expect_out_of_scope": true
+    },
+    {
+      "id": "dk_temp_1",
+      "template_id": "template_daikin_ac_remote_v1",
+      "query_vi": "Tăng nhiệt độ điều hòa lên",
+      "expected_buttons": ["temp_up"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "dk_temp_2",
+      "template_id": "template_daikin_ac_remote_v1",
+      "query_vi": "Lạnh quá, cho ấm lên chút",
+      "expected_buttons": ["temp_up"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "dk_temp_3",
+      "template_id": "template_daikin_ac_remote_v1",
+      "query_vi": "Tang nhiet do len 26 do",
+      "expected_buttons": ["temp_up"],
+      "allowed_extra": [],
+      "expect_out_of_scope": false
+    },
+    {
+      "id": "dk_oos_fan",
+      "template_id": "template_daikin_ac_remote_v1",
+      "query_vi": "Quạt trần bật ở đâu?",
+      "expected_buttons": [],
+      "allowed_extra": [],
+      "expect_out_of_scope": true
+    }
+  ]
+}

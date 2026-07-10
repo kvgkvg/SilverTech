@@ -1,0 +1,491 @@
+{
+  "provider": "mock",
+  "cases": [
+    {
+      "id": "mw_grill",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": true,
+      "predicted_buttons": "grill",
+      "recall": 1.0,
+      "precision": 1.0,
+      "correct": true,
+      "tts_safe": true,
+      "latency_ms": 420,
+      "_safety_note": null,
+      "steps": [
+        {
+          "step_number": 1,
+          "instruction_vi": "Nhấn nút Nướng để chọn chế độ nướng.",
+          "button_id": "grill",
+          "expected_result": "Lò chọn đúng chức năng trên bảng điều khiển.",
+          "audio_url": "/data/tts/a833d5adad2ba2099a08.mp3"
+        }
+      ]
+    },
+    {
+      "id": "mw_defrost",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": true,
+      "predicted_buttons": "turbo_defrost",
+      "recall": 1.0,
+      "precision": 1.0,
+      "correct": true,
+      "tts_safe": true,
+      "latency_ms": 386,
+      "_safety_note": null,
+      "steps": [
+        {
+          "step_number": 1,
+          "instruction_vi": "Nhấn nút Rã đông để chọn chế độ rã đông.",
+          "button_id": "turbo_defrost",
+          "expected_result": "Lò chọn đúng chức năng trên bảng điều khiển.",
+          "audio_url": "/data/tts/e9d8c08523e89f1fe2e7.mp3"
+        }
+      ]
+    },
+    {
+      "id": "mw_reheat",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": false,
+      "predicted_buttons": "",
+      "recall": 0.0,
+      "precision": 0.0,
+      "correct": false,
+      "tts_safe": true,
+      "latency_ms": 2,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "mw_timer",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": true,
+      "predicted_buttons": "time_clock",
+      "recall": 1.0,
+      "precision": 1.0,
+      "correct": true,
+      "tts_safe": true,
+      "latency_ms": 480,
+      "_safety_note": null,
+      "steps": [
+        {
+          "step_number": 1,
+          "instruction_vi": "Nhấn nút Hẹn giờ/Đồng hồ.",
+          "button_id": "time_clock",
+          "expected_result": "Lò chọn đúng chức năng trên bảng điều khiển.",
+          "audio_url": "/data/tts/a412ace5c5a9b1405adb.mp3"
+        }
+      ]
+    },
+    {
+      "id": "mw_add_minute",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": false,
+      "predicted_buttons": "",
+      "recall": 0.0,
+      "precision": 0.0,
+      "correct": false,
+      "tts_safe": true,
+      "latency_ms": 2,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "mw_stop",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": false,
+      "predicted_buttons": "",
+      "recall": 0.0,
+      "precision": 0.0,
+      "correct": false,
+      "tts_safe": true,
+      "latency_ms": 2,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "mw_auto_menu",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": false,
+      "predicted_buttons": "",
+      "recall": 0.0,
+      "precision": 0.0,
+      "correct": false,
+      "tts_safe": true,
+      "latency_ms": 2,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "mw_power",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": false,
+      "predicted_buttons": "",
+      "recall": 0.0,
+      "precision": 0.0,
+      "correct": false,
+      "tts_safe": true,
+      "latency_ms": 2,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "mw_combination",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": true,
+      "predicted_buttons": "grill",
+      "recall": 0.0,
+      "precision": 0.0,
+      "correct": false,
+      "tts_safe": true,
+      "latency_ms": 2,
+      "_safety_note": null,
+      "steps": [
+        {
+          "step_number": 1,
+          "instruction_vi": "Nhấn nút Nướng để chọn chế độ nướng.",
+          "button_id": "grill",
+          "expected_result": "Lò chọn đúng chức năng trên bảng điều khiển.",
+          "audio_url": "/data/tts/a833d5adad2ba2099a08.mp3"
+        }
+      ]
+    },
+    {
+      "id": "mw_quick30",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": false,
+      "predicted_buttons": "",
+      "recall": 0.0,
+      "precision": 0.0,
+      "correct": false,
+      "tts_safe": true,
+      "latency_ms": 2,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "mw_oos_weather",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": true,
+      "predicted_buttons": "",
+      "recall": 1.0,
+      "precision": 1.0,
+      "correct": true,
+      "tts_safe": true,
+      "latency_ms": 2,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "mw_oos_recipe",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": true,
+      "predicted_buttons": "",
+      "recall": 1.0,
+      "precision": 1.0,
+      "correct": true,
+      "tts_safe": true,
+      "latency_ms": 2,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "mw_oos_other_device",
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": true,
+      "predicted_buttons": "",
+      "recall": 1.0,
+      "precision": 1.0,
+      "correct": true,
+      "tts_safe": true,
+      "latency_ms": 2,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "el_program",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": true,
+      "predicted_buttons": "1",
+      "recall": 1.0,
+      "precision": 1.0,
+      "correct": true,
+      "tts_safe": true,
+      "latency_ms": 457,
+      "_safety_note": null,
+      "steps": [
+        {
+          "step_number": 1,
+          "instruction_vi": "Nhấn nút Giặt nhanh để chọn chương trình giặt nhanh.",
+          "button_id": "1",
+          "expected_result": "Lò chọn đúng chức năng trên bảng điều khiển.",
+          "audio_url": "/data/tts/0bdda19d1187d6600217.mp3"
+        }
+      ]
+    },
+    {
+      "id": "el_power_on",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": false,
+      "predicted_buttons": "",
+      "recall": 0.0,
+      "precision": 0.0,
+      "correct": false,
+      "tts_safe": true,
+      "latency_ms": 3,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "el_temperature",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": true,
+      "predicted_buttons": "1",
+      "recall": 0.0,
+      "precision": 1.0,
+      "correct": false,
+      "tts_safe": true,
+      "latency_ms": 495,
+      "_safety_note": null,
+      "steps": [
+        {
+          "step_number": 1,
+          "instruction_vi": "Nhấn nút Tăng nhiệt độ để chỉnh nhiệt độ.",
+          "button_id": "1",
+          "expected_result": "Lò chọn đúng chức năng trên bảng điều khiển.",
+          "audio_url": "/data/tts/868b5736568c7d16f541.mp3"
+        }
+      ]
+    },
+    {
+      "id": "el_spin",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": false,
+      "predicted_buttons": "",
+      "recall": 0.0,
+      "precision": 0.0,
+      "correct": false,
+      "tts_safe": true,
+      "latency_ms": 3,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "el_add_clothes",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": false,
+      "predicted_buttons": "",
+      "recall": 0.0,
+      "precision": 0.0,
+      "correct": false,
+      "tts_safe": true,
+      "latency_ms": 3,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "el_delay_end",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": true,
+      "predicted_buttons": "1",
+      "recall": 0.0,
+      "precision": 1.0,
+      "correct": false,
+      "tts_safe": true,
+      "latency_ms": 3,
+      "_safety_note": null,
+      "steps": [
+        {
+          "step_number": 1,
+          "instruction_vi": "Nhấn nút Hẹn giờ/Đồng hồ.",
+          "button_id": "1",
+          "expected_result": "Lò chọn đúng chức năng trên bảng điều khiển.",
+          "audio_url": "/data/tts/a412ace5c5a9b1405adb.mp3"
+        }
+      ]
+    },
+    {
+      "id": "el_prewash",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": false,
+      "predicted_buttons": "",
+      "recall": 0.0,
+      "precision": 0.0,
+      "correct": false,
+      "tts_safe": true,
+      "latency_ms": 3,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "el_extra_rinse",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": false,
+      "predicted_buttons": "",
+      "recall": 0.0,
+      "precision": 0.0,
+      "correct": false,
+      "tts_safe": true,
+      "latency_ms": 3,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "el_oos_time",
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": true,
+      "predicted_buttons": "",
+      "recall": 1.0,
+      "precision": 1.0,
+      "correct": true,
+      "tts_safe": true,
+      "latency_ms": 3,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "ts_quick_wash",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": true,
+      "predicted_buttons": "quick_wash",
+      "recall": 1.0,
+      "precision": 1.0,
+      "correct": true,
+      "tts_safe": true,
+      "latency_ms": 3,
+      "_safety_note": null,
+      "steps": [
+        {
+          "step_number": 1,
+          "instruction_vi": "Nhấn nút Giặt nhanh để chọn chương trình giặt nhanh.",
+          "button_id": "quick_wash",
+          "expected_result": "Lò chọn đúng chức năng trên bảng điều khiển.",
+          "audio_url": "/data/tts/0bdda19d1187d6600217.mp3"
+        }
+      ]
+    },
+    {
+      "id": "ts_dry",
+      "template_id": "template_toshiba_washer_panel_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": false,
+      "predicted_buttons": "",
+      "recall": 0.0,
+      "precision": 0.0,
+      "correct": false,
+      "tts_safe": true,
+      "latency_ms": 2,
+      "_safety_note": "Câu hỏi này không liên quan đến thiết bị. Bà/ông hãy hỏi về cách sử dụng các nút trên bảng điều khiển nhé.",
+      "steps": []
+    },
+    {
+      "id": "dk_temp_up",
+      "template_id": "template_daikin_ac_remote_v1",
+      "provider": "mock",
+      "outcome": "accepted",
+      "gate": true,
+      "scope_correct": true,
+      "predicted_buttons": "temp_up",
+      "recall": 1.0,
+      "precision": 1.0,
+      "correct": true,
+      "tts_safe": true,
+      "latency_ms": 2,
+      "_safety_note": null,
+      "steps": [
+        {
+          "step_number": 1,
+          "instruction_vi": "Nhấn nút Tăng nhiệt độ để chỉnh nhiệt độ.",
+          "button_id": "temp_up",
+          "expected_result": "Lò chọn đúng chức năng trên bảng điều khiển.",
+          "audio_url": "/data/tts/868b5736568c7d16f541.mp3"
+        }
+      ]
+    }
+  ],
+  "llm_logs": {
+    "total": 203,
+    "by_status": {
+      "accepted": {
+        "count": 199,
+        "mean_latency_ms": 6627
+      },
+      "rejected": {
+        "count": 4,
+        "mean_latency_ms": 7825
+      }
+    },
+    "p95_latency_ms": 28324
+  }
+}

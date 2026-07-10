@@ -1,0 +1,4856 @@
+{
+  "mode": "text_robustness",
+  "provider": "mock",
+  "rows": [
+    {
+      "case_id": "mw_grill_1",
+      "level": "clean",
+      "query": "Làm sao để nướng gà?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_1",
+      "level": "tone_loss",
+      "query": "Lam sao để nướng ga?",
+      "query_wer_vs_clean": 0.4,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_1",
+      "level": "no_diacritics",
+      "query": "Lam sao de nuong ga?",
+      "query_wer_vs_clean": 0.8,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_1",
+      "level": "drop_word",
+      "query": "Làm sao để nướng",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_1",
+      "level": "noisy",
+      "query": "Lam sao nuong ga?",
+      "query_wer_vs_clean": 0.8,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_2",
+      "level": "clean",
+      "query": "Nuong banh mi cho gion thi bam nut nao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_2",
+      "level": "tone_loss",
+      "query": "Nuong banh mi cho gion thi bam nut nao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_2",
+      "level": "no_diacritics",
+      "query": "Nuong banh mi cho gion thi bam nut nao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_2",
+      "level": "drop_word",
+      "query": "Nuong banh mi gion thi bam nut nao?",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_2",
+      "level": "noisy",
+      "query": "Nuong banh mi cho thi bam nut nao?",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_3",
+      "level": "clean",
+      "query": "Tôi muốn nướng cá thu",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_3",
+      "level": "tone_loss",
+      "query": "Tôi muốn nương cá thu",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_grill_3",
+      "level": "no_diacritics",
+      "query": "Toi muon nuong ca thu",
+      "query_wer_vs_clean": 0.8,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_3",
+      "level": "drop_word",
+      "query": "Tôi muốn nướng cá",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_3",
+      "level": "noisy",
+      "query": "Toi muon nuong thu",
+      "query_wer_vs_clean": 0.8,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_4",
+      "level": "clean",
+      "query": "Chế độ nướng của lò dùng như thế nào?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_4",
+      "level": "tone_loss",
+      "query": "Chê đô nướng của lò dung như thê nào?",
+      "query_wer_vs_clean": 0.444,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_4",
+      "level": "no_diacritics",
+      "query": "Che do nuong cua lo dung nhu the nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_grill_4",
+      "level": "drop_word",
+      "query": "Chế độ của lò dùng như thế nào?",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_grill_4",
+      "level": "noisy",
+      "query": "Che do nuong lo dung nhu the nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_defrost_1",
+      "level": "clean",
+      "query": "Tôi muốn rã đông thịt đông lạnh",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "turbo_defrost"
+    },
+    {
+      "case_id": "mw_defrost_1",
+      "level": "tone_loss",
+      "query": "Tôi muôn rã đông thịt đông lạnh",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "turbo_defrost"
+    },
+    {
+      "case_id": "mw_defrost_1",
+      "level": "no_diacritics",
+      "query": "Toi muon ra dong thit dong lanh",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "turbo_defrost"
+    },
+    {
+      "case_id": "mw_defrost_1",
+      "level": "drop_word",
+      "query": "Tôi muốn rã thịt đông lạnh",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_defrost_1",
+      "level": "noisy",
+      "query": "Toi muon ra dong thit lanh",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "turbo_defrost"
+    },
+    {
+      "case_id": "mw_defrost_2",
+      "level": "clean",
+      "query": "Ra dong ca bam nut gi?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "turbo_defrost"
+    },
+    {
+      "case_id": "mw_defrost_2",
+      "level": "tone_loss",
+      "query": "Ra dong ca bam nut gi?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "turbo_defrost"
+    },
+    {
+      "case_id": "mw_defrost_2",
+      "level": "no_diacritics",
+      "query": "Ra dong ca bam nut gi?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "turbo_defrost"
+    },
+    {
+      "case_id": "mw_defrost_2",
+      "level": "drop_word",
+      "query": "Ra ca bam nut gi?",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_defrost_2",
+      "level": "noisy",
+      "query": "Ra dong ca bam gi?",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "turbo_defrost"
+    },
+    {
+      "case_id": "mw_defrost_3",
+      "level": "clean",
+      "query": "Thịt để ngăn đá cứng quá, làm mềm nhanh được không?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_defrost_3",
+      "level": "tone_loss",
+      "query": "Thịt để ngăn đa cứng quá, làm mềm nhanh được không?",
+      "query_wer_vs_clean": 0.091,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_defrost_3",
+      "level": "no_diacritics",
+      "query": "Thit de ngan da cung qua, lam mem nhanh duoc khong?",
+      "query_wer_vs_clean": 0.909,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_defrost_3",
+      "level": "drop_word",
+      "query": "Thịt để ngăn đá cứng quá, làm mềm nhanh được",
+      "query_wer_vs_clean": 0.091,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_defrost_3",
+      "level": "noisy",
+      "query": "Thit de ngan cung qua, lam mem nhanh duoc khong?",
+      "query_wer_vs_clean": 0.909,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_defrost_4",
+      "level": "clean",
+      "query": "Rã đông 500 gam thịt bò thì làm sao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "turbo_defrost"
+    },
+    {
+      "case_id": "mw_defrost_4",
+      "level": "tone_loss",
+      "query": "Ra đông 500 gam thit bo thì lam sao?",
+      "query_wer_vs_clean": 0.444,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_defrost_4",
+      "level": "no_diacritics",
+      "query": "Ra dong 500 gam thit bo thi lam sao?",
+      "query_wer_vs_clean": 0.667,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "turbo_defrost"
+    },
+    {
+      "case_id": "mw_defrost_4",
+      "level": "drop_word",
+      "query": "Rã đông 500 gam thịt bò thì làm",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "turbo_defrost"
+    },
+    {
+      "case_id": "mw_defrost_4",
+      "level": "noisy",
+      "query": "Ra dong 500 gam thit thi lam sao?",
+      "query_wer_vs_clean": 0.667,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "turbo_defrost"
+    },
+    {
+      "case_id": "mw_reheat_1",
+      "level": "clean",
+      "query": "Hâm nóng cơm thế nào?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_1",
+      "level": "tone_loss",
+      "query": "Hâm nóng cơm thế nao?",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_1",
+      "level": "no_diacritics",
+      "query": "Ham nong com the nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_1",
+      "level": "drop_word",
+      "query": "Hâm nóng cơm nào?",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_1",
+      "level": "noisy",
+      "query": "Ham nong com nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_2",
+      "level": "clean",
+      "query": "Hâm lại thức ăn nguội trong tủ lạnh",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_2",
+      "level": "tone_loss",
+      "query": "Hâm lai thức ăn nguội trong tu lanh",
+      "query_wer_vs_clean": 0.375,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_2",
+      "level": "no_diacritics",
+      "query": "Ham lai thuc an nguoi trong tu lanh",
+      "query_wer_vs_clean": 0.875,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_2",
+      "level": "drop_word",
+      "query": "Hâm lại thức ăn nguội tủ lạnh",
+      "query_wer_vs_clean": 0.125,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_2",
+      "level": "noisy",
+      "query": "Ham lai thuc nguoi trong tu lanh",
+      "query_wer_vs_clean": 0.875,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_3",
+      "level": "clean",
+      "query": "Ham nong chao cho nong lai",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_3",
+      "level": "tone_loss",
+      "query": "Ham nong chao cho nong lai",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_3",
+      "level": "no_diacritics",
+      "query": "Ham nong chao cho nong lai",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_3",
+      "level": "drop_word",
+      "query": "Ham nong chao cho lai",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_3",
+      "level": "noisy",
+      "query": "Ham nong cho nong lai",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_4",
+      "level": "clean",
+      "query": "Hâm sữa cho cháu uống thì bấm nút nào?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_4",
+      "level": "tone_loss",
+      "query": "Hâm sưa cho cháu uông thì bấm nut nao?",
+      "query_wer_vs_clean": 0.444,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_4",
+      "level": "no_diacritics",
+      "query": "Ham sua cho chau uong thi bam nut nao?",
+      "query_wer_vs_clean": 0.889,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_4",
+      "level": "drop_word",
+      "query": "Hâm sữa cho cháu uống thì bấm nào?",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_reheat_4",
+      "level": "noisy",
+      "query": "Ham sua cho chau uong thi bam nao?",
+      "query_wer_vs_clean": 0.889,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_auto_menu_1",
+      "level": "clean",
+      "query": "Dùng chương trình nấu tự động như thế nào?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_auto_menu_1",
+      "level": "tone_loss",
+      "query": "Dung chương trình nấu tự động như thê nào?",
+      "query_wer_vs_clean": 0.222,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_auto_menu_1",
+      "level": "no_diacritics",
+      "query": "Dung chuong trinh nau tu dong nhu the nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_auto_menu_1",
+      "level": "drop_word",
+      "query": "Dùng chương trình nấu tự động như nào?",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_auto_menu_1",
+      "level": "noisy",
+      "query": "Dung chuong trinh tu dong nhu the nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_auto_menu_2",
+      "level": "clean",
+      "query": "Lò có sẵn món nấu tự động không, chọn ở đâu?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_auto_menu_2",
+      "level": "tone_loss",
+      "query": "Lo co săn món nấu tự động không, chon ở đâu?",
+      "query_wer_vs_clean": 0.364,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_auto_menu_2",
+      "level": "no_diacritics",
+      "query": "Lo co san mon nau tu dong khong, chon o dau?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_auto_menu_2",
+      "level": "drop_word",
+      "query": "Lò có món nấu tự động không, chọn ở đâu?",
+      "query_wer_vs_clean": 0.091,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_auto_menu_2",
+      "level": "noisy",
+      "query": "Lo co san mon nau tu khong, chon o dau?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_auto_menu_3",
+      "level": "clean",
+      "query": "Nau tu dong mon rau cu",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_auto_menu_3",
+      "level": "tone_loss",
+      "query": "Nau tu dong mon rau cu",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_auto_menu_3",
+      "level": "no_diacritics",
+      "query": "Nau tu dong mon rau cu",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_auto_menu_3",
+      "level": "drop_word",
+      "query": "Nau tu dong mon cu",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_auto_menu_3",
+      "level": "noisy",
+      "query": "Nau tu dong rau cu",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_combination_1",
+      "level": "clean",
+      "query": "Nấu kết hợp vừa nướng vừa vi sóng được không?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_combination_1",
+      "level": "tone_loss",
+      "query": "Nâu kết hợp vưa nướng vưa vi song được không?",
+      "query_wer_vs_clean": 0.4,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_combination_1",
+      "level": "no_diacritics",
+      "query": "Nau ket hop vua nuong vua vi song duoc khong?",
+      "query_wer_vs_clean": 0.9,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_combination_1",
+      "level": "drop_word",
+      "query": "Nấu kết hợp vừa nướng vi sóng được không?",
+      "query_wer_vs_clean": 0.1,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_combination_1",
+      "level": "noisy",
+      "query": "Nau ket vua nuong vua vi song duoc khong?",
+      "query_wer_vs_clean": 0.9,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_combination_2",
+      "level": "clean",
+      "query": "Chế độ kết hợp dùng khi nào?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_combination_2",
+      "level": "tone_loss",
+      "query": "Chế đô kết hợp dùng khi nào?",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_combination_2",
+      "level": "no_diacritics",
+      "query": "Che do ket hop dung khi nao?",
+      "query_wer_vs_clean": 0.857,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_combination_2",
+      "level": "drop_word",
+      "query": "Chế độ kết hợp dùng nào?",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_combination_2",
+      "level": "noisy",
+      "query": "Che do ket hop dung nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_combination_3",
+      "level": "clean",
+      "query": "Muốn gà vừa chín bên trong vừa vàng da bên ngoài thì chọn chế độ gì?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_combination_3",
+      "level": "tone_loss",
+      "query": "Muốn gà vưa chin bên trong vừa vàng da bên ngoài thì chon chê độ gì?",
+      "query_wer_vs_clean": 0.25,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_combination_3",
+      "level": "no_diacritics",
+      "query": "Muon ga vua chin ben trong vua vang da ben ngoai thi chon che do gi?",
+      "query_wer_vs_clean": 0.875,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_combination_3",
+      "level": "drop_word",
+      "query": "Muốn gà vừa chín bên trong vừa vàng da bên ngoài thì chế độ gì?",
+      "query_wer_vs_clean": 0.062,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_combination_3",
+      "level": "noisy",
+      "query": "Muon ga vua chin ben trong vua vang da ben ngoai thi che do gi?",
+      "query_wer_vs_clean": 0.875,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_power_1",
+      "level": "clean",
+      "query": "Chọn công suất vi sóng ở đâu?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_power_1",
+      "level": "tone_loss",
+      "query": "Chon công suất vi sóng ơ đâu?",
+      "query_wer_vs_clean": 0.286,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_power_1",
+      "level": "no_diacritics",
+      "query": "Chon cong suat vi song o dau?",
+      "query_wer_vs_clean": 0.857,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_power_1",
+      "level": "drop_word",
+      "query": "Chọn công suất sóng ở đâu?",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_power_1",
+      "level": "noisy",
+      "query": "Chon cong suat song o dau?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_power_2",
+      "level": "clean",
+      "query": "Giảm công suất xuống mức thấp để nấu liu riu",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_power_2",
+      "level": "tone_loss",
+      "query": "Giảm công suất xuống mức thấp để nâu liu riu",
+      "query_wer_vs_clean": 0.1,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_power_2",
+      "level": "no_diacritics",
+      "query": "Giam cong suat xuong muc thap de nau liu riu",
+      "query_wer_vs_clean": 0.8,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_power_2",
+      "level": "drop_word",
+      "query": "Giảm công suất xuống thấp để nấu liu riu",
+      "query_wer_vs_clean": 0.1,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_power_2",
+      "level": "noisy",
+      "query": "Giam cong suat xuong muc thap nau liu riu",
+      "query_wer_vs_clean": 0.8,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_power_3",
+      "level": "clean",
+      "query": "Chon muc cong suat lo vi song",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_power_3",
+      "level": "tone_loss",
+      "query": "Chon muc cong suat lo vi song",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_power_3",
+      "level": "no_diacritics",
+      "query": "Chon muc cong suat lo vi song",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_power_3",
+      "level": "drop_word",
+      "query": "Chon muc cong suat lo vi",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_power_3",
+      "level": "noisy",
+      "query": "Chon muc cong suat lo song",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_quick30_1",
+      "level": "clean",
+      "query": "Nấu nhanh 30 giây làm sao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_quick30_1",
+      "level": "tone_loss",
+      "query": "Nâu nhanh 30 giây làm sao?",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_quick30_1",
+      "level": "no_diacritics",
+      "query": "Nau nhanh 30 giay lam sao?",
+      "query_wer_vs_clean": 0.5,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_quick30_1",
+      "level": "drop_word",
+      "query": "Nấu nhanh 30 giây sao?",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_quick30_1",
+      "level": "noisy",
+      "query": "Nau nhanh 30 giay sao?",
+      "query_wer_vs_clean": 0.5,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_quick30_2",
+      "level": "clean",
+      "query": "Cài nhanh từng 30 giây một thì bấm gì?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_quick30_2",
+      "level": "tone_loss",
+      "query": "Cai nhanh từng 30 giây môt thì bâm gì?",
+      "query_wer_vs_clean": 0.333,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_quick30_2",
+      "level": "no_diacritics",
+      "query": "Cai nhanh tung 30 giay mot thi bam gi?",
+      "query_wer_vs_clean": 0.778,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_quick30_2",
+      "level": "drop_word",
+      "query": "Cài nhanh từng 30 giây một bấm gì?",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_quick30_2",
+      "level": "noisy",
+      "query": "Cai nhanh 30 giay mot thi bam gi?",
+      "query_wer_vs_clean": 0.778,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_quick30_3",
+      "level": "clean",
+      "query": "Chi can quay nong 30 giay thoi",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_quick30_3",
+      "level": "tone_loss",
+      "query": "Chi can quay nong 30 giay thoi",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_quick30_3",
+      "level": "no_diacritics",
+      "query": "Chi can quay nong 30 giay thoi",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_quick30_3",
+      "level": "drop_word",
+      "query": "Chi quay nong 30 giay thoi",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_quick30_3",
+      "level": "noisy",
+      "query": "Chi can quay nong 30 thoi",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_timer_1",
+      "level": "clean",
+      "query": "Cách hẹn giờ trên lò vi sóng?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "time_clock"
+    },
+    {
+      "case_id": "mw_timer_1",
+      "level": "tone_loss",
+      "query": "Cách hẹn giơ trên lo vi song?",
+      "query_wer_vs_clean": 0.429,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_timer_1",
+      "level": "no_diacritics",
+      "query": "Cach hen gio tren lo vi song?",
+      "query_wer_vs_clean": 0.857,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "time_clock"
+    },
+    {
+      "case_id": "mw_timer_1",
+      "level": "drop_word",
+      "query": "Cách hẹn giờ trên lò sóng?",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "time_clock"
+    },
+    {
+      "case_id": "mw_timer_1",
+      "level": "noisy",
+      "query": "Cach hen gio tren vi song?",
+      "query_wer_vs_clean": 0.857,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "time_clock"
+    },
+    {
+      "case_id": "mw_timer_2",
+      "level": "clean",
+      "query": "Dùng lò làm đồng hồ đếm giờ trong bếp được không?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_timer_2",
+      "level": "tone_loss",
+      "query": "Dùng lò làm đông hồ đếm giơ trong bêp đươc không?",
+      "query_wer_vs_clean": 0.364,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_timer_2",
+      "level": "no_diacritics",
+      "query": "Dung lo lam dong ho dem gio trong bep duoc khong?",
+      "query_wer_vs_clean": 0.909,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_timer_2",
+      "level": "drop_word",
+      "query": "Dùng lò đồng hồ đếm giờ trong bếp được không?",
+      "query_wer_vs_clean": 0.091,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_timer_2",
+      "level": "noisy",
+      "query": "Dung lo lam dong ho dem gio trong bep khong?",
+      "query_wer_vs_clean": 0.909,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_timer_3",
+      "level": "clean",
+      "query": "Cài đồng hồ của lò về 7 giờ sáng",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_timer_3",
+      "level": "tone_loss",
+      "query": "Cài đồng hồ cua lo về 7 giơ sáng",
+      "query_wer_vs_clean": 0.333,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_timer_3",
+      "level": "no_diacritics",
+      "query": "Cai dong ho cua lo ve 7 gio sang",
+      "query_wer_vs_clean": 0.889,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_timer_3",
+      "level": "drop_word",
+      "query": "Cài đồng hồ của lò về 7 giờ",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_timer_3",
+      "level": "noisy",
+      "query": "Cai dong ho cua ve 7 gio sang",
+      "query_wer_vs_clean": 0.889,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time1min_1",
+      "level": "clean",
+      "query": "Tăng thêm 1 phút nấu",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time1min_1",
+      "level": "tone_loss",
+      "query": "Tăng thêm 1 phút nâu",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time1min_1",
+      "level": "no_diacritics",
+      "query": "Tang them 1 phut nau",
+      "query_wer_vs_clean": 0.8,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time1min_1",
+      "level": "drop_word",
+      "query": "Tăng thêm 1 nấu",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time1min_1",
+      "level": "noisy",
+      "query": "Tang them 1 phut",
+      "query_wer_vs_clean": 0.8,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time1min_2",
+      "level": "clean",
+      "query": "Cài thời gian nấu 3 phút thì bấm sao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time1min_2",
+      "level": "tone_loss",
+      "query": "Cai thời gian nâu 3 phút thi bâm sao?",
+      "query_wer_vs_clean": 0.444,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time1min_2",
+      "level": "no_diacritics",
+      "query": "Cai thoi gian nau 3 phut thi bam sao?",
+      "query_wer_vs_clean": 0.667,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time1min_2",
+      "level": "drop_word",
+      "query": "Cài thời gian nấu phút thì bấm sao?",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time1min_2",
+      "level": "noisy",
+      "query": "Cai thoi nau 3 phut thi bam sao?",
+      "query_wer_vs_clean": 0.778,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time10min_1",
+      "level": "clean",
+      "query": "Cộng thêm 10 phút vào thời gian nấu",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time10min_1",
+      "level": "tone_loss",
+      "query": "Công thêm 10 phút vao thời gian nâu",
+      "query_wer_vs_clean": 0.375,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time10min_1",
+      "level": "no_diacritics",
+      "query": "Cong them 10 phut vao thoi gian nau",
+      "query_wer_vs_clean": 0.75,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time10min_1",
+      "level": "drop_word",
+      "query": "Cộng thêm 10 phút vào thời gian",
+      "query_wer_vs_clean": 0.125,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time10min_1",
+      "level": "noisy",
+      "query": "Cong them phut vao thoi gian nau",
+      "query_wer_vs_clean": 0.875,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time10min_2",
+      "level": "clean",
+      "query": "Muốn nấu lâu 20 phút thì cài thế nào?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time10min_2",
+      "level": "tone_loss",
+      "query": "Muốn nấu lâu 20 phút thì cài thế nào?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time10min_2",
+      "level": "no_diacritics",
+      "query": "Muon nau lau 20 phut thi cai the nao?",
+      "query_wer_vs_clean": 0.889,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time10min_2",
+      "level": "drop_word",
+      "query": "Muốn nấu lâu 20 phút thì cài thế",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time10min_2",
+      "level": "noisy",
+      "query": "Muon nau lau 20 phut thi cai the",
+      "query_wer_vs_clean": 0.889,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time10sec_1",
+      "level": "clean",
+      "query": "Thêm 10 giây nữa thôi",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time10sec_1",
+      "level": "tone_loss",
+      "query": "Thêm 10 giây nữa thôi",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time10sec_1",
+      "level": "no_diacritics",
+      "query": "Them 10 giay nua thoi",
+      "query_wer_vs_clean": 0.8,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time10sec_1",
+      "level": "drop_word",
+      "query": "Thêm 10 nữa thôi",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_time10sec_1",
+      "level": "noisy",
+      "query": "Them 10 giay nua",
+      "query_wer_vs_clean": 0.8,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_addtime_1",
+      "level": "clean",
+      "query": "Đồ ăn chưa chín, cộng thêm thời gian đang nấu được không?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_addtime_1",
+      "level": "tone_loss",
+      "query": "Đô ăn chưa chín, cộng thêm thơi gian đang nâu được không?",
+      "query_wer_vs_clean": 0.25,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_addtime_1",
+      "level": "no_diacritics",
+      "query": "Do an chua chin, cong them thoi gian dang nau duoc khong?",
+      "query_wer_vs_clean": 0.917,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_addtime_1",
+      "level": "drop_word",
+      "query": "Đồ chưa chín, cộng thêm thời gian đang nấu được không?",
+      "query_wer_vs_clean": 0.083,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_addtime_1",
+      "level": "noisy",
+      "query": "Do an chua chin, cong them thoi gian nau duoc khong?",
+      "query_wer_vs_clean": 0.917,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_addtime_2",
+      "level": "clean",
+      "query": "Nut Add Time dung de lam gi?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_addtime_2",
+      "level": "tone_loss",
+      "query": "Nut Add Time dung de lam gi?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_addtime_2",
+      "level": "no_diacritics",
+      "query": "Nut Add Time dung de lam gi?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_addtime_2",
+      "level": "drop_word",
+      "query": "Nut Add Time dung de gi?",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_addtime_2",
+      "level": "noisy",
+      "query": "Nut Time dung de lam gi?",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_1",
+      "level": "clean",
+      "query": "Làm sao dừng lò lại?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_1",
+      "level": "tone_loss",
+      "query": "Làm sao dưng lo lại?",
+      "query_wer_vs_clean": 0.4,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_1",
+      "level": "no_diacritics",
+      "query": "Lam sao dung lo lai?",
+      "query_wer_vs_clean": 0.8,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_1",
+      "level": "drop_word",
+      "query": "Làm sao lò lại?",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_1",
+      "level": "noisy",
+      "query": "Lam sao dung lai?",
+      "query_wer_vs_clean": 0.8,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_2",
+      "level": "clean",
+      "query": "Lò đang chạy, tôi muốn tắt ngay",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_2",
+      "level": "tone_loss",
+      "query": "Lo đang chay, tôi muốn tắt ngay",
+      "query_wer_vs_clean": 0.286,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_2",
+      "level": "no_diacritics",
+      "query": "Lo dang chay, toi muon tat ngay",
+      "query_wer_vs_clean": 0.857,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_2",
+      "level": "drop_word",
+      "query": "Lò đang chạy, tôi muốn tắt",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_2",
+      "level": "noisy",
+      "query": "Lo chay, toi muon tat ngay",
+      "query_wer_vs_clean": 0.857,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_3",
+      "level": "clean",
+      "query": "Bấm nhầm rồi, xoá cài đặt đi làm lại",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_3",
+      "level": "tone_loss",
+      "query": "Bấm nhâm rồi, xoá cai đặt đi làm lai",
+      "query_wer_vs_clean": 0.333,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_3",
+      "level": "no_diacritics",
+      "query": "Bam nham roi, xoa cai dat di lam lai",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_3",
+      "level": "drop_word",
+      "query": "Bấm nhầm rồi, xoá cài đặt đi làm",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_3",
+      "level": "noisy",
+      "query": "Bam nham roi, xoa dat di lam lai",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_4",
+      "level": "clean",
+      "query": "Dung lo lai gap",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_4",
+      "level": "tone_loss",
+      "query": "Dung lo lai gap",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_4",
+      "level": "no_diacritics",
+      "query": "Dung lo lai gap",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_4",
+      "level": "drop_word",
+      "query": "Dung lo lai",
+      "query_wer_vs_clean": 0.25,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_stop_4",
+      "level": "noisy",
+      "query": "Dung lai gap",
+      "query_wer_vs_clean": 0.25,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_start_1",
+      "level": "clean",
+      "query": "Cài xong rồi thì bấm gì để lò chạy?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_start_1",
+      "level": "tone_loss",
+      "query": "Cài xong rồi thì bấm gi đê lò chạy?",
+      "query_wer_vs_clean": 0.222,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_start_1",
+      "level": "no_diacritics",
+      "query": "Cai xong roi thi bam gi de lo chay?",
+      "query_wer_vs_clean": 0.889,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_start_1",
+      "level": "drop_word",
+      "query": "Cài rồi thì bấm gì để lò chạy?",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_start_1",
+      "level": "noisy",
+      "query": "Cai xong roi thi bam gi lo chay?",
+      "query_wer_vs_clean": 0.889,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_start_2",
+      "level": "clean",
+      "query": "Bắt đầu nấu đi",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_start_2",
+      "level": "tone_loss",
+      "query": "Bắt đầu nấu đi",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_start_2",
+      "level": "no_diacritics",
+      "query": "Bat dau nau di",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_start_2",
+      "level": "drop_word",
+      "query": "Bắt nấu đi",
+      "query_wer_vs_clean": 0.25,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_start_2",
+      "level": "noisy",
+      "query": "Bat dau nau",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_start_3",
+      "level": "clean",
+      "query": "Nut khoi dong lo o dau?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_start_3",
+      "level": "tone_loss",
+      "query": "Nut khoi dong lo o dau?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_start_3",
+      "level": "no_diacritics",
+      "query": "Nut khoi dong lo o dau?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_start_3",
+      "level": "drop_word",
+      "query": "Nut khoi dong lo dau?",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_start_3",
+      "level": "noisy",
+      "query": "Nut khoi lo o dau?",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_up_1",
+      "level": "clean",
+      "query": "Chỉnh thời gian tăng lên chút xíu",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_up_1",
+      "level": "tone_loss",
+      "query": "Chinh thơi gian tăng lên chut xíu",
+      "query_wer_vs_clean": 0.429,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_up_1",
+      "level": "no_diacritics",
+      "query": "Chinh thoi gian tang len chut xiu",
+      "query_wer_vs_clean": 0.857,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_up_1",
+      "level": "drop_word",
+      "query": "Chỉnh thời gian tăng lên xíu",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_up_1",
+      "level": "noisy",
+      "query": "Chinh gian tang len chut xiu",
+      "query_wer_vs_clean": 0.857,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_down_1",
+      "level": "clean",
+      "query": "Lỡ cài nhiều quá, giảm thời gian xuống",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_down_1",
+      "level": "tone_loss",
+      "query": "Lơ cai nhiều qua, giam thời gian xuống",
+      "query_wer_vs_clean": 0.5,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_down_1",
+      "level": "no_diacritics",
+      "query": "Lo cai nhieu qua, giam thoi gian xuong",
+      "query_wer_vs_clean": 0.875,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_down_1",
+      "level": "drop_word",
+      "query": "Lỡ cài quá, giảm thời gian xuống",
+      "query_wer_vs_clean": 0.125,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_down_1",
+      "level": "noisy",
+      "query": "Lo nhieu qua, giam thoi gian xuong",
+      "query_wer_vs_clean": 0.875,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_multi_grill_time",
+      "level": "clean",
+      "query": "Nướng trong 10 phút thì bấm những nút nào?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_multi_grill_time",
+      "level": "tone_loss",
+      "query": "Nương trong 10 phut thi bâm nhưng nut nào?",
+      "query_wer_vs_clean": 0.667,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_multi_grill_time",
+      "level": "no_diacritics",
+      "query": "Nuong trong 10 phut thi bam nhung nut nao?",
+      "query_wer_vs_clean": 0.778,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_multi_grill_time",
+      "level": "drop_word",
+      "query": "Nướng trong phút thì bấm những nút nào?",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_multi_grill_time",
+      "level": "noisy",
+      "query": "Nuong trong 10 phut thi bam nut nao?",
+      "query_wer_vs_clean": 0.778,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_multi_defrost_grill",
+      "level": "clean",
+      "query": "Cá đông lạnh, muốn rã đông xong nướng luôn",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_multi_defrost_grill",
+      "level": "tone_loss",
+      "query": "Ca đông lạnh, muôn ra đông xong nương luôn",
+      "query_wer_vs_clean": 0.444,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_multi_defrost_grill",
+      "level": "no_diacritics",
+      "query": "Ca dong lanh, muon ra dong xong nuong luon",
+      "query_wer_vs_clean": 0.889,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_multi_defrost_grill",
+      "level": "drop_word",
+      "query": "Cá đông muốn rã đông xong nướng luôn",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_multi_defrost_grill",
+      "level": "noisy",
+      "query": "Ca dong lanh, muon dong xong nuong luon",
+      "query_wer_vs_clean": 0.889,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "grill"
+    },
+    {
+      "case_id": "mw_oos_weather",
+      "level": "clean",
+      "query": "Hôm nay thời tiết thế nào?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_weather",
+      "level": "tone_loss",
+      "query": "Hôm nay thời tiết thê nào?",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_weather",
+      "level": "no_diacritics",
+      "query": "Hom nay thoi tiet the nao?",
+      "query_wer_vs_clean": 0.833,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_weather",
+      "level": "drop_word",
+      "query": "Hôm nay thời tiết thế",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_weather",
+      "level": "noisy",
+      "query": "Hom nay tiet the nao?",
+      "query_wer_vs_clean": 0.833,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_recipe",
+      "level": "clean",
+      "query": "Cho tôi công thức nấu phở bò",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_recipe",
+      "level": "tone_loss",
+      "query": "Cho tôi công thức nấu phở bo",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_recipe",
+      "level": "no_diacritics",
+      "query": "Cho toi cong thuc nau pho bo",
+      "query_wer_vs_clean": 0.857,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_recipe",
+      "level": "drop_word",
+      "query": "Cho tôi công nấu phở bò",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_recipe",
+      "level": "noisy",
+      "query": "Cho cong thuc nau pho bo",
+      "query_wer_vs_clean": 0.857,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_other_device",
+      "level": "clean",
+      "query": "Máy giặt nhà tôi kêu to quá phải làm sao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_other_device",
+      "level": "tone_loss",
+      "query": "Máy giặt nha tôi kêu to quá phai lam sao?",
+      "query_wer_vs_clean": 0.3,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_other_device",
+      "level": "no_diacritics",
+      "query": "May giat nha toi keu to qua phai lam sao?",
+      "query_wer_vs_clean": 0.8,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_other_device",
+      "level": "drop_word",
+      "query": "Máy giặt nhà tôi kêu to quá phải làm",
+      "query_wer_vs_clean": 0.1,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_other_device",
+      "level": "noisy",
+      "query": "May giat nha toi keu qua phai lam sao?",
+      "query_wer_vs_clean": 0.9,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_smalltalk",
+      "level": "clean",
+      "query": "Buồn quá, nói chuyện với tôi chút đi",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_smalltalk",
+      "level": "tone_loss",
+      "query": "Buôn quá, nói chuyên với tôi chut đi",
+      "query_wer_vs_clean": 0.375,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_smalltalk",
+      "level": "no_diacritics",
+      "query": "Buon qua, noi chuyen voi toi chut di",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_smalltalk",
+      "level": "drop_word",
+      "query": "Buồn quá, nói chuyện tôi chút đi",
+      "query_wer_vs_clean": 0.125,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_smalltalk",
+      "level": "noisy",
+      "query": "Buon qua, chuyen voi toi chut di",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_lottery",
+      "level": "clean",
+      "query": "Hôm nay đánh con lô nào đẹp?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_lottery",
+      "level": "tone_loss",
+      "query": "Hôm nay đánh con lô nào đep?",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_lottery",
+      "level": "no_diacritics",
+      "query": "Hom nay danh con lo nao dep?",
+      "query_wer_vs_clean": 0.714,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_lottery",
+      "level": "drop_word",
+      "query": "Hôm đánh con lô nào đẹp?",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_lottery",
+      "level": "noisy",
+      "query": "Hom nay danh con lo dep?",
+      "query_wer_vs_clean": 0.714,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_tv",
+      "level": "clean",
+      "query": "Chuyển kênh tivi sang VTV3 giúp tôi",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_tv",
+      "level": "tone_loss",
+      "query": "Chuyển kênh tivi sang VTV3 giúp tôi",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_tv",
+      "level": "no_diacritics",
+      "query": "Chuyen kenh tivi sang VTV3 giup toi",
+      "query_wer_vs_clean": 0.571,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_tv",
+      "level": "drop_word",
+      "query": "Chuyển kênh tivi sang VTV3 giúp",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "mw_oos_tv",
+      "level": "noisy",
+      "query": "Chuyen kenh tivi sang giup toi",
+      "query_wer_vs_clean": 0.714,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_program_1",
+      "level": "clean",
+      "query": "Chọn chương trình giặt nhanh 15 phút thì làm sao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "1"
+    },
+    {
+      "case_id": "el_program_1",
+      "level": "tone_loss",
+      "query": "Chon chương trinh giặt nhanh 15 phút thì làm sao?",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "1"
+    },
+    {
+      "case_id": "el_program_1",
+      "level": "no_diacritics",
+      "query": "Chon chuong trinh giat nhanh 15 phut thi lam sao?",
+      "query_wer_vs_clean": 0.7,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "1"
+    },
+    {
+      "case_id": "el_program_1",
+      "level": "drop_word",
+      "query": "Chọn chương trình giặt nhanh 15 thì làm sao?",
+      "query_wer_vs_clean": 0.1,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "1"
+    },
+    {
+      "case_id": "el_program_1",
+      "level": "noisy",
+      "query": "Chon trinh giat nhanh 15 phut thi lam sao?",
+      "query_wer_vs_clean": 0.7,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "1"
+    },
+    {
+      "case_id": "el_program_2",
+      "level": "clean",
+      "query": "Giặt đồ len thì vặn núm về đâu?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_program_2",
+      "level": "tone_loss",
+      "query": "Giăt đồ len thì văn num về đâu?",
+      "query_wer_vs_clean": 0.375,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_program_2",
+      "level": "no_diacritics",
+      "query": "Giat do len thi van num ve dau?",
+      "query_wer_vs_clean": 0.875,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_program_2",
+      "level": "drop_word",
+      "query": "Giặt len thì vặn núm về đâu?",
+      "query_wer_vs_clean": 0.125,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_program_2",
+      "level": "noisy",
+      "query": "Giat len thi van num ve dau?",
+      "query_wer_vs_clean": 0.875,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_program_3",
+      "level": "clean",
+      "query": "Muốn giặt chăn mền dày thì chọn chế độ nào?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_program_3",
+      "level": "tone_loss",
+      "query": "Muốn giặt chăn mền dày thì chon chê độ nào?",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_program_3",
+      "level": "no_diacritics",
+      "query": "Muon giat chan men day thi chon che do nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_program_3",
+      "level": "drop_word",
+      "query": "Muốn giặt chăn dày thì chọn chế độ nào?",
+      "query_wer_vs_clean": 0.1,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_program_3",
+      "level": "noisy",
+      "query": "Muon giat chan day thi chon che do nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_program_4",
+      "level": "clean",
+      "query": "Giat do the thao thi chon o dau?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_program_4",
+      "level": "tone_loss",
+      "query": "Giat do the thao thi chon o dau?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_program_4",
+      "level": "no_diacritics",
+      "query": "Giat do the thao thi chon o dau?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_program_4",
+      "level": "drop_word",
+      "query": "Giat do the thao thi chon o",
+      "query_wer_vs_clean": 0.125,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_program_4",
+      "level": "noisy",
+      "query": "Giat do the thi chon o dau?",
+      "query_wer_vs_clean": 0.125,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_temp_1",
+      "level": "clean",
+      "query": "Chỉnh nhiệt độ nước giặt ở đâu?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "1"
+    },
+    {
+      "case_id": "el_temp_1",
+      "level": "tone_loss",
+      "query": "Chinh nhiêt đô nươc giặt ơ đâu?",
+      "query_wer_vs_clean": 0.714,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_temp_1",
+      "level": "no_diacritics",
+      "query": "Chinh nhiet do nuoc giat o dau?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "1"
+    },
+    {
+      "case_id": "el_temp_1",
+      "level": "drop_word",
+      "query": "Chỉnh nhiệt độ nước giặt đâu?",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "1"
+    },
+    {
+      "case_id": "el_temp_1",
+      "level": "noisy",
+      "query": "Chinh nhiet nuoc giat o dau?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_temp_2",
+      "level": "clean",
+      "query": "Giặt nước nóng 60 độ cho sạch khuẩn",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_temp_2",
+      "level": "tone_loss",
+      "query": "Giăt nươc nong 60 đô cho sạch khuân",
+      "query_wer_vs_clean": 0.625,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_temp_2",
+      "level": "no_diacritics",
+      "query": "Giat nuoc nong 60 do cho sach khuan",
+      "query_wer_vs_clean": 0.75,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_temp_2",
+      "level": "drop_word",
+      "query": "Giặt nước nóng 60 cho sạch khuẩn",
+      "query_wer_vs_clean": 0.125,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_temp_2",
+      "level": "noisy",
+      "query": "Giat nong 60 do cho sach khuan",
+      "query_wer_vs_clean": 0.75,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_temp_3",
+      "level": "clean",
+      "query": "Doi sang giat nuoc lanh",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_temp_3",
+      "level": "tone_loss",
+      "query": "Doi sang giat nuoc lanh",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_temp_3",
+      "level": "no_diacritics",
+      "query": "Doi sang giat nuoc lanh",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_temp_3",
+      "level": "drop_word",
+      "query": "Doi sang giat lanh",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_temp_3",
+      "level": "noisy",
+      "query": "Doi sang giat lanh",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_power_1",
+      "level": "clean",
+      "query": "Bật máy giặt lên như thế nào?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_power_1",
+      "level": "tone_loss",
+      "query": "Bât may giăt lên như thê nao?",
+      "query_wer_vs_clean": 0.714,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_power_1",
+      "level": "no_diacritics",
+      "query": "Bat may giat len nhu the nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_power_1",
+      "level": "drop_word",
+      "query": "Bật giặt lên như thế nào?",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_power_1",
+      "level": "noisy",
+      "query": "Bat may len nhu the nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_power_2",
+      "level": "clean",
+      "query": "Tắt nguồn máy giặt đi",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_power_2",
+      "level": "tone_loss",
+      "query": "Tắt nguôn máy giăt đi",
+      "query_wer_vs_clean": 0.4,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_power_2",
+      "level": "no_diacritics",
+      "query": "Tat nguon may giat di",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_power_2",
+      "level": "drop_word",
+      "query": "Tắt nguồn máy đi",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_power_2",
+      "level": "noisy",
+      "query": "Tat nguon may giat",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_power_3",
+      "level": "clean",
+      "query": "Nut nguon o cho nao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_power_3",
+      "level": "tone_loss",
+      "query": "Nut nguon o cho nao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_power_3",
+      "level": "no_diacritics",
+      "query": "Nut nguon o cho nao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_power_3",
+      "level": "drop_word",
+      "query": "Nut nguon o cho",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_power_3",
+      "level": "noisy",
+      "query": "Nut o cho nao?",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_spin_1",
+      "level": "clean",
+      "query": "Muốn đổi tốc độ vắt thì bấm nút nào?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_spin_1",
+      "level": "tone_loss",
+      "query": "Muốn đổi tôc đô văt thì bấm nut nao?",
+      "query_wer_vs_clean": 0.556,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_spin_1",
+      "level": "no_diacritics",
+      "query": "Muon doi toc do vat thi bam nut nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_spin_1",
+      "level": "drop_word",
+      "query": "Muốn đổi tốc độ vắt thì bấm nào?",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_spin_1",
+      "level": "noisy",
+      "query": "Muon doi toc do vat thi bam nut",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_spin_2",
+      "level": "clean",
+      "query": "Vắt nhẹ thôi cho đồ đỡ nhăn",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_spin_2",
+      "level": "tone_loss",
+      "query": "Văt nhe thôi cho đồ đỡ nhăn",
+      "query_wer_vs_clean": 0.286,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_spin_2",
+      "level": "no_diacritics",
+      "query": "Vat nhe thoi cho do do nhan",
+      "query_wer_vs_clean": 0.857,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_spin_2",
+      "level": "drop_word",
+      "query": "Vắt nhẹ thôi cho đồ đỡ",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_spin_2",
+      "level": "noisy",
+      "query": "Vat nhe thoi cho do nhan",
+      "query_wer_vs_clean": 0.857,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_spin_3",
+      "level": "clean",
+      "query": "Chinh vong vat 800 vong",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_spin_3",
+      "level": "tone_loss",
+      "query": "Chinh vong vat 800 vong",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_spin_3",
+      "level": "no_diacritics",
+      "query": "Chinh vong vat 800 vong",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_spin_3",
+      "level": "drop_word",
+      "query": "Chinh vong vat 800",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_spin_3",
+      "level": "noisy",
+      "query": "Chinh vong vat 800",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_vapour_1",
+      "level": "clean",
+      "query": "Thêm hơi nước để diệt khuẩn quần áo",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_vapour_1",
+      "level": "tone_loss",
+      "query": "Thêm hơi nước đê diêt khuân quân áo",
+      "query_wer_vs_clean": 0.5,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_vapour_1",
+      "level": "no_diacritics",
+      "query": "Them hoi nuoc de diet khuan quan ao",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_vapour_1",
+      "level": "drop_word",
+      "query": "Thêm hơi nước để diệt quần áo",
+      "query_wer_vs_clean": 0.125,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_vapour_1",
+      "level": "noisy",
+      "query": "Them hoi nuoc de diet khuan quan",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_vapour_2",
+      "level": "clean",
+      "query": "Chế độ hơi nước Vapour bật ở đâu?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_vapour_2",
+      "level": "tone_loss",
+      "query": "Chế độ hơi nươc Vapour bât ơ đâu?",
+      "query_wer_vs_clean": 0.375,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_vapour_2",
+      "level": "no_diacritics",
+      "query": "Che do hoi nuoc Vapour bat o dau?",
+      "query_wer_vs_clean": 0.875,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_vapour_2",
+      "level": "drop_word",
+      "query": "Chế độ hơi nước Vapour ở đâu?",
+      "query_wer_vs_clean": 0.125,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_vapour_2",
+      "level": "noisy",
+      "query": "Che do nuoc Vapour bat o dau?",
+      "query_wer_vs_clean": 0.875,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_prewash_1",
+      "level": "clean",
+      "query": "Bật chế độ giặt sơ trước",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_prewash_1",
+      "level": "tone_loss",
+      "query": "Bât chế đô giăt sơ trươc",
+      "query_wer_vs_clean": 0.667,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_prewash_1",
+      "level": "no_diacritics",
+      "query": "Bat che do giat so truoc",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_prewash_1",
+      "level": "drop_word",
+      "query": "Bật chế độ giặt trước",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_prewash_1",
+      "level": "noisy",
+      "query": "Bat che do giat so",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_prewash_2",
+      "level": "clean",
+      "query": "Áo bẩn nhiều bùn đất, muốn máy giặt sơ một lần trước khi giặt chính",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_prewash_2",
+      "level": "tone_loss",
+      "query": "Áo bân nhiều bùn đât, muôn máy giăt sơ một lân trươc khi giặt chính",
+      "query_wer_vs_clean": 0.4,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_prewash_2",
+      "level": "no_diacritics",
+      "query": "Ao ban nhieu bun dat, muon may giat so mot lan truoc khi giat chinh",
+      "query_wer_vs_clean": 0.933,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_prewash_2",
+      "level": "drop_word",
+      "query": "Áo bẩn bùn đất, muốn máy giặt sơ một lần trước khi giặt chính",
+      "query_wer_vs_clean": 0.067,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_prewash_2",
+      "level": "noisy",
+      "query": "Ao nhieu bun dat, muon may giat so mot lan truoc khi giat chinh",
+      "query_wer_vs_clean": 0.933,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_prewash_3",
+      "level": "clean",
+      "query": "Giat so bat the nao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_prewash_3",
+      "level": "tone_loss",
+      "query": "Giat so bat the nao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_prewash_3",
+      "level": "no_diacritics",
+      "query": "Giat so bat the nao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_prewash_3",
+      "level": "drop_word",
+      "query": "Giat bat the nao?",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_prewash_3",
+      "level": "noisy",
+      "query": "Giat so bat nao?",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_rinse_1",
+      "level": "clean",
+      "query": "Tôi muốn máy xả thêm nước cho sạch xà phòng",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_rinse_1",
+      "level": "tone_loss",
+      "query": "Tôi muôn may xa thêm nươc cho sach xà phong",
+      "query_wer_vs_clean": 0.6,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_rinse_1",
+      "level": "no_diacritics",
+      "query": "Toi muon may xa them nuoc cho sach xa phong",
+      "query_wer_vs_clean": 0.9,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_rinse_1",
+      "level": "drop_word",
+      "query": "Tôi muốn máy thêm nước cho sạch xà phòng",
+      "query_wer_vs_clean": 0.1,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_rinse_1",
+      "level": "noisy",
+      "query": "Toi muon may xa them nuoc cho sach phong",
+      "query_wer_vs_clean": 0.9,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_rinse_2",
+      "level": "clean",
+      "query": "Da cháu bị dị ứng bột giặt, làm sao xả kỹ hơn?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_rinse_2",
+      "level": "tone_loss",
+      "query": "Da cháu bị dị ưng bôt giặt, làm sao xả kỹ hơn?",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_rinse_2",
+      "level": "no_diacritics",
+      "query": "Da chau bi di ung bot giat, lam sao xa ky hon?",
+      "query_wer_vs_clean": 0.833,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_rinse_2",
+      "level": "drop_word",
+      "query": "Da cháu bị dị bột giặt, làm sao xả kỹ hơn?",
+      "query_wer_vs_clean": 0.083,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_rinse_2",
+      "level": "noisy",
+      "query": "Da chau bi di ung bot giat, lam xa ky hon?",
+      "query_wer_vs_clean": 0.917,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_rinse_3",
+      "level": "clean",
+      "query": "Bat xa them Extra Rinse",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_rinse_3",
+      "level": "tone_loss",
+      "query": "Bat xa them Extra Rinse",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_rinse_3",
+      "level": "no_diacritics",
+      "query": "Bat xa them Extra Rinse",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_rinse_3",
+      "level": "drop_word",
+      "query": "Bat xa them Extra",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_rinse_3",
+      "level": "noisy",
+      "query": "Bat xa Extra Rinse",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_1",
+      "level": "clean",
+      "query": "Máy đang giặt mà muốn thêm quần áo thì làm sao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_1",
+      "level": "tone_loss",
+      "query": "Máy đang giặt ma muôn thêm quần ao thì lam sao?",
+      "query_wer_vs_clean": 0.364,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_1",
+      "level": "no_diacritics",
+      "query": "May dang giat ma muon them quan ao thi lam sao?",
+      "query_wer_vs_clean": 0.909,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_1",
+      "level": "drop_word",
+      "query": "Máy đang giặt mà muốn thêm quần áo thì làm",
+      "query_wer_vs_clean": 0.091,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_1",
+      "level": "noisy",
+      "query": "May dang giat ma muon them quan ao lam sao?",
+      "query_wer_vs_clean": 0.909,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_2",
+      "level": "clean",
+      "query": "Chọn xong chương trình rồi, bấm gì để máy bắt đầu giặt?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_2",
+      "level": "tone_loss",
+      "query": "Chọn xong chương trinh rồi, bấm gi để máy bắt đầu giặt?",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_2",
+      "level": "no_diacritics",
+      "query": "Chon xong chuong trinh roi, bam gi de may bat dau giat?",
+      "query_wer_vs_clean": 0.917,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_2",
+      "level": "drop_word",
+      "query": "Chọn xong chương trình rồi, bấm gì để máy đầu giặt?",
+      "query_wer_vs_clean": 0.083,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_2",
+      "level": "noisy",
+      "query": "Chon xong chuong trinh roi, bam gi de may bat dau",
+      "query_wer_vs_clean": 0.917,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_3",
+      "level": "clean",
+      "query": "Tạm dừng máy giặt lại một chút",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_3",
+      "level": "tone_loss",
+      "query": "Tạm dừng máy giặt lại một chut",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_3",
+      "level": "no_diacritics",
+      "query": "Tam dung may giat lai mot chut",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_3",
+      "level": "drop_word",
+      "query": "Tạm dừng máy giặt lại chút",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_3",
+      "level": "noisy",
+      "query": "Tam dung may giat mot chut",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_4",
+      "level": "clean",
+      "query": "Lo bo sot cai ao, mo cua bo them vao duoc khong?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_4",
+      "level": "tone_loss",
+      "query": "Lo bo sot cai ao, mo cua bo them vao duoc khong?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_4",
+      "level": "no_diacritics",
+      "query": "Lo bo sot cai ao, mo cua bo them vao duoc khong?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_4",
+      "level": "drop_word",
+      "query": "Lo bo sot cai ao, mo cua bo them vao khong?",
+      "query_wer_vs_clean": 0.083,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_start_4",
+      "level": "noisy",
+      "query": "Lo bo cai ao, mo cua bo them vao duoc khong?",
+      "query_wer_vs_clean": 0.083,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_timemgr_1",
+      "level": "clean",
+      "query": "Rút ngắn thời gian giặt lại được không?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_timemgr_1",
+      "level": "tone_loss",
+      "query": "Rut ngăn thời gian giặt lại được không?",
+      "query_wer_vs_clean": 0.25,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_timemgr_1",
+      "level": "no_diacritics",
+      "query": "Rut ngan thoi gian giat lai duoc khong?",
+      "query_wer_vs_clean": 0.875,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_timemgr_1",
+      "level": "drop_word",
+      "query": "Rút ngắn thời giặt lại được không?",
+      "query_wer_vs_clean": 0.125,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_timemgr_1",
+      "level": "noisy",
+      "query": "Rut ngan thoi gian giat lai duoc",
+      "query_wer_vs_clean": 0.875,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_timemgr_2",
+      "level": "clean",
+      "query": "Điều chỉnh thời gian giặt Time Manager dùng sao?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_timemgr_2",
+      "level": "tone_loss",
+      "query": "Điều chinh thời gian giặt Time Manager dung sao?",
+      "query_wer_vs_clean": 0.222,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_timemgr_2",
+      "level": "no_diacritics",
+      "query": "Dieu chinh thoi gian giat Time Manager dung sao?",
+      "query_wer_vs_clean": 0.556,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_timemgr_2",
+      "level": "drop_word",
+      "query": "Điều chỉnh thời giặt Time Manager dùng sao?",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_timemgr_2",
+      "level": "noisy",
+      "query": "Dieu chinh thoi gian giat Time dung sao?",
+      "query_wer_vs_clean": 0.667,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_delay_1",
+      "level": "clean",
+      "query": "Hẹn giờ giặt xong sau 3 tiếng nữa",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "1"
+    },
+    {
+      "case_id": "el_delay_1",
+      "level": "tone_loss",
+      "query": "Hen giờ giặt xong sau 3 tiếng nưa",
+      "query_wer_vs_clean": 0.25,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_delay_1",
+      "level": "no_diacritics",
+      "query": "Hen gio giat xong sau 3 tieng nua",
+      "query_wer_vs_clean": 0.625,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "1"
+    },
+    {
+      "case_id": "el_delay_1",
+      "level": "drop_word",
+      "query": "Hẹn giờ giặt xong sau 3 nữa",
+      "query_wer_vs_clean": 0.125,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "1"
+    },
+    {
+      "case_id": "el_delay_1",
+      "level": "noisy",
+      "query": "Hen giat xong sau 3 tieng nua",
+      "query_wer_vs_clean": 0.625,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_delay_2",
+      "level": "clean",
+      "query": "Muốn máy giặt xong đúng lúc tôi đi chợ về",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_delay_2",
+      "level": "tone_loss",
+      "query": "Muốn máy giặt xong đung lúc tôi đi chợ vê",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_delay_2",
+      "level": "no_diacritics",
+      "query": "Muon may giat xong dung luc toi di cho ve",
+      "query_wer_vs_clean": 0.9,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_delay_2",
+      "level": "drop_word",
+      "query": "Muốn máy giặt xong đúng lúc tôi chợ về",
+      "query_wer_vs_clean": 0.1,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_delay_2",
+      "level": "noisy",
+      "query": "Muon may giat xong dung luc di cho ve",
+      "query_wer_vs_clean": 0.9,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_delay_3",
+      "level": "clean",
+      "query": "Hen gio ket thuc o dau?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "1"
+    },
+    {
+      "case_id": "el_delay_3",
+      "level": "tone_loss",
+      "query": "Hen gio ket thuc o dau?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "1"
+    },
+    {
+      "case_id": "el_delay_3",
+      "level": "no_diacritics",
+      "query": "Hen gio ket thuc o dau?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "1"
+    },
+    {
+      "case_id": "el_delay_3",
+      "level": "drop_word",
+      "query": "Hen ket thuc o dau?",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_delay_3",
+      "level": "noisy",
+      "query": "Hen gio ket o dau?",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": "1"
+    },
+    {
+      "case_id": "el_display_1",
+      "level": "clean",
+      "query": "Màn hình máy giặt đang hiển thị gì vậy?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_display_1",
+      "level": "tone_loss",
+      "query": "Màn hình may giặt đang hiên thị gi vây?",
+      "query_wer_vs_clean": 0.444,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_display_1",
+      "level": "no_diacritics",
+      "query": "Man hinh may giat dang hien thi gi vay?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_display_1",
+      "level": "drop_word",
+      "query": "Màn hình máy giặt đang thị gì vậy?",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_display_1",
+      "level": "noisy",
+      "query": "Man hinh may dang hien thi gi vay?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_time",
+      "level": "clean",
+      "query": "Bây giờ là mấy giờ rồi?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_time",
+      "level": "tone_loss",
+      "query": "Bây giờ là mấy giơ rôi?",
+      "query_wer_vs_clean": 0.333,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_time",
+      "level": "no_diacritics",
+      "query": "Bay gio la may gio roi?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_time",
+      "level": "drop_word",
+      "query": "Bây giờ là mấy giờ",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_time",
+      "level": "noisy",
+      "query": "Bay gio la gio roi?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_fridge",
+      "level": "clean",
+      "query": "Tủ lạnh nhà tôi không lạnh, sửa thế nào?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_fridge",
+      "level": "tone_loss",
+      "query": "Tu lạnh nhà tôi không lạnh, sửa thê nao?",
+      "query_wer_vs_clean": 0.333,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_fridge",
+      "level": "no_diacritics",
+      "query": "Tu lanh nha toi khong lanh, sua the nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_fridge",
+      "level": "drop_word",
+      "query": "Tủ lạnh nhà không lạnh, sửa thế nào?",
+      "query_wer_vs_clean": 0.111,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_fridge",
+      "level": "noisy",
+      "query": "Tu lanh nha toi khong lanh, sua nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_detergent",
+      "level": "clean",
+      "query": "Nên mua bột giặt hãng nào tốt?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_detergent",
+      "level": "tone_loss",
+      "query": "Nên mua bôt giặt hang nào tôt?",
+      "query_wer_vs_clean": 0.429,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_detergent",
+      "level": "no_diacritics",
+      "query": "Nen mua bot giat hang nao tot?",
+      "query_wer_vs_clean": 0.857,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_detergent",
+      "level": "drop_word",
+      "query": "Nên mua bột giặt hãng tốt?",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_detergent",
+      "level": "noisy",
+      "query": "Nen mua giat hang nao tot?",
+      "query_wer_vs_clean": 0.857,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_joke",
+      "level": "clean",
+      "query": "Kể cho tôi một câu chuyện cười đi",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_joke",
+      "level": "tone_loss",
+      "query": "Kê cho tôi một câu chuyên cươi đi",
+      "query_wer_vs_clean": 0.375,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_joke",
+      "level": "no_diacritics",
+      "query": "Ke cho toi mot cau chuyen cuoi di",
+      "query_wer_vs_clean": 0.875,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_joke",
+      "level": "drop_word",
+      "query": "Kể tôi một câu chuyện cười đi",
+      "query_wer_vs_clean": 0.125,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "el_oos_joke",
+      "level": "noisy",
+      "query": "Ke cho toi cau chuyen cuoi di",
+      "query_wer_vs_clean": 0.875,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_quick_1",
+      "level": "clean",
+      "query": "Tôi muốn giặt nhanh",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "quick_wash"
+    },
+    {
+      "case_id": "ts_quick_1",
+      "level": "tone_loss",
+      "query": "Tôi muốn giặt nhanh",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "quick_wash"
+    },
+    {
+      "case_id": "ts_quick_1",
+      "level": "no_diacritics",
+      "query": "Toi muon giat nhanh",
+      "query_wer_vs_clean": 0.75,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "quick_wash"
+    },
+    {
+      "case_id": "ts_quick_1",
+      "level": "drop_word",
+      "query": "Tôi muốn nhanh",
+      "query_wer_vs_clean": 0.25,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_quick_1",
+      "level": "noisy",
+      "query": "Toi giat nhanh",
+      "query_wer_vs_clean": 0.75,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "quick_wash"
+    },
+    {
+      "case_id": "ts_quick_2",
+      "level": "clean",
+      "query": "Giat nhanh do it ban",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "quick_wash"
+    },
+    {
+      "case_id": "ts_quick_2",
+      "level": "tone_loss",
+      "query": "Giat nhanh do it ban",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "quick_wash"
+    },
+    {
+      "case_id": "ts_quick_2",
+      "level": "no_diacritics",
+      "query": "Giat nhanh do it ban",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "quick_wash"
+    },
+    {
+      "case_id": "ts_quick_2",
+      "level": "drop_word",
+      "query": "Giat do it ban",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_quick_2",
+      "level": "noisy",
+      "query": "Giat nhanh it ban",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "quick_wash"
+    },
+    {
+      "case_id": "ts_dry_1",
+      "level": "clean",
+      "query": "Sấy quần áo thì bấm nút nào?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_dry_1",
+      "level": "tone_loss",
+      "query": "Sây quần áo thì bâm nút nào?",
+      "query_wer_vs_clean": 0.286,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_dry_1",
+      "level": "no_diacritics",
+      "query": "Say quan ao thi bam nut nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_dry_1",
+      "level": "drop_word",
+      "query": "Sấy quần thì bấm nút nào?",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_dry_1",
+      "level": "noisy",
+      "query": "Say quan ao thi nut nao?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_dry_2",
+      "level": "clean",
+      "query": "Trời mưa đồ không khô, dùng chế độ sấy được không?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_dry_2",
+      "level": "tone_loss",
+      "query": "Trời mưa đồ không khô, dung chê độ sấy đươc không?",
+      "query_wer_vs_clean": 0.273,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_dry_2",
+      "level": "no_diacritics",
+      "query": "Troi mua do khong kho, dung che do say duoc khong?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_dry_2",
+      "level": "drop_word",
+      "query": "Trời mưa đồ không dùng chế độ sấy được không?",
+      "query_wer_vs_clean": 0.091,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_dry_2",
+      "level": "noisy",
+      "query": "Troi do khong kho, dung che do say duoc khong?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_start_1",
+      "level": "clean",
+      "query": "Bấm gì để máy bắt đầu giặt?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_start_1",
+      "level": "tone_loss",
+      "query": "Bâm gì đê máy băt đầu giặt?",
+      "query_wer_vs_clean": 0.429,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_start_1",
+      "level": "no_diacritics",
+      "query": "Bam gi de may bat dau giat?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_start_1",
+      "level": "drop_word",
+      "query": "Bấm gì để máy bắt giặt?",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_start_1",
+      "level": "noisy",
+      "query": "Bam gi de may bat giat?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_start_2",
+      "level": "clean",
+      "query": "Tạm dừng máy một lát",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_start_2",
+      "level": "tone_loss",
+      "query": "Tam dừng may môt lat",
+      "query_wer_vs_clean": 0.8,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_start_2",
+      "level": "no_diacritics",
+      "query": "Tam dung may mot lat",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_start_2",
+      "level": "drop_word",
+      "query": "Tạm dừng một lát",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_start_2",
+      "level": "noisy",
+      "query": "Tam dung may mot",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_oos_price",
+      "level": "clean",
+      "query": "Máy giặt này giá bao nhiêu tiền?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_oos_price",
+      "level": "tone_loss",
+      "query": "May giăt này gia bao nhiêu tiên?",
+      "query_wer_vs_clean": 0.571,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_oos_price",
+      "level": "no_diacritics",
+      "query": "May giat nay gia bao nhieu tien?",
+      "query_wer_vs_clean": 0.857,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_oos_price",
+      "level": "drop_word",
+      "query": "Máy giặt này giá bao nhiêu",
+      "query_wer_vs_clean": 0.143,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "ts_oos_price",
+      "level": "noisy",
+      "query": "May giat nay gia nhieu tien?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "dk_temp_1",
+      "level": "clean",
+      "query": "Tăng nhiệt độ điều hòa lên",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "temp_up"
+    },
+    {
+      "case_id": "dk_temp_1",
+      "level": "tone_loss",
+      "query": "Tăng nhiêt độ điêu hoa lên",
+      "query_wer_vs_clean": 0.5,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "dk_temp_1",
+      "level": "no_diacritics",
+      "query": "Tang nhiet do dieu hoa len",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "temp_up"
+    },
+    {
+      "case_id": "dk_temp_1",
+      "level": "drop_word",
+      "query": "Tăng độ điều hòa lên",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "dk_temp_1",
+      "level": "noisy",
+      "query": "Tang nhiet dieu hoa len",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "dk_temp_2",
+      "level": "clean",
+      "query": "Lạnh quá, cho ấm lên chút",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "dk_temp_2",
+      "level": "tone_loss",
+      "query": "Lạnh quá, cho âm lên chút",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "dk_temp_2",
+      "level": "no_diacritics",
+      "query": "Lanh qua, cho am len chut",
+      "query_wer_vs_clean": 0.833,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "dk_temp_2",
+      "level": "drop_word",
+      "query": "Lạnh quá, ấm lên chút",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "dk_temp_2",
+      "level": "noisy",
+      "query": "Lanh qua, cho len chut",
+      "query_wer_vs_clean": 0.833,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "dk_temp_3",
+      "level": "clean",
+      "query": "Tang nhiet do len 26 do",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "temp_up"
+    },
+    {
+      "case_id": "dk_temp_3",
+      "level": "tone_loss",
+      "query": "Tang nhiet do len 26 do",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "temp_up"
+    },
+    {
+      "case_id": "dk_temp_3",
+      "level": "no_diacritics",
+      "query": "Tang nhiet do len 26 do",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "temp_up"
+    },
+    {
+      "case_id": "dk_temp_3",
+      "level": "drop_word",
+      "query": "Tang nhiet do len do",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": "temp_up"
+    },
+    {
+      "case_id": "dk_temp_3",
+      "level": "noisy",
+      "query": "Tang do len 26 do",
+      "query_wer_vs_clean": 0.167,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": false,
+      "predicted": ""
+    },
+    {
+      "case_id": "dk_oos_fan",
+      "level": "clean",
+      "query": "Quạt trần bật ở đâu?",
+      "query_wer_vs_clean": 0.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "dk_oos_fan",
+      "level": "tone_loss",
+      "query": "Quat trân bật ở đâu?",
+      "query_wer_vs_clean": 0.4,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "dk_oos_fan",
+      "level": "no_diacritics",
+      "query": "Quat tran bat o dau?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "dk_oos_fan",
+      "level": "drop_word",
+      "query": "Quạt trần ở đâu?",
+      "query_wer_vs_clean": 0.2,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    },
+    {
+      "case_id": "dk_oos_fan",
+      "level": "noisy",
+      "query": "Quat tran bat dau?",
+      "query_wer_vs_clean": 1.0,
+      "outcome": "accepted",
+      "gate": true,
+      "correct": true,
+      "predicted": ""
+    }
+  ]
+}

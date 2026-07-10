@@ -1,0 +1,1135 @@
+{
+  "cases": [
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "baseline",
+      "level": 0,
+      "logo_detected": true,
+      "logo_err_px": 0.48019734750285786,
+      "logo_err_norm": 0.003981942244128389,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9814435879062473,
+      "button_center_err_px": 0.4699403366882579,
+      "runtime_s": 2.258,
+      "detect_stats": {
+        "best_corr": 0.7700902223587036,
+        "best_sift": 85.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "scale",
+      "level": 0.35,
+      "logo_detected": true,
+      "logo_err_px": 0.5855947601584287,
+      "logo_err_norm": 0.011792971884877105,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9325196976535555,
+      "button_center_err_px": 0.612096903701877,
+      "runtime_s": 2.286,
+      "detect_stats": {
+        "best_corr": 0.7086547017097473,
+        "best_sift": 44.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "scale",
+      "level": 0.5,
+      "logo_detected": true,
+      "logo_err_px": 0.4636604847905972,
+      "logo_err_norm": 0.006536183045506216,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9027532587087095,
+      "button_center_err_px": 1.610525327934709,
+      "runtime_s": 1.32,
+      "detect_stats": {
+        "best_corr": 0.7874019742012024,
+        "best_sift": 53.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "scale",
+      "level": 0.7,
+      "logo_detected": true,
+      "logo_err_px": 0.21805454586115608,
+      "logo_err_norm": 0.002195640486959407,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9739317426003983,
+      "button_center_err_px": 0.45796658591157163,
+      "runtime_s": 1.375,
+      "detect_stats": {
+        "best_corr": 0.8447553515434265,
+        "best_sift": 80.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "scale",
+      "level": 1.0,
+      "logo_detected": true,
+      "logo_err_px": 0.1212569948046896,
+      "logo_err_norm": 0.0008546748532489135,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9845210334573768,
+      "button_center_err_px": 0.45572174528836695,
+      "runtime_s": 1.346,
+      "detect_stats": {
+        "best_corr": 0.7323414087295532,
+        "best_sift": 81.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "rotation",
+      "level": -15,
+      "logo_detected": true,
+      "logo_err_px": 1.1566094977356067,
+      "logo_err_norm": 0.01004957560034569,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9711688133335851,
+      "button_center_err_px": 0.43772019116712024,
+      "runtime_s": 1.351,
+      "detect_stats": {
+        "best_corr": 0.5385239124298096,
+        "best_sift": 70.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "rotation",
+      "level": -10,
+      "logo_detected": true,
+      "logo_err_px": 0.9477827589791847,
+      "logo_err_norm": 0.008171718574157005,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9696871417090706,
+      "button_center_err_px": 0.6259718328933019,
+      "runtime_s": 1.355,
+      "detect_stats": {
+        "best_corr": 0.5227682590484619,
+        "best_sift": 74.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "rotation",
+      "level": -5,
+      "logo_detected": true,
+      "logo_err_px": 1.4406357819593936,
+      "logo_err_norm": 0.01223016612284801,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9549168896045409,
+      "button_center_err_px": 1.4582043063740215,
+      "runtime_s": 1.359,
+      "detect_stats": {
+        "best_corr": 0.5770455598831177,
+        "best_sift": 87.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "rotation",
+      "level": 5,
+      "logo_detected": true,
+      "logo_err_px": 1.317538399516284,
+      "logo_err_norm": 0.011185140408909841,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9404603045469262,
+      "button_center_err_px": 1.6258772489764768,
+      "runtime_s": 1.358,
+      "detect_stats": {
+        "best_corr": 0.8251754641532898,
+        "best_sift": 75.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "rotation",
+      "level": 10,
+      "logo_detected": true,
+      "logo_err_px": 1.0318865619094866,
+      "logo_err_norm": 0.008896855850660135,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9738881088703384,
+      "button_center_err_px": 0.4257830636393595,
+      "runtime_s": 1.337,
+      "detect_stats": {
+        "best_corr": 0.6763577461242676,
+        "best_sift": 80.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "rotation",
+      "level": 15,
+      "logo_detected": false,
+      "logo_err_px": NaN,
+      "logo_err_norm": NaN,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9852433370158725,
+      "button_center_err_px": 0.22147248573121822,
+      "runtime_s": 1.467,
+      "detect_stats": {
+        "best_corr": 0.5919456481933594,
+        "best_sift": 3.0,
+        "best_refined": 0.4753912389278412
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "perspective",
+      "level": 10,
+      "logo_detected": true,
+      "logo_err_px": 0.6022334222137349,
+      "logo_err_norm": 0.005871690416897217,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9842834374221496,
+      "button_center_err_px": 0.509656511253946,
+      "runtime_s": 1.468,
+      "detect_stats": {
+        "best_corr": 0.813808023929596,
+        "best_sift": 69.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "perspective",
+      "level": 20,
+      "logo_detected": true,
+      "logo_err_px": 0.34240985954972386,
+      "logo_err_norm": 0.003987689969308573,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.985348568361729,
+      "button_center_err_px": 0.5207824983698799,
+      "runtime_s": 1.544,
+      "detect_stats": {
+        "best_corr": 0.7598860263824463,
+        "best_sift": 51.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "perspective",
+      "level": 30,
+      "logo_detected": true,
+      "logo_err_px": 0.3407883628399722,
+      "logo_err_norm": 0.004910705651738914,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9432962500638585,
+      "button_center_err_px": 1.5597190276078507,
+      "runtime_s": 1.539,
+      "detect_stats": {
+        "best_corr": 0.8104979395866394,
+        "best_sift": 42.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "perspective_x",
+      "level": 15,
+      "logo_detected": true,
+      "logo_err_px": 0.501392448726743,
+      "logo_err_norm": 0.0043307479551200475,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.975797334768104,
+      "button_center_err_px": 0.9619075006617717,
+      "runtime_s": 1.501,
+      "detect_stats": {
+        "best_corr": 0.7787606716156006,
+        "best_sift": 68.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "blur",
+      "level": 3,
+      "logo_detected": true,
+      "logo_err_px": 0.48019734750285786,
+      "logo_err_norm": 0.003981942244128389,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9845441289889099,
+      "button_center_err_px": 0.4786969855530989,
+      "runtime_s": 1.504,
+      "detect_stats": {
+        "best_corr": 0.8310554027557373,
+        "best_sift": 45.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "blur",
+      "level": 5,
+      "logo_detected": true,
+      "logo_err_px": 0.48019734750285786,
+      "logo_err_norm": 0.003981942244128389,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9825979717938385,
+      "button_center_err_px": 0.4868809689623049,
+      "runtime_s": 1.489,
+      "detect_stats": {
+        "best_corr": 0.8279500007629395,
+        "best_sift": 30.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "blur",
+      "level": 9,
+      "logo_detected": true,
+      "logo_err_px": 657.7949949495688,
+      "logo_err_norm": 5.454635874160716,
+      "tier": "LOGO_SIMILARITY",
+      "button_hit_rate": 0.0,
+      "button_iou": 0.0,
+      "button_center_err_px": 196.6788803824069,
+      "runtime_s": 1.828,
+      "detect_stats": {
+        "best_corr": 0.7910786867141724,
+        "best_sift": 16.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "blur",
+      "level": 13,
+      "logo_detected": false,
+      "logo_err_px": NaN,
+      "logo_err_norm": NaN,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9397641765958951,
+      "button_center_err_px": 1.584280049999084,
+      "runtime_s": 1.545,
+      "detect_stats": {
+        "best_corr": 0.6232765913009644,
+        "best_sift": 8.0,
+        "best_refined": 0.7410785555839539
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "brightness",
+      "level": -60,
+      "logo_detected": true,
+      "logo_err_px": 0.48019734750285786,
+      "logo_err_norm": 0.003981942244128389,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9830227652749269,
+      "button_center_err_px": 0.4242949384868092,
+      "runtime_s": 1.43,
+      "detect_stats": {
+        "best_corr": 0.7700902223587036,
+        "best_sift": 82.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "brightness",
+      "level": -30,
+      "logo_detected": true,
+      "logo_err_px": 0.48019734750285786,
+      "logo_err_norm": 0.003981942244128389,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9839376019877469,
+      "button_center_err_px": 0.46800017791901743,
+      "runtime_s": 1.512,
+      "detect_stats": {
+        "best_corr": 0.7700902223587036,
+        "best_sift": 85.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "brightness",
+      "level": 30,
+      "logo_detected": true,
+      "logo_err_px": 0.48019734750285786,
+      "logo_err_norm": 0.003981942244128389,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9839376019877469,
+      "button_center_err_px": 0.4680001779190012,
+      "runtime_s": 1.512,
+      "detect_stats": {
+        "best_corr": 0.7793498039245605,
+        "best_sift": 78.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "brightness",
+      "level": 60,
+      "logo_detected": true,
+      "logo_err_px": 0.48019734750285786,
+      "logo_err_norm": 0.003981942244128389,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9827126048004478,
+      "button_center_err_px": 0.4151662474320967,
+      "runtime_s": 1.503,
+      "detect_stats": {
+        "best_corr": 0.8033076524734497,
+        "best_sift": 63.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "noise",
+      "level": 5,
+      "logo_detected": true,
+      "logo_err_px": 0.48019734750285786,
+      "logo_err_norm": 0.003981942244128389,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9814435879062473,
+      "button_center_err_px": 0.46994033668823343,
+      "runtime_s": 1.533,
+      "detect_stats": {
+        "best_corr": 0.7555752992630005,
+        "best_sift": 79.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "noise",
+      "level": 10,
+      "logo_detected": true,
+      "logo_err_px": 0.48019734750285786,
+      "logo_err_norm": 0.003981942244128389,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9814435879062473,
+      "button_center_err_px": 0.4699403366882857,
+      "runtime_s": 1.52,
+      "detect_stats": {
+        "best_corr": 0.7661558389663696,
+        "best_sift": 78.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "noise",
+      "level": 20,
+      "logo_detected": true,
+      "logo_err_px": 0.48019734750285786,
+      "logo_err_norm": 0.003981942244128389,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9823616683530466,
+      "button_center_err_px": 0.42681379013783044,
+      "runtime_s": 1.623,
+      "detect_stats": {
+        "best_corr": 0.7117623090744019,
+        "best_sift": 68.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "jpeg",
+      "level": 60,
+      "logo_detected": true,
+      "logo_err_px": 0.48019734750285786,
+      "logo_err_norm": 0.003981942244128389,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9851009598642215,
+      "button_center_err_px": 0.449679192909663,
+      "runtime_s": 1.497,
+      "detect_stats": {
+        "best_corr": 0.7923386096954346,
+        "best_sift": 70.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "jpeg",
+      "level": 40,
+      "logo_detected": true,
+      "logo_err_px": 0.48019734750285786,
+      "logo_err_norm": 0.003981942244128389,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9814435879062473,
+      "button_center_err_px": 0.4699403366882582,
+      "runtime_s": 1.485,
+      "detect_stats": {
+        "best_corr": 0.7587918043136597,
+        "best_sift": 56.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "jpeg",
+      "level": 20,
+      "logo_detected": true,
+      "logo_err_px": 0.48019734750285786,
+      "logo_err_norm": 0.003981942244128389,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9814435879062473,
+      "button_center_err_px": 0.4699403366882407,
+      "runtime_s": 1.419,
+      "detect_stats": {
+        "best_corr": 0.7612947225570679,
+        "best_sift": 55.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "occlusion",
+      "level": 0.25,
+      "logo_detected": true,
+      "logo_err_px": 0.38038579721984267,
+      "logo_err_norm": 0.0031542745558525436,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9814435879062473,
+      "button_center_err_px": 0.4699403366882619,
+      "runtime_s": 1.442,
+      "detect_stats": {
+        "best_corr": 0.7700902223587036,
+        "best_sift": 61.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "occlusion",
+      "level": 0.5,
+      "logo_detected": true,
+      "logo_err_px": 0.21823572583616355,
+      "logo_err_norm": 0.0018096769180505918,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9828302719144336,
+      "button_center_err_px": 0.4268137901378687,
+      "runtime_s": 1.509,
+      "detect_stats": {
+        "best_corr": 0.7700902223587036,
+        "best_sift": 39.0
+      }
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "sweep": "occlusion",
+      "level": 1.0,
+      "logo_detected": false,
+      "logo_err_px": NaN,
+      "logo_err_norm": NaN,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9820972891412989,
+      "button_center_err_px": 0.45196475544805614,
+      "runtime_s": 1.568,
+      "detect_stats": {
+        "best_corr": 0.7700902223587036,
+        "best_sift": 7.0,
+        "best_refined": 0.4669989049434662
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "baseline",
+      "level": 0,
+      "logo_detected": true,
+      "logo_err_px": 0.5199509354613199,
+      "logo_err_norm": 0.002548184281140658,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9839606305674217,
+      "button_center_err_px": 0.6074877153211521,
+      "runtime_s": 2.456,
+      "detect_stats": {
+        "best_corr": 0.6672499179840088,
+        "best_sift": 58.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "scale",
+      "level": 0.35,
+      "logo_detected": true,
+      "logo_err_px": 0.6190192350070224,
+      "logo_err_norm": 0.007367556822720678,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9507932336128053,
+      "button_center_err_px": 0.8115119536235287,
+      "runtime_s": 2.398,
+      "detect_stats": {
+        "best_corr": 0.9194602966308594,
+        "best_sift": 42.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "scale",
+      "level": 0.5,
+      "logo_detected": true,
+      "logo_err_px": 0.6089637810760332,
+      "logo_err_norm": 0.0050735138820103606,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9635077321305403,
+      "button_center_err_px": 0.8121842462836096,
+      "runtime_s": 2.278,
+      "detect_stats": {
+        "best_corr": 0.7584621906280518,
+        "best_sift": 52.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "scale",
+      "level": 0.7,
+      "logo_detected": true,
+      "logo_err_px": 0.3590325299144079,
+      "logo_err_norm": 0.0021365996529328826,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9769627950511366,
+      "button_center_err_px": 0.6566280263381732,
+      "runtime_s": 2.398,
+      "detect_stats": {
+        "best_corr": 0.8568977117538452,
+        "best_sift": 60.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "scale",
+      "level": 1.0,
+      "logo_detected": true,
+      "logo_err_px": 0.06912718956227326,
+      "logo_err_norm": 0.00028796273831658756,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.984828007482698,
+      "button_center_err_px": 0.7595597778621545,
+      "runtime_s": 2.374,
+      "detect_stats": {
+        "best_corr": 0.5834290981292725,
+        "best_sift": 56.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "rotation",
+      "level": -15,
+      "logo_detected": true,
+      "logo_err_px": 59.69697052860816,
+      "logo_err_norm": 0.3835565271171938,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9806893436362788,
+      "button_center_err_px": 0.4886272992634381,
+      "runtime_s": 2.318,
+      "detect_stats": {
+        "best_corr": 0.393797904253006,
+        "best_sift": 54.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "rotation",
+      "level": -10,
+      "logo_detected": true,
+      "logo_err_px": 28.166391961503077,
+      "logo_err_norm": 0.16790135321711502,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9846204432820505,
+      "button_center_err_px": 0.4593395942765814,
+      "runtime_s": 2.23,
+      "detect_stats": {
+        "best_corr": 0.3811362385749817,
+        "best_sift": 52.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "rotation",
+      "level": -5,
+      "logo_detected": true,
+      "logo_err_px": 0.274105247562915,
+      "logo_err_norm": 0.0014943341380522447,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9783395913475172,
+      "button_center_err_px": 0.8256822710940179,
+      "runtime_s": 2.269,
+      "detect_stats": {
+        "best_corr": 0.5480817556381226,
+        "best_sift": 60.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "rotation",
+      "level": 5,
+      "logo_detected": true,
+      "logo_err_px": 0.5396540770015953,
+      "logo_err_norm": 0.0029420214212333216,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9802011803325226,
+      "button_center_err_px": 0.6390992585675075,
+      "runtime_s": 2.252,
+      "detect_stats": {
+        "best_corr": 0.5702791213989258,
+        "best_sift": 61.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "rotation",
+      "level": 10,
+      "logo_detected": true,
+      "logo_err_px": 49.24200012768181,
+      "logo_err_norm": 0.29353416894344475,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9828320412618567,
+      "button_center_err_px": 0.4271096434482499,
+      "runtime_s": 2.364,
+      "detect_stats": {
+        "best_corr": 0.46820759773254395,
+        "best_sift": 54.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "rotation",
+      "level": 15,
+      "logo_detected": true,
+      "logo_err_px": 62.78567387250618,
+      "logo_err_norm": 0.4034016267493947,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9812965918174361,
+      "button_center_err_px": 0.4656912401590991,
+      "runtime_s": 2.177,
+      "detect_stats": {
+        "best_corr": 0.37950369715690613,
+        "best_sift": 55.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "perspective",
+      "level": 10,
+      "logo_detected": true,
+      "logo_err_px": 0.5816449938990716,
+      "logo_err_norm": 0.0034548367755571916,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.992115192361103,
+      "button_center_err_px": 0.47765838955835255,
+      "runtime_s": 2.201,
+      "detect_stats": {
+        "best_corr": 0.6321405172348022,
+        "best_sift": 63.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "perspective",
+      "level": 20,
+      "logo_detected": true,
+      "logo_err_px": 1.5645179563472948,
+      "logo_err_norm": 0.011061415299311723,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9714778538173345,
+      "button_center_err_px": 1.2335995328346014,
+      "runtime_s": 2.215,
+      "detect_stats": {
+        "best_corr": 0.6419994235038757,
+        "best_sift": 50.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "perspective",
+      "level": 30,
+      "logo_detected": true,
+      "logo_err_px": 28.221817594236654,
+      "logo_err_norm": 0.23800063239871574,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9582124497413976,
+      "button_center_err_px": 2.1083002032080858,
+      "runtime_s": 2.203,
+      "detect_stats": {
+        "best_corr": 0.6378056406974792,
+        "best_sift": 28.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "perspective_x",
+      "level": 15,
+      "logo_detected": true,
+      "logo_err_px": 0.2636175042766046,
+      "logo_err_norm": 0.001559718214533743,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9722392892871894,
+      "button_center_err_px": 0.9465471285615044,
+      "runtime_s": 2.145,
+      "detect_stats": {
+        "best_corr": 0.845504641532898,
+        "best_sift": 70.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "blur",
+      "level": 3,
+      "logo_detected": true,
+      "logo_err_px": 0.5199509354613199,
+      "logo_err_norm": 0.002548184281140658,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9838477362698846,
+      "button_center_err_px": 0.6233540965918634,
+      "runtime_s": 2.247,
+      "detect_stats": {
+        "best_corr": 0.6791056990623474,
+        "best_sift": 53.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "blur",
+      "level": 5,
+      "logo_detected": true,
+      "logo_err_px": 0.5199509354613199,
+      "logo_err_norm": 0.002548184281140658,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9838477362698846,
+      "button_center_err_px": 0.6233540965918671,
+      "runtime_s": 2.248,
+      "detect_stats": {
+        "best_corr": 0.6844204664230347,
+        "best_sift": 44.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "blur",
+      "level": 9,
+      "logo_detected": true,
+      "logo_err_px": 0.5199509354613199,
+      "logo_err_norm": 0.002548184281140658,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9854983288753051,
+      "button_center_err_px": 0.6066321645835154,
+      "runtime_s": 2.238,
+      "detect_stats": {
+        "best_corr": 0.6736750602722168,
+        "best_sift": 21.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "blur",
+      "level": 13,
+      "logo_detected": true,
+      "logo_err_px": 0.5326145357594498,
+      "logo_err_norm": 0.002610246266265682,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9856872988219816,
+      "button_center_err_px": 0.6397305670348244,
+      "runtime_s": 2.154,
+      "detect_stats": {
+        "best_corr": 0.6546549797058105,
+        "best_sift": 8.0,
+        "best_refined": 0.915561854839325
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "brightness",
+      "level": -60,
+      "logo_detected": true,
+      "logo_err_px": 0.5199509354613199,
+      "logo_err_norm": 0.002548184281140658,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9823216445534356,
+      "button_center_err_px": 0.6678556771919817,
+      "runtime_s": 2.324,
+      "detect_stats": {
+        "best_corr": 0.6676615476608276,
+        "best_sift": 62.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "brightness",
+      "level": -30,
+      "logo_detected": true,
+      "logo_err_px": 0.5199509354613199,
+      "logo_err_norm": 0.002548184281140658,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9839606305674217,
+      "button_center_err_px": 0.6074877153211359,
+      "runtime_s": 2.308,
+      "detect_stats": {
+        "best_corr": 0.6676422357559204,
+        "best_sift": 56.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "brightness",
+      "level": 30,
+      "logo_detected": true,
+      "logo_err_px": 0.5199509354613199,
+      "logo_err_norm": 0.002548184281140658,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9839606305674217,
+      "button_center_err_px": 0.6074877153211671,
+      "runtime_s": 2.225,
+      "detect_stats": {
+        "best_corr": 0.6710606813430786,
+        "best_sift": 58.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "brightness",
+      "level": 60,
+      "logo_detected": true,
+      "logo_err_px": 0.5199509354613199,
+      "logo_err_norm": 0.002548184281140658,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9838477362698846,
+      "button_center_err_px": 0.6233540965918578,
+      "runtime_s": 2.217,
+      "detect_stats": {
+        "best_corr": 0.6748684048652649,
+        "best_sift": 53.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "noise",
+      "level": 5,
+      "logo_detected": true,
+      "logo_err_px": 0.5199509354613199,
+      "logo_err_norm": 0.002548184281140658,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9839606305674217,
+      "button_center_err_px": 0.6074877153211892,
+      "runtime_s": 2.297,
+      "detect_stats": {
+        "best_corr": 0.6690143942832947,
+        "best_sift": 58.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "noise",
+      "level": 10,
+      "logo_detected": true,
+      "logo_err_px": 0.5199509354613199,
+      "logo_err_norm": 0.002548184281140658,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9839606305674217,
+      "button_center_err_px": 0.6074877153211681,
+      "runtime_s": 2.311,
+      "detect_stats": {
+        "best_corr": 0.6638295650482178,
+        "best_sift": 56.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "noise",
+      "level": 20,
+      "logo_detected": true,
+      "logo_err_px": 0.5199509354613199,
+      "logo_err_norm": 0.002548184281140658,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9823754217509144,
+      "button_center_err_px": 0.6518647060495344,
+      "runtime_s": 2.241,
+      "detect_stats": {
+        "best_corr": 0.40573850274086,
+        "best_sift": 54.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "jpeg",
+      "level": 60,
+      "logo_detected": true,
+      "logo_err_px": 0.5199509354613199,
+      "logo_err_norm": 0.002548184281140658,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9839606305674217,
+      "button_center_err_px": 0.607487715321138,
+      "runtime_s": 2.283,
+      "detect_stats": {
+        "best_corr": 0.6667277216911316,
+        "best_sift": 59.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "jpeg",
+      "level": 40,
+      "logo_detected": true,
+      "logo_err_px": 0.49554770143167204,
+      "logo_err_norm": 0.0024285885017654874,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9839606305674217,
+      "button_center_err_px": 0.607487715321171,
+      "runtime_s": 2.307,
+      "detect_stats": {
+        "best_corr": 0.6672173738479614,
+        "best_sift": 64.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "jpeg",
+      "level": 20,
+      "logo_detected": true,
+      "logo_err_px": 0.5326145357594498,
+      "logo_err_norm": 0.002610246266265682,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9823754217509144,
+      "button_center_err_px": 0.6518647060495464,
+      "runtime_s": 2.288,
+      "detect_stats": {
+        "best_corr": 0.6570011973381042,
+        "best_sift": 61.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "occlusion",
+      "level": 0.25,
+      "logo_detected": true,
+      "logo_err_px": 0.4838546702436153,
+      "logo_err_norm": 0.002371283098043389,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9839606305674217,
+      "button_center_err_px": 0.6074877153212042,
+      "runtime_s": 2.25,
+      "detect_stats": {
+        "best_corr": 0.6641361713409424,
+        "best_sift": 44.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "occlusion",
+      "level": 0.5,
+      "logo_detected": true,
+      "logo_err_px": 0.47253450112279166,
+      "logo_err_norm": 0.0023158050230055135,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9839606305674217,
+      "button_center_err_px": 0.6074877153211735,
+      "runtime_s": 2.258,
+      "detect_stats": {
+        "best_corr": 0.6641361713409424,
+        "best_sift": 33.0
+      }
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "sweep": "occlusion",
+      "level": 1.0,
+      "logo_detected": true,
+      "logo_err_px": 922.1525264912109,
+      "logo_err_norm": 4.5193005965730295,
+      "tier": "HOMOGRAPHY_REFINED",
+      "button_hit_rate": 1.0,
+      "button_iou": 0.9839606305674217,
+      "button_center_err_px": 0.6074877153211686,
+      "runtime_s": 2.207,
+      "detect_stats": {
+        "best_corr": 0.6641361713409424,
+        "best_sift": 8.0,
+        "best_refined": 0.6782462000846863
+      }
+    }
+  ],
+  "negatives": [
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "frame": "noise",
+      "false_accept": false,
+      "score": 0.18224337697029114
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "frame": "gradient",
+      "false_accept": false,
+      "score": 0.3027728199958801
+    },
+    {
+      "template_id": "template_electrolux_washer_ewf9024adsa",
+      "frame": "other_panel",
+      "false_accept": false,
+      "score": 0.45650720596313477
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "frame": "noise",
+      "false_accept": false,
+      "score": 0.10264902561903
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "frame": "gradient",
+      "false_accept": false,
+      "score": -0.05668925866484642
+    },
+    {
+      "template_id": "template_panasonic_microwave_nn_gt35hm_v1",
+      "frame": "other_panel",
+      "false_accept": false,
+      "score": 0.5643800497055054
+    }
+  ]
+}
